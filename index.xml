@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MobyMob Blog</title>
-    <link>https://mobymob.github.io/blog/index.xml</link>
+    <link>https://ivan-osipov.github.io/blog/index.xml</link>
     <description>Recent content on MobyMob Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <atom:link href="https://mobymob.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <language>ru</language>
+    <atom:link href="https://ivan-osipov.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
   </channel>
 </rss>
