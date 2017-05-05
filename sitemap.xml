@@ -2,135 +2,135 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://i-osipov.ru/post/hosting-thoughts/</loc>
+    <loc>https://ivan-osipov.github.io/blog/post/hosting-thoughts/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/post/i-have-a-first-podcast/</loc>
+    <loc>https://ivan-osipov.github.io/blog/post/i-have-a-first-podcast/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/categories/</loc>
+    <loc>https://ivan-osipov.github.io/blog/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/development/</loc>
-    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/categories/development/</loc>
-    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/tags/experience/</loc>
+    <loc>https://ivan-osipov.github.io/blog/tags/development/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/categories/experience/</loc>
+    <loc>https://ivan-osipov.github.io/blog/categories/development/</loc>
+    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/experience/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/heroku/</loc>
-    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/tags/hobby/</loc>
-    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/categories/hobby/</loc>
-    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/categories/hosting/</loc>
-    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/tags/it/</loc>
+    <loc>https://ivan-osipov.github.io/blog/categories/experience/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/</loc>
+    <loc>https://ivan-osipov.github.io/blog/tags/heroku/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/java/</loc>
+    <loc>https://ivan-osipov.github.io/blog/tags/hobby/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/pilot/</loc>
-    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/tags/podcast/</loc>
-    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/categories/podcast/</loc>
-    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/tags/podfm/</loc>
-    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://i-osipov.ru/post/</loc>
+    <loc>https://ivan-osipov.github.io/blog/categories/hobby/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/sites/</loc>
+    <loc>https://ivan-osipov.github.io/blog/categories/hosting/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/studying/</loc>
+    <loc>https://ivan-osipov.github.io/blog/tags/it/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/</loc>
+    <loc>https://ivan-osipov.github.io/blog/</loc>
+    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://i-osipov.ru/tags/themes/</loc>
+    <loc>https://ivan-osipov.github.io/blog/tags/java/</loc>
+    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/pilot/</loc>
+    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/podcast/</loc>
+    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/categories/podcast/</loc>
+    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/podfm/</loc>
+    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/post/</loc>
+    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/sites/</loc>
+    <lastmod>2017-05-06T02:37:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/studying/</loc>
+    <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ivan-osipov.github.io/blog/tags/themes/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
     <priority>0</priority>
   </url>
