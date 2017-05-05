@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Берешь дешевле? Заплатишь позже -- Ivan Osipov&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="http://i-osipov.ru/favicon.ico" type="image/x-icon"> 
+    <link rel="stylesheet" href="http://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://i-osipov.ru">Ivan Osipov&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://i-osipov.ru//img/posts/hostimg-thoughts/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Берешь дешевле? Заплатишь позже</h1>
+               <h2 class="subheading">О хероку и не слишком хероку</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Ivan Osipov</a> on 
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Занимательное дело, решил сходить на рынок, купить пару доменов. Зашёл на reg.ru, вышел и забыл на пол года. Спустя время вернулся с кучей идей и большим желанием прикупить себе парочку, но один хороший человек подсказал мне, что бывает и дешевле. Вспомнил я всё чему меня учили и вышел с этим вопросом в Интернет. Оказалось что можно купить тоже самое и в два раза дешевле. Ну тут моё детское сердце не выдержало, я и купил. Итого: 2 домена по 99 рублей, всего 198 р. Звучит не дорого.</p>
+
+<p>Передо мной стояла задача: взять простую html страничку и залить её на просторы интернета. Я - человек не избалованный знаниями в области создания сайтов понимаю, что мне нужно всего лишь отдавать статический контент сайта, однако, на далёкой, возможно не сбытной, перспективе за этой статикой будет какой-никакой бекэнд, естественно, на Java.</p>
+
+<p><img src="../../img/posts/hostimg-thoughts/heroku.png" alt="Heroku" title="Heroku" /></p>
+
+<p>Я спросил у гугла и получил ответ. Heroku - облачная PaaS-платформа. Это значит, что тебе не нужно настраивать сервер и всё всё вокруг него и это замечательно! Я скачал и установил их приложение и через консоль отправил свой прекрасный html файлик на сервера Heroku, ну, а кроме него, еще всё остальное Spring Boot приложение, которое сейчас формальная обертка над статикой, ну пригодится же, точно говорю. Конечно для создание Spring Boot приложения я воспользовался их стандартным генератором, довольно удобно. Сгенерировал -&gt; Распаковал -&gt; Вставил статику -&gt; Готово. У хероку есть несколько способов отправить код на сервер, один из которых - использовать Git репозиторий внутри хероку. Отличный способ, кроме одного момента: аутентификация.</p>
+
+<p>Как вы, вероятно, знаете у гита есть два способа подтвердить себя: https, ssl. Я обычно предпочитаю простые пути, следовательно, https мне в помощь, однако всё не так просто. При выполнении git push система запрашивает ваши креденшиналы. Уж не знаю, что я делал не так, даже авторизовывался через консоль как сказано на сайте этих ребят - ничего не помогало. Всплывает окно авторизации к которому не подходят стандартные. Как типичный разработчик, прежде чем читать документацию, я решил погуглить и погуглил. А нагуглил я себе документацию, оказалось, что поле логина нужно оставить пустым, а в пароль вставить очень хитрый ключ из личного кабинета Хероку. Видимо я вновь, что-то не так понял, т.к. этот метод мне тоже не помог, смерившись со сложностью такого простого способа я решил запушить наХероку публичный ключик и это решило проблему авторизации быстрее чем за 5 минут.</p>
+
+<p>Сижу довольный, смотрю в документацию и изучаю как же подтянуть кастомный домен. Оказалось, что хероку дает тебе специальный DNS target, который ты вписываешь как CNAME, когда редактируешь зону DNS у своего поставщика домена. Как бы не так, не дает мой регистратор задать CNAME на корневой домен (@.example.com) и приводит мне цитаты, видимо из любимых книжек:</p>
+
+<pre><code>Нельзя указывать записи CNAME и другие с тем же именем.
+Смотрите RFC1912, раздел 2.4.
+</code></pre>
+
+<p>Бабах! www.exampe.com можно, *.example.com можно, а @.example.com нельзя! И что делать? Оказывается, что www.exampe.com работает, а exampe.com нет, но вот что забавно, если хоть раз посетить www.exampe.com, то неработающий exampe.com начинает переадресовывать тебя на старый, добрый www.exampe.com. Единственное решение, которое пришло на данный момент - это задать переадресацию у регистратора. Здорово, конечно, но это еще 120 р. за то, что кто-то где-то написал в спецификации. Деньги здесь, конечно, роли не играют, но сам факт такого решения меня возмущает.</p>
+
+<p>И тут я подумал посмотреть на другие хостинги, там оказалось всё еще хуже. На Amazon - $ 7 за перенос домена, на Azure - месяц бесплатно, не плохо, но нужно глубже разобраться, на Google Cloud Engine всё отлично, но инфраструктура и навязаная работа с key value store - мне не нравится (по крайней мере год назад было так), да и всё это IaaS, а мне бы файлик залить&hellip;</p>
+
+<p><img src="../../img/posts/hostimg-thoughts/heroku-split.png" alt="Heroku" title="Heroku" /></p>
+
+<p>В итоге, самая простая привязка кастомного домена оказалась у Github Pages. Они дают IP, DNS сервер их легко принимает и всё работает уже через несколько минут. Для хостинга своего одностраничного проекта так и оставил Heroku, а для своего блога на Github Pages сделал привязку домена i-osipov.ru. А это я даже не глубоко копнул в этот мир деплоя веб сайтов и приложений&hellip; На пути Докер. Надо узнать что это такое и как его запускать на Windows 8, слышал что-то про виртуалки, но это уже совсем другая история&hellip;</p>
+
+                  
+   
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/MrIvanOsipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="http://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="http://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+
+</body>
+
+</html>
+
