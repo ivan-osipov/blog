@@ -1,3 +1,11 @@
 img[alt=Heroku] { width: 100%; }
+img[alt=GoPro] { width: 100%; }
 img[alt=Квадрант] { position: relative; left: 25%; }
-img[alt=БКС] { width: 100%; }
+img[alt=БКС] {
+    position: relative;
+    left: 25%;
+    width: 50%;
+}
+a {
+    color: #5476e5
+}
