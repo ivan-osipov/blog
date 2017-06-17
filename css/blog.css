@@ -1,6 +1,20 @@
 img[alt=Heroku] { width: 100%; }
 img[alt=GoPro] { width: 100%; }
-img[alt=Квадрант] { position: relative; left: 25%; }
+@media all and (min-width:600px){
+  img[alt=Квадрант] {
+      position: relative;
+      left: 25%;
+      width: 50%;
+  }
+}
+@media all and (max-width:600px){
+  img[alt=Квадрант] {
+      position: relative;
+      left: 0%;
+      width: 100%;
+  }
+}
+
 img[alt=БКС] {
     position: relative;
     left: 25%;
