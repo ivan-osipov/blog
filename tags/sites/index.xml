@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Sites on Ivan Osipov&#39;s Blog</title>
-    <link>https://ivan-osipov.github.io/blog/tags/sites/index.xml</link>
+    <link>http://i-osipov.ru/tags/sites/index.xml</link>
     <description>Recent content in Sites on Ivan Osipov&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <atom:link href="https://ivan-osipov.github.io/blog/tags/sites/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://i-osipov.ru/tags/sites/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Берешь дешевле? Заплатишь позже</title>
-      <link>https://ivan-osipov.github.io/blog/post/hosting-thoughts/</link>
+      <link>http://i-osipov.ru/post/hosting-thoughts/</link>
       <pubDate>Sat, 06 May 2017 02:37:00 +0400</pubDate>
       
-      <guid>https://ivan-osipov.github.io/blog/post/hosting-thoughts/</guid>
+      <guid>http://i-osipov.ru/post/hosting-thoughts/</guid>
       <description>&lt;p&gt;Занимательное дело, решил сходить на рынок, купить пару доменов. Зашёл на reg.ru, вышел и забыл на пол года. Спустя время вернулся с кучей идей и большим желанием прикупить себе парочку, но один хороший человек подсказал мне, что бывает и дешевле. Вспомнил я всё чему меня учили и вышел с этим вопросом в Интернет. Оказалось что можно купить тоже самое и в два раза дешевле. Ну тут моё детское сердце не выдержало, я и купил. Итого: 2 домена по 99 рублей, всего 198 р. Звучит не дорого.&lt;/p&gt;
 
 &lt;p&gt;Передо мной стояла задача: взять простую html страничку и залить её на просторы интернета. Я - человек не избалованный знаниями в области создания сайтов понимаю, что мне нужно всего лишь отдавать статический контент сайта, однако, на далёкой, возможно не сбытной, перспективе за этой статикой будет какой-никакой бекэнд, естественно, на Java.&lt;/p&gt;
