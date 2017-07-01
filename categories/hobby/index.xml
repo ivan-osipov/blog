@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hobby on Ivan Osipov&#39;s Blog</title>
-    <link>http://i-osipov.ru/categories/hobby/index.xml</link>
+    <link>https://i-osipov.ru/categories/hobby/index.xml</link>
     <description>Recent content in Hobby on Ivan Osipov&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <atom:link href="http://i-osipov.ru/categories/hobby/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://i-osipov.ru/categories/hobby/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Хочешь заработать? Быстро? Дай сюда - не балуйся. Часть 1</title>
-      <link>http://i-osipov.ru/post/investments/</link>
+      <link>https://i-osipov.ru/post/investments/</link>
       <pubDate>Thu, 15 Jun 2017 19:10:40 +0400</pubDate>
       
-      <guid>http://i-osipov.ru/post/investments/</guid>
+      <guid>https://i-osipov.ru/post/investments/</guid>
       <description>
 
 &lt;div class=&#34;text-justify&#34;&gt;
@@ -242,10 +242,10 @@
     
     <item>
       <title>Берешь дешевле? Заплатишь позже</title>
-      <link>http://i-osipov.ru/post/hosting-thoughts/</link>
+      <link>https://i-osipov.ru/post/hosting-thoughts/</link>
       <pubDate>Sat, 06 May 2017 02:37:00 +0400</pubDate>
       
-      <guid>http://i-osipov.ru/post/hosting-thoughts/</guid>
+      <guid>https://i-osipov.ru/post/hosting-thoughts/</guid>
       <description>&lt;p&gt;Занимательное дело, решил сходить на рынок, купить пару доменов. Зашёл на reg.ru, вышел и забыл на пол года. Спустя время вернулся с кучей идей и большим желанием прикупить себе парочку, но один хороший человек подсказал мне, что бывает и дешевле. Вспомнил я всё чему меня учили и вышел с этим вопросом в Интернет. Оказалось что можно купить тоже самое и в два раза дешевле. Ну тут моё детское сердце не выдержало, я и купил. Итого: 2 домена по 99 рублей, всего 198 р. Звучит не дорого.&lt;/p&gt;
 
 &lt;p&gt;Передо мной стояла задача: взять простую html страничку и залить её на просторы интернета. Я - человек не избалованный знаниями в области создания сайтов понимаю, что мне нужно всего лишь отдавать статический контент сайта, однако, на далёкой, возможно не сбытной, перспективе за этой статикой будет какой-никакой бекэнд, естественно, на Java.&lt;/p&gt;
@@ -274,10 +274,10 @@
     
     <item>
       <title>Начинаю новый эксперимент: подкастинг</title>
-      <link>http://i-osipov.ru/post/i-have-a-first-podcast/</link>
+      <link>https://i-osipov.ru/post/i-have-a-first-podcast/</link>
       <pubDate>Mon, 30 Jan 2017 01:41:31 +0400</pubDate>
       
-      <guid>http://i-osipov.ru/post/i-have-a-first-podcast/</guid>
+      <guid>https://i-osipov.ru/post/i-have-a-first-podcast/</guid>
       <description>&lt;p&gt;Решил испытать себя в деле подкастинга. Прослушать и скачать пилотный выпуск можете ниже:&lt;/p&gt;
 
 &lt;p&gt;&lt;audio controls=&#34;controls&#34;&gt;
