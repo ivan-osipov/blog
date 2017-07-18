@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/telegram_here/</loc>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/investments/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
   </url>
@@ -14,6 +19,12 @@
   <url>
     <loc>https://i-osipov.ru/post/i-have-a-first-podcast/</loc>
     <lastmod>2017-01-30T01:41:31+04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/articles/</loc>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -95,7 +106,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2017-06-15T19:10:40+04:00</lastmod>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -137,7 +148,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2017-06-15T19:10:40+04:00</lastmod>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -155,6 +166,18 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/telegram/</loc>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/telegram/</loc>
+    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
     <priority>0</priority>
   </url>
   
