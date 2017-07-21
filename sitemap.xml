@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/do_the_blog/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/telegram_here/</loc>
     <lastmod>2017-07-19T00:21:33+04:00</lastmod>
   </url>
@@ -28,7 +33,25 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/blog/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/blog/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/cloudflare/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -63,6 +86,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/github/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/goals/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
     <priority>0</priority>
@@ -93,6 +122,18 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/https/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/hugo/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/investments/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
     <priority>0</priority>
@@ -106,7 +147,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -148,7 +189,13 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/programming/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -166,6 +213,12 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/technologies/</loc>
+    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
     <priority>0</priority>
   </url>
   

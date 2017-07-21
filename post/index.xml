@@ -6,8 +6,118 @@
     <description>Recent content in Posts on Ivan Osipov</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <lastBuildDate>Wed, 19 Jul 2017 00:21:33 +0400</lastBuildDate>
+    <lastBuildDate>Thu, 20 Jul 2017 00:19:26 +0400</lastBuildDate>
     <atom:link href="https://i-osipov.ru/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Программист? Сделай блог</title>
+      <link>https://i-osipov.ru/post/do_the_blog/</link>
+      <pubDate>Thu, 20 Jul 2017 00:19:26 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/do_the_blog/</guid>
+      <description>&lt;p&gt;Всем привет!
+Как и обещал, переношу свой пост из телеграм канала &lt;strong&gt;Джун уронил прод&lt;/strong&gt; &lt;a href=&#34;https://t.me/djuup&#34;&gt;@djuup&lt;/a&gt;.&lt;br /&gt;
+Статья &lt;strong&gt;Программист? Сделай блог&lt;/strong&gt; выходила на канале в двух частях, здесь вы можете прочитать обе в одном целостном посте.
+Приятного чтения!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;О чем этот пост&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Наполнение этого поста расскажет, как быстро и просто запустить собственный блог аналогичный этому, а если вы программист и шарите, то сделать это абсолютно бесплатно и красиво. Стоимость сделать такой блог колышется от 0 до 99 рублей в год и всё зависит от того захотите ли вы свой красивый домен. Я захотел.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Читайте дальше, если вы понимаете зачем вам блог и уже горите идеями, так ярко, что даже у черных дыр не хватило бы массы утянуть за собой столько света.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Здесь вы не найдете филосовствований о целевой аудитории и интересном контенте, а только техническая сторона, по делу, что и как сделать.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Поехали&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Что такое блог в глазах программиста? Это какая-то информация в виде постов, которую нужно выбрасывать по первому требованию, так давайте выбрасывать его с энтузиазмом. Конечно, вы можете взять WordPress и в красивом интерфейсе накидать всё что хотите. Управлять контентом из админки и так далее, но готовы ли вы отдавать за возможность подключить кастомный домен по $3 в месяц, да еще и оплата ежегодная, т.е. вы сразу выкините $ 36 (2160 руб. при курсе 60 руб за $1). Это путь моей жены, но не мой.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/posts/do_the_blog/gagarin.jpg&#34; alt=&#34;Gagarin&#34; title=&#34;Gagarin&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;К чёрту динамику&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Я убежден, что всё что нужно для суперского блога это html + css и немножко js. Какие PHP? Какая БД? Что за чушь! Момент, когда вы публикуете новый пост вполне детерминирован и на самом деле, всё что вам нужно, это сохранить страничку с вашим годным контентом, а затем отдать её при запросе определенного URL&amp;rsquo;a. Как это сделать? На помощь приходят генераторы статических страниц, такие как Hugo или Jekyll. В этом посте остановимся на hugo.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/posts/do_the_blog/hugo.png&#34; alt=&#34;Hugo&#34; title=&#34;Hugo&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&amp;ldquo;Где этот мерзавец?&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Для начала ставим себе Git, например, &lt;a href=&#34;https://git-scm.com/&#34;&gt;отсюда&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&amp;ldquo;Хочу блог. Красивый чтоб&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Примерно так и работает hugo. Наша цель на этом этапе сгенерировать себе блог для этого, по шагам:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gohugoio/hugo/releases&#34;&gt;Качаем Hugo&lt;/a&gt; в любую удобную директорию&lt;/li&gt;
+&lt;li&gt;Добавляем к Path в переменных окружения bin папку в этой директории, например, C://hugo/bin. Теперь мы можем генерить где угодно и что угодно&lt;/li&gt;
+&lt;li&gt;Открываем cmd или bash (что сподручнее) переходим в директорию, где появится папка с блогом. Находясь в этой директории прописываем:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new site your-blog-name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Готово, блог сгенерён, но вы же хотите, чтобы красиво? По этому, переходим в папку с блогом, выбираем тему &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;здесь&lt;/a&gt; (пожалуй, самый сложный этап - это выбрать тему) и действуем в соответствии с указаниями в теме. Скорее всего они будут следующими: перейдите в папку themes и склонируйте туда гит репозиторий темы, возьмем, например, эту &lt;a href=&#34;https://github.com/beli3ver/hemingway2&#34;&gt;тему&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Склонировали? Возвращаемся в папку с блогом и открываем текстовым редактором файл &lt;strong&gt;config.toml&lt;/strong&gt;. В нём устанавливаем тему, например, так&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;theme = &amp;quot;hemingway2&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Почти готово. Пишем в cmd/bash&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo
+hugo server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Изи катка. Открываем &lt;em&gt;&lt;a href=&#34;http://localhost:1313/&#34;&gt;http://localhost:1313/&lt;/a&gt;&lt;/em&gt; вот и наш блог.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Блог без постов как Нева без мостов&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Чтобы докинуть постов не обязательно выключать сервер. Просто открываете еще одну консоль/терминал и пишете&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new post/my-new-post.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Каждый пост - это Markdown файлик с дополнительными метаднными, этот файлик вы найдете в content/post. Чтобы опубликовать пост нужно указать в метаданных внутри файла: draft = false. Метаданные отделяются плюсами.&lt;/p&gt;
+
+&lt;p&gt;Каждый новый пост - это новый файлик, благодаря которому обновляется статический контент.&lt;/p&gt;
+
+&lt;p&gt;Нужно понимать, что предварительно сгенерированная статика это довольно быстро и абсолютно безопасно, т.к. у вас нет админки, которую можно взломать.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;НА ПРОД!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Всё бы хорошо, только что с этим всем делать?&lt;/p&gt;
+
+&lt;p&gt;После выполнения пустой команды &lt;strong&gt;hugo&lt;/strong&gt; каждый раз перегенерируется папка &lt;strong&gt;public&lt;/strong&gt;. Она-то нам и нужна. В этой папке лежит готовая статика блога. Но нужно куда-то это опубликовать. Здесь на помощь приходят github pages. Регистрируемся на github.com и создаем репозиторий, например, &lt;strong&gt;blog&lt;/strong&gt;. При создании репозитория github напишет как правильно отправить туда код. Что же нужно сделать в нашем случае? Перейти в папку &lt;strong&gt;public&lt;/strong&gt; и выполнить в ней:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git init
+git add *
+git commit -m &#39;init&#39;
+git remote add origin https://github.com/&amp;lt;user-login&amp;gt;/&amp;lt;repo-name&amp;gt;.git
+git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Не забудьте поправить URL&amp;rsquo;ы. При любых изменениях в блоге вам нужно будет перекоммитить статику в гитхаб. Теперь открываем настройки репозитория (Settings) и смотрим что там есть. Находим раздел GitHub Pages. Указываем, что статика будет браться из master ветки и сохраняем.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Вот и всё&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHub на месте скажет ваш URL, это будет что-то вроде &lt;a href=&#34;https://ivan-osipov.github.com/blog&#34;&gt;https://ivan-osipov.github.com/blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Как свистульки прикрутить?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugo - довольно гибкий инструмент и с его помощью можно провернуть много чего интересного не рассмотренного в этой статье. Ответы на большинство вопросов дает документация Hugo. Отнеситесь внимательно и к документации темы, она поможет вам лучшим способом сконфигурировать и настроить ваш блог.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Продолжение следует&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Все в телеграм! Джун уронил прод!</title>
