@@ -1,4 +1,9 @@
 img[alt=Heroku] { width: 100%; }
+img[alt=Gagarin] { width: 100%; }
+img[alt=Hugo] { width: 100%; }
+img[alt=DNS] { width: 100%; }
+img[alt=DOMAIN] { width: 100%; }
+
 img[alt=GoPro] { width: 100%; }
 @media all and (min-width:600px){
   img[alt=Квадрант] {
