@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Telegram API. Как написать бота? -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/djuup">telegram channel</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/about-bg.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Telegram API. Как написать бота?</h1>
+               <h2 class="subheading">Как сделать своего телеграм бота</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2017-07-23
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/telegram">Telegram</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/telegram">telegram</a>, <a href="/tags/bot">bot</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Всем привет!<br />
+Это перенос статьи из моего telegram канала <a href="https://t.me/djuup">Джун уронил прод</a></p>
+
+<p>Сегодня мы побеседуем о том как делаются Telegram боты.</p>
+
+<p><strong>Кто ты по жизни?</strong></p>
+
+<p>Telegram боты бывают двух видов:</p>
+
+<ul>
+<li>Боты основанные на Webhoock</li>
+<li>Боты основанные на Https Get</li>
+</ul>
+
+<p>Первый вариант бота требует от вас поднять сервер и установить &ldquo;вебхуки&rdquo; для асинхронного оповещения вас о новых изменениях. На вашем сервере должен быть соответствующий роутинг.</p>
+
+<p>Второй вариант бота - это имитация асинхронности. Ваш бот с определенным периодом будет запрашивать последние изменения с сервера телеграм на основании механизма long pool. Т.е. бот делает запрос и подвисает, а отвисает либо по таймауту, либо по получению новыйх обновлений. Об этом виде ботов сегодня и пойдет речь.</p>
+
+<p><strong>Long pooling в разрезе работы с сетью</strong></p>
+
+<p>Когда вы работаете с Telegram Api вы нагружаете сервера Telegram. Все запросы вы отправляете по одному URL, но в один момент времени может работать только один обработчик для Telegram бота.</p>
+
+<blockquote>
+<p>Интересно, что в API предусмотрена умная обработка ошибок, среди прочего, в ответе телеграм сервера, который вы за DDOS&rsquo;или, может сообщить вам сколько нужно подождать, чтобы вы могли взаимодействовать с Telegram снова</p>
+</blockquote>
+
+<p>Как сказано выше у вас фактически однопоточная обработка запросов к телеграм. По этому, кажется, здравым принять одну из следующих реализаций ботов:</p>
+
+<ul>
+<li>реализовать поток, который будет отправлять запросы и складировать ответы в общую очередь из которой потоки-обработчики будут их разбирать;</li>
+<li>поставить прокси-сервер, который будет затягивать последние изменения и шарить их между нодами (другими серверами) бота. В этом случае можно подменяя прокси-сервер менять реализации взаимодействия с telegram api не меняя реализацию для нод. Это решение мне нравится несколько больше, его масштабируемость зависит от потребностей в функциональности бота, т.к. если можно обрабатывать параллельно несколько чатов независимо друг от друга, то масштабируемость на пределе.</li>
+</ul>
+
+<p>Оставим использование прокси-сервера для будущих статей, а пока давайте рассмотрим как вы можете реализовать своего бота.</p>
+
+<p><strong>Красная или синяя таблетка?</strong></p>
+
+<p>На сколько вы любите писать велосипеды? В зависимости от этого у вас есть 2 пути реализации Telegram бота:</p>
+
+<ul>
+<li>писать всё самому с нуля;</li>
+<li>воспользоваться существующей библиотекой.</li>
+</ul>
+
+<p>Если вы используете динамически типизируемые языки, которые поддерживают нативную работу с JSON, то первый вариант, не так уж и плох, однако, уже существует большое количество библиотек для разработки ботов их публичный перечень вы можете увидеть <a href="https://core.telegram.org/bots/samples">здесь</a>. Вы найдете много вариантов для PHP, Java, Python, Node.js и так далее. Я сейчас реализую собственную библиотеку на языке Kotlin - <a href="https://clabo.i-osipov.ru/">Clabo</a>. Эта библиотека поможет вам на основании расширяемого DSL описать работу своего бота, например, всё что надо для запуска бота, который говорит &ldquo;Привет!&rdquo; по команде /start это небольшой кусочек кода по <a href="https://gist.github.com/ivan-osipov/266204f3560a6c5e64d381df5c73bf22">ссылке</a>.</p>
+
+<p><strong>BotFather</strong></p>
+
+<p>В телеграме есть специальный бот, который позволяет создавать других ботов и настраивать их. Некоторые действия вы, как пользователь, не можете сделать из интерфейса, например, сменить имя бота или задать набор команд, для этого нужен <a href="http://t.me/botfather">BotFather</a>.</p>
+
+<p>Теперь у вас есть представление, как реализовать бота, но что с ним можно сделать? Об этом я расскажу ниже.</p>
+
+<p><strong>И зачем всё это?</strong></p>
+
+<p>Боты очень способные, они обладают следующими возможностями:</p>
+
+<ul>
+<li>Встраиваемый мод (Inline mode). Вы можете встроить бота прямо в строку с вводом, хорошие примеры таких ботов это GifBot и YouTubeBot. Вы вписываете имя бота, например, @youtube и он предлагает вам результаты поиска видео или вы можете авторизоваться и результаты будут специфичны для вас.</li>
+<li>Клавиатуры. Есть два вида клавиатур: &ldquo;Клавиатура для быстрого ответа&rdquo; и &ldquo;Встроенная клавиатура&rdquo;. Первый вариант позволяет пользователю не писать сообщение, а просто отправить его выбрав один из вариантов. Встроенная клавиатура размещается прямо под сообщением и ассоциирована именно с ним.</li>
+<li>Команды. Всё что вы пишете после &ldquo;/&rdquo; в телеграм называется командами, чтобы избежать коллизий, когда два бота в одном чате имеют одну и ту же команду используется следующий формат &ldquo;/command@BotName&rdquo;.</li>
+<li>Бот может отправлять отформатированные с помощью html или markdown сообщения.</li>
+<li>Бот может запросить местоположение или номер телефона.</li>
+<li>Ботов можно добавлять в группы и, например, администрировать их.</li>
+</ul>
+
+<p><strong>Что в итоге?</strong></p>
+
+<p>Мы обзорно рассмотрели основы того как можно сделать ботов, для чего это и что они могут делать. Применение ботов ограничивается только вашей фантазией.
+Вы создаете бота и запускаете сопровождающий код, который обрабатывает сообщения. Ничего сложного. Увидимся в следующих статьях!</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/how_to_create_telegram_bot\/';
+    var disqus_title = 'Telegram API. Как написать бота?';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/how_to_create_telegram_bot\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/MrIvanOsipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
