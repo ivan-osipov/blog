@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Article on Ivan Osipov</title>
+    <link>https://i-osipov.ru/tags/article/index.xml</link>
+    <description>Recent content in Article on Ivan Osipov</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <atom:link href="https://i-osipov.ru/tags/article/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Instant View in Action</title>
+      <link>https://i-osipov.ru/post/instant-view-in-action/</link>
+      <pubDate>Sat, 20 Jan 2018 00:00:00 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/instant-view-in-action/</guid>
+      <description>
+
+&lt;p&gt;Telegram идет большими шагами по планете и масштабы постоянно растут. Многие из нас часто читают
+статьи на каналах, нажимают кнопку Instant View и вот, статья уже перед нами, но как это получилось?
+Instant View работает по первой ссылке, но почему не по каждой? Сегодня мы с вами разберемся как взять
+свой сайт и адаптировать Instant View к нему. Действовать мы будем на примере i-osipov.ru.&lt;/p&gt;
+
+&lt;h1 id=&#34;с-чем-мы-имеем-дело&#34;&gt;С чем мы имеем дело&lt;/h1&gt;
+
+&lt;p&gt;Под капотом у i-osipov.ru находится hugo, hugo это генератор статического контента. Для понимания,
+когда я пишу пост - у меня есть отдельный проект на диске в котором есть предопределенные директории.
+В директориях лежит контент, например, в &lt;em&gt;content/post/*&lt;/em&gt; находятся все посты на сайте, а при
+выполнении команды hugo в терминале стоя в корневой папке у меня генерируется статика, html + css + js,
+используется преднастроенная тема, в итоге статика выгружается в GitHub репозиторий, публикуется с
+помощью GitHub Pages, а i-osipov.ru лишь альтернативное имя, через которое доступен контент.&lt;/p&gt;
+
+&lt;p&gt;Как вы можете догадаться, формат статики определяю не я, определяет hugo. Теперь передо мной стоит
+задача разобраться в этом формате и научить Telegram генерировать Instant View для моего сайта.
+Прежде всего, источниом информации по этому вопросу для меня является
+&lt;a href=&#34;https://instantview.telegram.org/&#34;&gt;instantview.telegram.org&lt;/a&gt;. С этой страницы мы узнаем о том, что
+Instant View (&lt;strong&gt;IV&lt;/strong&gt;) - это механизм позволяющий открывать ваши ссылки прямо в телеграм, это отличный user
+friendly способ подать ваш контент, ваш сайт может быть не оптимизирован для мобильных устройств
+(это нас не так волнует, т.к. у hugo с этим почти всё в порядке), а слово &lt;em&gt;Instant&lt;/em&gt; означает мгновенную
+загрузку и кеширование на серверах телеграмма.&lt;/p&gt;
+
+&lt;h1 id=&#34;как-работает-instant-view&#34;&gt;Как работает Instant View&lt;/h1&gt;
+
+&lt;p&gt;Втавка ссылки на внешний контент в текстовое поле влечет за собой цепочку событий: генерируется link preview -
+это короткая инфрмация о том какой контент доступен по ссылке, специальный &lt;em&gt;Instant View Bot&lt;/em&gt; проверяет,
+есть ли шаблон IV для указанного сайта. После &lt;a href=&#34;https://instantview.telegram.org/#publishing-templates&#34;&gt;публикации шаблона&lt;/a&gt;
+он становится доступен всем пользователям Telegram. До процесса глобальной публикации вы можете давать ссылку
+читателям без процесса публикации и подтверждения, но об этом в разделе &lt;em&gt;Публикация&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;создание-instant-view&#34;&gt;Создание Instant View&lt;/h1&gt;
+
+&lt;h2 id=&#34;редактор-instant-view&#34;&gt;Редактор Instant View&lt;/h2&gt;
+
+&lt;p&gt;С этого момента начинается процесс разработки, так что если у вас есть к чему прикрутить IV, то самое время взять ноутбук и приготовится.&lt;/p&gt;
+
+&lt;p&gt;Все манипуляции вашими IV происходят на странице &lt;a href=&#34;https://instantview.telegram.org/my&#34;&gt;instantview.telegram.org/my&lt;/a&gt;
+При первом входе вас попросят залогиниться через telegram. Далее вы даёте ссылку на любой контент (пост на котором мы будем
+отлаживать шаблон) на вашем сайте.
+Что именно вы выберете - не так важно, главное, чтобы верстка контента была примерно одинаковой. Я возьму один из последних постов.
+Редактор открылся, теперь мы видим следующую картину&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/posts/instant_view_in_action/iv_editor.jpg&#34; alt=&#34;InstantViewEditor&#34; title=&#34;Instant View Editor&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Перед нами 3 рабочих пространства. Слева мы видим подгруженную, словно с телефона, версию страницы блога, по центру
+расположилось поле для указания правил (это наше рабочее пространство), а справа мы видим результат - то, как примерно
+будет выглядеть IV. На скриншоте по центру по умолчанию пусто, но для полноты я вписал туда &lt;code&gt;body: //article&lt;/code&gt;. Такая
+простая конфигурация говорит о том, что тело нашего Instant View будет парситься Instant View Bot&amp;rsquo;ом прямо из html тега
+под названием &lt;em&gt;article&lt;/em&gt; (выбранного благодаря xpath). Это первое из двух обязательных полей для создания Instant View, дальше мы разберем правила,
+которые помогут сформировать качественное встроенное представление внутри Telegram из того контента, который доступен на
+странице. При необходимости, вы можете перезагрузить исходную страницу и сохранить ваши описанные правила с помощью
+&lt;code&gt;ctrl + S&lt;/code&gt; или &lt;code&gt;cmd + S&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;В нижней части страницы располагается результат последней операции и вывод функции @debug на которую мы взглянем в
+разделе &lt;em&gt;Дебаггер&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;С помощью символа &lt;code&gt;#&lt;/code&gt; обозначается начало комментария, текст справа этого символа не интерпритируется.&lt;/p&gt;
+
+&lt;h2 id=&#34;панель-разработчика&#34;&gt;Панель разработчика&lt;/h2&gt;
+
+&lt;p&gt;Важнейший инструмент на этапе построения Instant View это Панель разработчика в вашем браузере. К примеру, в Google
+Chrome она открывается при нажатии &lt;code&gt;F12&lt;/code&gt; или &lt;code&gt;Ctrl + Shift + I&lt;/code&gt;, либо поищите в меню Дополнительные инструменты -
+Инструменты разработчика.&lt;/p&gt;
+
+&lt;h2 id=&#34;фильтрация-контента&#34;&gt;Фильтрация контента&lt;/h2&gt;
+
+&lt;p&gt;Помните, что Instant View предназначен для относительно стачесных статей, центральная страница динамичного сайта -
+плохой кандидат для IV. Следовательно и не каждая станица интересующего сайта нам подойдет. Часто, статьи обособляются
+html тегом &lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt; и это знак того, что на странице есть статья. Для того, чтобы по ошибке Instant View Bot не интерпретировал
+ссылки на другие страницы сайта как встроенные, нам необходимо добавить условия.&lt;/p&gt;
+
+&lt;h2 id=&#34;условия&#34;&gt;Условия&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#conditions&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Условия начинаются либо с &lt;code&gt;?&lt;/code&gt;, либо с &lt;code&gt;!&lt;/code&gt; по следующему формату:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;?condition:  xpath_query   # пример условия
+!condition:  regexp        # в правой части условия находится регулярное выражение
+?condition                 # условие без параметров
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Если условия следуют друг за другом, то они интерпретируются как единый блок, где &lt;code&gt;?&lt;/code&gt;-правила это ИЛИ, а &lt;code&gt;!&lt;/code&gt;-правила
+это И. В блоке условий должно быть как минимум одно условие ИЛИ.&lt;/p&gt;
+
+&lt;p&gt;Несколько блоков условий выглядят следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;?exists: //article
+# здесь мы пишем правила, которые применим когда на странице есть тег article
+
+?exists: //content
+# здесь мы пишем правила, которые применим когда на странице есть тег content, а тега article может и не быть
+
+?exists: //content
+!exists: //article
+# здесь мы пишем правила, которые применим когда на странице и есть тег contentи тег article
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Конечно, кроме условия &lt;code&gt;exists&lt;/code&gt; существуют и другие, ниже их полный список на текущий момент:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;?domain: regexp # проверяет соответствует ли домен регулярному выражению
+
+?domain_not: regexp # проверят не запрещен ли домен
+
+?path: regexp # проверяет путь до текущей страницы соответствует регулярному выражению
+
+?path_not: regexp # проверяет, что путь не соответствует регулярному выражению
+
+?exists: xpath_query # проверяет наличие узла на странице
+
+?not_exists: xpath_query # проверяет отсутствие узла на странице
+
+?true
+# правила здесь будут применены всегда
+?false
+# правила здесь не применятся никогда (по сути место для неработающих правил)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для нашего примера я выбрал следующие условия:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;?exists: //article
+!domain: i-osipov\.ru
+!path: /post/.+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Посты находятся всегда под i-osipov.ru/post/* и в каждом посте должен существовать тег &lt;em&gt;article&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;свойства&#34;&gt;Свойства&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#properties&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Свойства содержат в себе значения и имеют следующий формат:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;property: xpath_query
+property: &amp;quot;Some string&amp;quot;
+property: null
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;По умолчанию свойства не переопределяются, т.е. если не нулевое значение было записано в свойство, то для того, чтобы
+его переопределить, нужно испрользовать символ &lt;code&gt;!&lt;/code&gt;, т.е. конструкция &lt;code&gt;property!: //content&lt;/code&gt; сможет обновить свойство,
+если правая часть вернет не возвращает пустой результат и не &lt;code&gt;null&lt;/code&gt;. Если же правая часть вернет пустой результат,
+то значение не переопределится, для того, чтобы это произошло, необходимо воспользоваться &lt;code&gt;!!&lt;/code&gt;. В результате,
+&lt;code&gt;property!!: //content&lt;/code&gt; перезапишет значение свойства вне зависимости от результата.&lt;/p&gt;
+
+&lt;p&gt;Ранее, я упоминал о том, что есть два свойства, которые обязательно нужно определить. Мы уже познакомились со свойством
+&lt;code&gt;body: //article&lt;/code&gt;, которое помогает Instant View Bot определить где же находится основной контент статьи. Второе,
+обязательное к определению свойство это &lt;code&gt;title&lt;/code&gt;, например, правило &lt;code&gt;title: //article//h1&lt;/code&gt; выберет заголовок первого уровня внутри
+блока статьи и объяснит IV Bot&amp;rsquo;у, через свойство &lt;em&gt;title&lt;/em&gt;, где же смотреть название статьи.&lt;/p&gt;
+
+&lt;p&gt;Рассмотрим другие свойства, которые нам доступны из коробки:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Формат описания
+название: тип # пояснение
+Для создания свойства в конструкциях ниже тип нужно заменить конкретным значением
+
+title: RichText # заголовок страницы
+body: RichText # тело страницы
+author: String # имя автора
+author_url: URL # ссылка на автора
+published_date: Unixtime # дата публикации
+description: String # краткое описание для превью ссылки
+image_url: Url # ссылка на фото для превью ссылки
+document_url: Url # ссылка на документ для превью ссылки
+channel: String # указатель на авторский канал, например, @channelName
+cover: Media # Обложка страницы
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для нашего примера, я обозначу следующие свойства&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;body: //article
+title: //h1
+channel: &amp;quot;@from_junior_to_senior&amp;quot;
+description: //h2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Наших текущих знаний хватает только на такие простые манипуляции, но даже их достаточно для минимального варианта.
+Для полноты картины пока &amp;ldquo;захардкодим&amp;rdquo; остальные интересующие нас значения, например, так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;author: &amp;quot;Ivan Osipov&amp;quot;
+author_url: &amp;quot;https://i-osipov.ru&amp;quot;
+published_date: &amp;quot;2017-07-23&amp;quot;
+image_url: &amp;quot;https://i-osipov.ru/img/posts/how_to_create_telegram_bot/header.png&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В следующих разделах мы с вами перепишем этот хардкод, но пока так.&lt;/p&gt;
+
+&lt;p&gt;Результат таких манипуляций ниже на скриншоте редактора:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/posts/instant_view_in_action/iv_step1.jpg&#34; alt=&#34;Instant View. Шаг 1&#34; title=&#34;Instant View. Шаг 1&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;типы-данных&#34;&gt;Типы данных&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#supported-types&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;В главе выше мы затронули типы и прежде всего необходимо пояснить, что страница Instant View содержит разные типы.
+Каждый тип ассоциирован с html тегом, например, тип &lt;code&gt;Header&lt;/code&gt; определяет объекты созданные на основе тегов &lt;code&gt;&amp;lt;h1&amp;gt; - &amp;lt;h4&amp;gt;&lt;/code&gt;.
+У типов есть допустимые дочерние типы, по сути, это те, кто могут быть вложены внутрь. Благодаря типам, практически
+весь контент под тегом &lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt; может быть распознан без дополнительных усилий. Типы важная, но при этом довольно
+простая составляющая Instant View, по этому полный перечень с описанием доступен по
+&lt;a href=&#34;https://instantview.telegram.org/docs#supported-types&#34;&gt;ссылке&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;На ваших страницах может быть представлен какой-либо код на опрежеденном языке, телеграм не поддерживает подстветку
+синтаксиса, но они планируют сделать это в будущем. По этой причине, для больших блоков кода обособленных в &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;
+желательно указывать аттрибут &lt;code&gt;data-language&lt;/code&gt;, как результат, подстветка кода в Instant View появится сама собой со
+временем.&lt;/p&gt;
+
+&lt;h2 id=&#34;переменные&#34;&gt;Переменные&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#variables&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Концепция переменных знакома вам из любого языка программирования. Здесь основное предназначение переменных - гибкое
+манипулирование ими перед назначением их значений свойствам. Кратко, у нас есть идентификатор, который начинается с &lt;code&gt;$&lt;/code&gt;,
+например, &lt;code&gt;$myvariable&lt;/code&gt; и есть значение. Идентификатор может быть только в нижнем регистре. Значение переменной может
+быть xpath или строка, в последнем  случае переменная будет содержать
+список из одного текстового элемента в котором определен заданный в строке текст. Кроме того, вы можете назначить
+переменной &lt;code&gt;null&lt;/code&gt;, что позволяет сбросить значение в ней. Вы можете свободно менять значение переменной, если же вы
+хотите назначить переменной значение только в том случае, если раньше никакое значение не было присвоено, то можно
+воспользоваться символом &lt;code&gt;?&lt;/code&gt;, написанным после идентификатора, вот так &lt;code&gt;$myvariable?&lt;/code&gt;,
+в том месте, где происходит смена значений.&lt;/p&gt;
+
+&lt;p&gt;Резюмируя, мы можем менять значения переменных следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$images:  //img
+$images: //img[@src]  # значение переменной $images будет переопределено
+$images?: //article//img  # новое значение для переменной $images будет выставлено, если в переменной ничего не записано
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для того, чтобы объяснить вторую строчку и что же такое &lt;code&gt;//img[@src]&lt;/code&gt; давайте поговорим о расширенном XPath.&lt;/p&gt;
+
+&lt;h2 id=&#34;расширенный-xpath&#34;&gt;Расширенный XPath&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#extended-xpath&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Прежде всего нужно сказать, что у нас есть чуть больше чем XPath для формирования выборки узлов html документа. Если вы пока не
+знакомы с XPath, то самое время это сделать. Начать можно &lt;a href=&#34;https://ru.wikipedia.org/wiki/XPath&#34;&gt;отсюда&lt;/a&gt;. Кратко,
+XPath это язык, который позволяет навигироваться по XML. Нtml и Xml родственные форматы, по этому мы можем навигироваться и
+по Html.
+Взглянем на дополнительные возможности, которые дает нам расширенный XPath от Telegram.&lt;/p&gt;
+
+&lt;h3 id=&#34;относительный-xpath&#34;&gt;Относительный XPath&lt;/h3&gt;
+
+&lt;p&gt;В разделе &lt;em&gt;Переменные&lt;/em&gt; мы узнали о таком типе правил как объявление переменных, здесь этот концепт нам пригодится.
+Стандартный XPath выполняет поиск по всему документу (мы указываем абсолютное выражение для поиска, искать будем от
+корня документа), однако, это порождает длинные цепочки описания путей до узлов. В расширенном XPath мы можем объяснить
+в каком контексте необходимо выполнять поиск при помощи переменных. Представим, что у нас есть следующее html дерево.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;body&amp;gt;
+    &amp;lt;article&amp;gt;
+        &amp;lt;h1&amp;gt;Заголовок 1 уровня&amp;lt;/h1&amp;gt;
+        &amp;lt;h2&amp;gt;Заголовок 2 уровня&amp;lt;/h2&amp;gt;
+    &amp;lt;/article&amp;gt;
+&amp;lt;/body&amp;gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для навигации по такому дереву мы можем использовать стандартный XPath&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//article/h1 # находит &#39;Заголовок 1 уровня&#39;
+//article/h2 # находит &#39;Заголовок 2 уровня&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Либо, так как мы изначально знаем о том, что поиск будет выполняться внутри узла &lt;code&gt;article&lt;/code&gt;, то можем воспользоваться
+переменной и таким образом задать контекст:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$myArticle: //article
+$myArticle/h1 # находит &#39;Заголовок 1 уровня&#39;
+$myArticle/h2 # находит &#39;Заголовок 2 уровня&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;один-узел-вместо-нескольких&#34;&gt;Один узел вместо нескольких&lt;/h3&gt;
+
+&lt;p&gt;Иногда, мы знаем, что XPath вернет нам несколько результатов, но мы хотим только первый, второй или любой другой из
+них. По умолчанию XPath возвращает список узлов, однако, для того, чтобы сузить область поиска мы можем явно выбрать
+один из полученных узлов с помощью выражения &lt;code&gt;(xpath_query)[n]&lt;/code&gt;, здесь &lt;code&gt;n&lt;/code&gt; - это порядковый номер узла в списке,
+полученном с помощью &lt;code&gt;xpath_query&lt;/code&gt;. Нумерация начинается с 1, либо на месте &lt;code&gt;n&lt;/code&gt; можно записать &lt;code&gt;last()&lt;/code&gt; и тогда
+будет выбран последний элемент. Такой синтаксис поддерживается только для всего выражения целиком. Ниже несколько примеров:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$headers:    //h1                    # все &amp;lt;h1&amp;gt; узлы на странице
+$header2:    (//h1)[2]               # второй &amp;lt;h1&amp;gt; узел на странице
+$header2:    ($headers)[2]           # аналогично предыдущему
+$last_link:  ($header2//a)[last()]   # последняя ссылка (&amp;lt;a&amp;gt;) внутри контекста $header2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;выбор-по-css-классу&#34;&gt;Выбор по css классу&lt;/h3&gt;
+
+&lt;p&gt;Отличный инструмент, который мы получили с расширенным XPath это выражение &lt;code&gt;has-class(&amp;quot;class&amp;quot;)&lt;/code&gt;, которое позволяет выбирать
+узлы имеющие определенный класс. Это выражение - сокращение следующего
+&lt;code&gt;contains(concat(&amp;quot; &amp;quot;, normalize-space(@class), &amp;quot; &amp;quot;), &amp;quot; class &amp;quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Я покажу практическое применение инструмента на своём же блоге, для которого настраиваю Instant View. Ранее мы присвоили
+свойствам title и description следующие значения:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;title: //h1
+description: //h2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Но это не до конца верно, правильнее ограничить контекст поиска и мы можем это сделать. Все заголовки документа могут
+быть доступны только через &lt;code&gt;div&lt;/code&gt; элемент с классом &lt;code&gt;post-heading&lt;/code&gt;, зная это, мы можем воспользоваться &lt;code&gt;has-class&lt;/code&gt; и
+получим следующее обновление для нашего шаблона.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$header: //div[has-class(&amp;quot;post-heading&amp;quot;)]
+title: $header/h1
+description: $header/h2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;элемент-одного-уровня&#34;&gt;Элемент одного уровня&lt;/h3&gt;
+
+&lt;p&gt;XPath дает нам мощные возможности для поиска, но не всегда они легко читаемы, последние два улучшения - это сокрщенные
+формы стандарных XPath выражений. В стандартном XPath мы можем донянуться до предшествующего &lt;code&gt;sibling&lt;/code&gt; узла (по русски это
+&amp;ldquo;элемент одного уровня&amp;rdquo;) следующим образом: &lt;code&gt;preceding-sibling::*[1]/self&lt;/code&gt;, расширенный XPath дает нам сокращения в виде
+&lt;code&gt;prev-sibling&lt;/code&gt;, можно сравнить в применении:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$divsAfter: //div[./preceding-sibling::*[1]/self::img] # Собирает все div элементы предшествующие узлам img
+
+$divsAfter: //div[./prev-sibling::img] # Сокращенная форма того же самого
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для последующих элементов есть аналогичное выражение &lt;code&gt;next-sibling&lt;/code&gt;, которое является сокращением
+&lt;code&gt;following-sibling::*[1]/self&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;функции&#34;&gt;Функции&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#functions&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Пожалуй важнейший и очень гибкий вид правил - функции. С их помощью вы сможете удалять ненужные элементы, производить
+трансформации одних элементов в другие и так далее. Функции начинаются с символа &lt;code&gt;@&lt;/code&gt; и есть несколько разных форматов
+их применения:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@function:                 xpath_query   # функция без параметров
+@function(param):          xpath_query   # дополнительный параметр указывается в скобках
+@function(p1 p2):          xpath_query   # параметры могут быть разделены пробелом
+@function(p1, &amp;quot;param #2&amp;quot;): xpath_query   # или запятой и заключены в кавычки при необходимости
+@function:                 &amp;quot;Some text&amp;quot;   # вместо xpath можно использовать строки
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;У функции определяется основной аргумент, например, xpath выражение или строка. Основной аргумент записывается справа
+от &amp;ldquo;:&amp;ldquo;. В случае строки в качестве аргумента, на самом деле, будет передан список с одним тектовым элементом, который
+содержит указанный текст.&lt;/p&gt;
+
+&lt;p&gt;Разберем пример. Внутри тега &lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt;, который содержит контент статьи, находится блок с комментариями, это встроенные
+Disqus комментарии. Однако, эти комментарии не поддерживаются в Instant View и нам необходимо их исключить. Для его
+мы воспользуемся функцией &lt;code&gt;@remove&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Открыв консоль разработчика в Chrome и выбрав элемент, который я хочу удалить, я обнаружил, что в DOM дереве исходной
+страницы есть два элемента. Эта часть дерева выглядит примерно так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;...
+&amp;lt;noscript&amp;gt;Please enable JavaScript to view the &amp;amp;lt;a href=&amp;quot;http://disqus.com/?ref_noscript&amp;quot;&amp;amp;gt;comments powered by Disqus.&amp;amp;lt;/a&amp;amp;gt;&amp;lt;/noscript&amp;gt;
+&amp;lt;a href=&amp;quot;http://disqus.com&amp;quot; class=&amp;quot;dsq-brlink&amp;quot;&amp;gt;comments powered by &amp;lt;span class=&amp;quot;logo-disqus&amp;quot;&amp;gt;Disqus&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Узел &lt;code&gt;noscript&lt;/code&gt; довольно просто обнаружить и удалить. &lt;code&gt;$body&lt;/code&gt; ниже это отсылка к телу статьи, к свойству
+&lt;code&gt;body&lt;/code&gt;, которое мы проинициализировали в самом начале используя XPath &lt;code&gt;//article&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@remove: $body//noscript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Со ссылкой, следующей за узлом &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt; всё не так очевидно, здесь мне помогла функция &lt;code&gt;@debug&lt;/code&gt;, благодаря этой
+функции вы можете понять находит ли XPath желаемый элемент или нет. Применение выглядит следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@debug: $body//noscript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Результат применения вы увидите в самом низу страницы редактора.
+Здесь я могу применить расширенный XPath и сказать &amp;ldquo;Удали все узлы &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; перед которыми есть узел того же уровня &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt;&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@remove: $body//a[prev-sibling::noscript]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Успех? Нет! Оказывается, из-за того, что сначала мы удалили &lt;em&gt;noscript&lt;/em&gt;, а затем опирались на него при поиске &lt;em&gt;a&lt;/em&gt;, то
+интерпритатор в конце не нашел ни одного &lt;em&gt;a&lt;/em&gt; у которого предшественник &lt;em&gt;noscript&lt;/em&gt;. Понять это получилось опять же,
+благодаря функции &lt;code&gt;@debug&lt;/code&gt;. В результате, поменяв местами вызовы функции &lt;code&gt;@remove&lt;/code&gt; мы последовательно удалили оба
+не нужных элемента.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@remove: $body//a[prev-sibling::noscript]   # Сначала удаляем ссылку следующую за noscript
+@remove: $body//noscript                    # Затем удаляем сам noscript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Также функции могут явно или неявно работать со специальными переменными.&lt;/p&gt;
+
+&lt;h3 id=&#34;специальные-переменные&#34;&gt;Специальные переменные&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#special-variables-and&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Когда мы работаем с функцией у которой справа записан xpath, то мы можем на следующей строке получитьрезультат этого
+выражения не повторяя его. Этот результат хранится в переменной &lt;code&gt;$$&lt;/code&gt;, т.е. мы можем сделать, например, так&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;description: $header/h2
+@debug: $$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;После чего внизу редактора увидим, какой же результат мы записали в description. Также каждая функция выполняет некую
+трансформацию, обрабатывает входящие элементы и получает какой-то результат. Собственно, сам результат можно получить
+из переменной &lt;code&gt;$@&lt;/code&gt;. Итак:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$$&lt;/code&gt; - содержит результат самого последнего XPath выражения;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$@&lt;/code&gt; - содержит значение возвращаемое последней запущенной функцией.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;description: $header/h2     # определяет описание страницы
+@debug                      # выводит описание, по умолчанию вместо xpath подразумевается $$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;другие-функции&#34;&gt;Другие функции&lt;/h3&gt;
+
+&lt;p&gt;В конце этого руководства я приведу описание каждой из доступных функций, но для специфик применения, предлагаю обратиться к оригинальной
+документации по ссылкам. См. приложение А.&lt;/p&gt;
+
+&lt;p&gt;Используя изученные в приложении А функции мы можем, для начала, улучшить последний процесс удаления хвостов от disqus.
+Раньше мы удаляли хвосты так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@remove: $body//a[prev-sibling::noscript]   # Сначала удаляем ссылку следующую за noscript
+@remove: $body//noscript                    # Затем удаляем сам noscript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Теперь мы воспользуемся функцией &lt;code&gt;@combine&lt;/code&gt;, которая склеивает заданные узлы в один &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt; узел. А затем удалим результат
+склейки.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@combine: $body//noscript/next-sibling::a
+@remove
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Нам осталось разобраться, как правильно обозначить автора, дату публикации и ссылку на картинку для превью.&lt;/p&gt;
+
+&lt;p&gt;Для получения картинки, воспользуемся функцией &lt;code&gt;@background_to_image&lt;/code&gt;, она преобразует стиль в элемент &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;.
+Результат функции присвоим переменной &lt;code&gt;$main_image&lt;/code&gt;, значение атрибутта &lt;code&gt;src&lt;/code&gt; присвоим свойству &lt;code&gt;image_url&lt;/code&gt;, а саму картинку
+добавим в начало статьи. Всё это делается следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@background_to_image: //header[has-class(&amp;quot;intro-header&amp;quot;)]   # нашли картинку
+$main_image: $@                                             # сохранили узел в переменную
+
+@prepend_to($body): $main_image                             # вставили в начало контента
+image_url: $main_image/@src                                 # обозначили её как картинку для preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Инструменты разработчика Chrome подсказывают, что оставшаяся интересующая нас информация находится в той же части
+дерева элементов, что и заголовки для статей, по этому воспользуемся, уже определенным ранее &lt;code&gt;$header&lt;/code&gt;. Нам осталось
+извлечь из дерева имя автора и дату публикации. Извлечение данных, я сделал следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$extra_meta: $header/span       # уточняем поддерево с метаданными
+
+$author: ($extra_meta/a)[1]     # выбираем первую ссылку в списке
+author: $author/text()          # извлекаем её название, в моем случае это автор
+
+@match(&amp;quot;Дата публикации: ([0-9]{4}-[0-9]{2}-[0-9]{2})&amp;quot;, 1): $extra_meta # в поддереве с метаданными ищем дату по регулярному выражению и забираем первую группу
+published_date: $@              # присваиваем результат поиска
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;встраиваемые-элементы&#34;&gt;Встраиваемые элементы&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#embedded-elements&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;В вашем случае могут быть медиа элементы, которые вы так же хотели бы встроить. Сегодня телеграм поддерживает следующие
+сервисы для встраивания в Instant View:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Youtube&lt;/li&gt;
+&lt;li&gt;Vimeo&lt;/li&gt;
+&lt;li&gt;Tweets &amp;amp; Twitter Videos&lt;/li&gt;
+&lt;li&gt;Facebook Posts &amp;amp; Videos&lt;/li&gt;
+&lt;li&gt;Instagram&lt;/li&gt;
+&lt;li&gt;Giphy&lt;/li&gt;
+&lt;li&gt;SoundCloud&lt;/li&gt;
+&lt;li&gt;GithubGist&lt;/li&gt;
+&lt;li&gt;Aparat&lt;/li&gt;
+&lt;li&gt;VK.com Videos&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;включения-системные-правила&#34;&gt;Включения (системные правила)&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#include&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Включения - это системные правила и вам их нет необходимости использовать для собственных нужд, но знание того что
+это пригодится для понимания работы Telegram Instant View.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+ core.telegram.org # вставляет блок правил, который используется для core.telegram.org
+?not_exists: $body  # если не найдет, то ...
++ telegram.org      # вставляет другой блок
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Я вижу один вариант использования. Это если ваш сайт на одном движке с кем-то, для кого уже есть готовые правила&lt;/p&gt;
+
+&lt;h2 id=&#34;обработка-страниц&#34;&gt;Обработка страниц&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#processing-pages&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Все страницы обрабатываются по следующим правилам:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Url: http://example.com/some_page.html
++ example.com
+?true
++ ..after
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Если же страница находится на поддомене, то она обрабатывается так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Url: http://some.subdomain.example.com/some_page.html
++ some.subdomain.example.com
+?not_exists: $body
++ subdomain.example.com
+?not_exists: $body
++ example.com
+?true
++ ..after
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Следовательно, сначала Instant View Bot ищет шаблон для полного домена и если он не находит проинициализированного свойства
+&lt;em&gt;body&lt;/em&gt;, то понижает уровнь домена и ищет шаблон для него. Блок правил &lt;code&gt;..after&lt;/code&gt; выполняется для всех доменов.&lt;/p&gt;
+
+&lt;h2 id=&#34;instant-view-для-поддоменов&#34;&gt;Instant View для поддоменов&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#working-with-subdomains&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Если страница обрабатывается для поддомена, то необходимо вручную выбрать уровень домена, который необходим в левом
+верхнем углу редактора.&lt;/p&gt;
+
+&lt;h2 id=&#34;публикация&#34;&gt;Публикация&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://instantview.telegram.org/#publishing-templates&#34;&gt;Документация&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Для того, чтобы посмотреть результат нажмите на кнопку View In Telegram и если у вас есть десктопное приложение, то в нем
+вам предложат отправить кому-нибудь ссылку, которая будет открывать ваш тестовый пример через Instant View.&lt;/p&gt;
+
+&lt;p&gt;Публикация для всех пользователей Telegram происходит только после подтверждения вашего шаблона командой Telegram.
+До этого момента вы можете распространять ссылки с истользованием шаблона, даже без подтверждения. Для этого вам нужно
+составить ссылку в формате: &lt;code&gt;t.me/iv?url=...&amp;amp;rhash=...&lt;/code&gt;, где url это ссылка на публикацию, а &lt;code&gt;rhash&lt;/code&gt; - идентификатор
+шаблона.&lt;/p&gt;
+
+&lt;h2 id=&#34;бонус-instant-view-и-cloudflare&#34;&gt;Бонус. Instant View и Cloudflare&lt;/h2&gt;
+
+&lt;!--email_off--&gt;
+
+&lt;p&gt;В своих прошлых статьях, я рассказывал о том, что в качестве DNS серверов для i-osipov.ru используются DNS сервера
+Cloudflare. Кроме того, Cloudflare это прокси защищающий от DDOS и при реализации Instant View я заметил одну небольшую
+особенность. Из коробки этот замечательный сервис предоставляет услугу, которая называется &amp;lsquo;Email protection&amp;rsquo;, по сути
+в определенном наборе ситуаций, которые можно детектировать как &amp;ldquo;бот, который обходит интернет и собирает email&amp;rsquo;ы для
+спама&amp;rdquo;, Cloudflare заменят все email&amp;rsquo;ы обсусцирует email&amp;rsquo;ы на странице. Instant View Bot такой же подозрительный тип,
+но всё ради безопасности. Тем ни менее, в статье про то &amp;ldquo;как написать бота для телеграма&amp;rdquo; есть полная форма команды
+оправляемая телеграм боту, напомню что выглядит она вот так: &lt;code&gt;/command@BotName&lt;/code&gt;. Проблема в том, что cloudflare распознает
+как email всё что справа от слеша и отдает неправильную страничку боту. Как это исправить? Все подробности есть
+&lt;a href=&#34;https://support.cloudflare.com/hc/en-us/articles/200170016-What-is-Email-Address-Obfuscation-&#34;&gt;здесь&lt;/a&gt;, если коротко,
+то вы должны встроить в код страницы тег &lt;code&gt;&amp;lt;!--email_off--&amp;gt; здесь cloudflare не будет защищать email&#39;ы &amp;lt;!--/email_off--&amp;gt;&lt;/code&gt;.
+Да, вы правильно поняли, для того, чтобы показать вам команду для бота и в этой статье, мне пришлось снова встроить
+комментарии отключающие cloudflare email protection.&lt;/p&gt;
+
+&lt;!--/email_off--&gt;
+
+&lt;h2 id=&#34;шаблон-для-i-osipov-ru&#34;&gt;Шаблон для i-osipov.ru&lt;/h2&gt;
+
+&lt;p&gt;В итоге, мы получили следующий шаблон:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;?exists: //article
+!domain: i-osipov\.ru
+!path: /post/.+
+
+body: //article
+
+$header: //div[has-class(&amp;quot;post-heading&amp;quot;)]
+title: $header/h1
+description: $header/h2
+
+channel: &amp;quot;@from_junior_to_senior&amp;quot;
+
+$extra_meta: $header/span
+
+$author: ($extra_meta/a)[1]
+author: $author/text()
+
+author_url: &amp;quot;https://i-osipov.ru&amp;quot;
+
+@match(&amp;quot;Дата публикации: ([0-9]{4}-[0-9]{2}-[0-9]{2})&amp;quot;, 1): $extra_meta
+published_date: $@
+
+@background_to_image: //header[has-class(&amp;quot;intro-header&amp;quot;)]
+$main_image: $@
+
+@prepend_to($body): $main_image
+image_url: $main_image/@src
+
+@combine: $body//noscript/next-sibling::a
+@remove
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;На самом деле в шаблон входит еще и обнотка неподдерживаемых таблиц, вместо них можно отображать ссылку на сайт с
+полным контентом. Как это сделать вы можете подглядеть в публичком шаблоне для i-osipov.ru или поразмышлять самостоятельно.&lt;/p&gt;
+
+&lt;h2 id=&#34;заключение&#34;&gt;Заключение&lt;/h2&gt;
+
+&lt;p&gt;Telegram Instant View это мощный инструмент, который поможет вам интегрировать ваш контент в инфраструктуру Telegram.
+Относиться к Instant View можно по разному, но на мой взгляд, если вы можете сделать жизнь вашего читателя еще лучше -
+сделайте это. Со своей стороны, я надеюсь, что этот документ поможет вам легко разобраться в создании Instant View и
+улучшить UX ваших статей. Для достижения совершенства обратите внимание на
+&lt;a href=&#34;https://instantview.telegram.org/checklist&#34;&gt;Чеклист Идеального Instant View&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;приложение-а&#34;&gt;Приложение А&lt;/h1&gt;
+
+&lt;p&gt;Функции для детальной настройки форматирования&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#debug&#34;&gt;@debug&lt;/a&gt; отладка команд, вывод результов в нижней части редактора;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#append&#34;&gt;@append&lt;/a&gt; вставляет переданные элементы &lt;strong&gt;в начало&lt;/strong&gt; каждого найденного по XPath;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#prepend&#34;&gt;@prepend&lt;/a&gt; вставляет переданные элементы &lt;strong&gt;в конец&lt;/strong&gt; каждого найденного по XPath;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#after&#34;&gt;@after&lt;/a&gt; вставляет переданные элементы &lt;strong&gt;после&lt;/strong&gt; каждого найденного по XPath;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#before&#34;&gt;@before&lt;/a&gt; вставляет переданные элементы &lt;strong&gt;перед&lt;/strong&gt; каждым найденным по XPath;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#append-to&#34;&gt;@append_to&lt;/a&gt; вставляет целевой узел в конец базового;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#prepend-to&#34;&gt;@prepend_to&lt;/a&gt; вставляет целевой узел в начало базового;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#after-el&#34;&gt;@after_el&lt;/a&gt;  вставляет целевой узел после базового;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#before-el&#34;&gt;@before_el&lt;/a&gt; вставляет целевой узел перед базовым;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#replace-tag&#34;&gt;@replace_tag&lt;/a&gt; изменяет имя тега;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#wrap&#34;&gt;@wrap&lt;/a&gt; заворачивает целевой элемент в заданный тег;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#clone&#34;&gt;@clone&lt;/a&gt; создает копию целевого узла;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#detach&#34;&gt;@detach&lt;/a&gt; отделяет целевой узел от оставшейся части, создает копию родительского узла;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#pre&#34;&gt;@pre&lt;/a&gt; помечает текст внутри целевого узла как отформатированный;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#set-attr&#34;&gt;@set_attr&lt;/a&gt; устанавливает аттрибут в каждом соответствующем узле;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#set-attrs&#34;&gt;@set_attrs&lt;/a&gt; устанавливает несколько аттрибутов;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#match&#34;&gt;@match&lt;/a&gt; выполняет поиск на основе регулярного выражения, в результате, заменяет содержимое целевого узла;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#replace&#34;&gt;@replace&lt;/a&gt; выполняет замену на основе регулярного выражения;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#urlencode&#34;&gt;@urlencode&lt;/a&gt; кодирует url в соответствии с RFC 3986;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#urldecode&#34;&gt;@urldecode&lt;/a&gt; декодирует url в соответствии с RFC 3986;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#htmlencode&#34;&gt;@htmlencode&lt;/a&gt; кодирует специальные символы в целевом узле в HTML сущности;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#htmldecode&#34;&gt;@htmldecode&lt;/a&gt; декодирует специальные символы в целевом узле в HTML сущности;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#background-to-image&#34;&gt;@background_to_image&lt;/a&gt; трансформирует целевой узел в &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; тэг с &lt;code&gt;src&lt;/code&gt; атрибуттом;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#json-to-xml&#34;&gt;@json_to_xml&lt;/a&gt; трансформирует json контент целевого узла в xml;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#html-to-dom&#34;&gt;@html_to_dom&lt;/a&gt; парсит html узел и вставляет его в документ (в документации есть очевидный пример);&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#combine&#34;&gt;@combine&lt;/a&gt; склеивает каждый следующий с предыдущим узлом, если такой существет;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#datetime&#34;&gt;@datetime&lt;/a&gt; трансформирует дату и время из строки в unix time;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#simplify&#34;&gt;@simplify&lt;/a&gt; системная функция для понимания того, как работает преобразование в Instant View;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#inline&#34;&gt;@inline&lt;/a&gt; встраивает iframe;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#unsupported&#34;&gt;@unsupported&lt;/a&gt; определяет, какие элементы не поддерживаются, для того чтобы не давать пользователю Instant View с неполным контентом.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/instant-view-in-action/</loc>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/how_to_create_telegram_bot/</loc>
     <lastmod>2017-07-23T23:10:24+04:00</lastmod>
   </url>
@@ -32,6 +37,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/article/</loc>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/articles/</loc>
     <lastmod>2017-07-19T00:21:33+04:00</lastmod>
     <priority>0</priority>
@@ -45,7 +56,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/blog/</loc>
-    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -122,7 +133,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/hobby/</loc>
-    <lastmod>2017-06-15T19:10:40+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,6 +156,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/instant-view/</loc>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/investments/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
     <priority>0</priority>
@@ -158,13 +175,19 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2017-07-23T23:10:24+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/tags/java/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/manual/</loc>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -200,7 +223,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2017-07-23T23:10:24+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -235,13 +258,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/telegram/</loc>
-    <lastmod>2017-07-23T23:10:24+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/telegram/</loc>
-    <lastmod>2017-07-23T23:10:24+04:00</lastmod>
+    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
     <priority>0</priority>
   </url>
   

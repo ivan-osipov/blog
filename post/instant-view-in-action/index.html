@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Instant View in Action -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">telegram channel</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru/img/posts/instant_view_in_action/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Instant View in Action</h1>
+               <h2 class="subheading">Полное руководство по созданию Telegram Instant View на примере i-osipov.ru</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-01-20
+<br />
+В категориях: <a href="/categories/blog">Blog</a>, <a href="/categories/hobby">Hobby</a>, <a href="/categories/telegram">Telegram</a>, <a href="/categories/manual">Manual</a>
+
+<br />
+Тэги: <a href="/tags/telegram">telegram</a>, <a href="/tags/instant-view">instant view</a>, <a href="/tags/article">article</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Telegram идет большими шагами по планете и масштабы постоянно растут. Многие из нас часто читают
+статьи на каналах, нажимают кнопку Instant View и вот, статья уже перед нами, но как это получилось?
+Instant View работает по первой ссылке, но почему не по каждой? Сегодня мы с вами разберемся как взять
+свой сайт и адаптировать Instant View к нему. Действовать мы будем на примере i-osipov.ru.</p>
+
+<h1 id="с-чем-мы-имеем-дело">С чем мы имеем дело</h1>
+
+<p>Под капотом у i-osipov.ru находится hugo, hugo это генератор статического контента. Для понимания,
+когда я пишу пост - у меня есть отдельный проект на диске в котором есть предопределенные директории.
+В директориях лежит контент, например, в <em>content/post/*</em> находятся все посты на сайте, а при
+выполнении команды hugo в терминале стоя в корневой папке у меня генерируется статика, html + css + js,
+используется преднастроенная тема, в итоге статика выгружается в GitHub репозиторий, публикуется с
+помощью GitHub Pages, а i-osipov.ru лишь альтернативное имя, через которое доступен контент.</p>
+
+<p>Как вы можете догадаться, формат статики определяю не я, определяет hugo. Теперь передо мной стоит
+задача разобраться в этом формате и научить Telegram генерировать Instant View для моего сайта.
+Прежде всего, источниом информации по этому вопросу для меня является
+<a href="https://instantview.telegram.org/">instantview.telegram.org</a>. С этой страницы мы узнаем о том, что
+Instant View (<strong>IV</strong>) - это механизм позволяющий открывать ваши ссылки прямо в телеграм, это отличный user
+friendly способ подать ваш контент, ваш сайт может быть не оптимизирован для мобильных устройств
+(это нас не так волнует, т.к. у hugo с этим почти всё в порядке), а слово <em>Instant</em> означает мгновенную
+загрузку и кеширование на серверах телеграмма.</p>
+
+<h1 id="как-работает-instant-view">Как работает Instant View</h1>
+
+<p>Втавка ссылки на внешний контент в текстовое поле влечет за собой цепочку событий: генерируется link preview -
+это короткая инфрмация о том какой контент доступен по ссылке, специальный <em>Instant View Bot</em> проверяет,
+есть ли шаблон IV для указанного сайта. После <a href="https://instantview.telegram.org/#publishing-templates">публикации шаблона</a>
+он становится доступен всем пользователям Telegram. До процесса глобальной публикации вы можете давать ссылку
+читателям без процесса публикации и подтверждения, но об этом в разделе <em>Публикация</em>.</p>
+
+<h1 id="создание-instant-view">Создание Instant View</h1>
+
+<h2 id="редактор-instant-view">Редактор Instant View</h2>
+
+<p>С этого момента начинается процесс разработки, так что если у вас есть к чему прикрутить IV, то самое время взять ноутбук и приготовится.</p>
+
+<p>Все манипуляции вашими IV происходят на странице <a href="https://instantview.telegram.org/my">instantview.telegram.org/my</a>
+При первом входе вас попросят залогиниться через telegram. Далее вы даёте ссылку на любой контент (пост на котором мы будем
+отлаживать шаблон) на вашем сайте.
+Что именно вы выберете - не так важно, главное, чтобы верстка контента была примерно одинаковой. Я возьму один из последних постов.
+Редактор открылся, теперь мы видим следующую картину</p>
+
+<p><img src="../../img/posts/instant_view_in_action/iv_editor.jpg" alt="InstantViewEditor" title="Instant View Editor" /></p>
+
+<p>Перед нами 3 рабочих пространства. Слева мы видим подгруженную, словно с телефона, версию страницы блога, по центру
+расположилось поле для указания правил (это наше рабочее пространство), а справа мы видим результат - то, как примерно
+будет выглядеть IV. На скриншоте по центру по умолчанию пусто, но для полноты я вписал туда <code>body: //article</code>. Такая
+простая конфигурация говорит о том, что тело нашего Instant View будет парситься Instant View Bot&rsquo;ом прямо из html тега
+под названием <em>article</em> (выбранного благодаря xpath). Это первое из двух обязательных полей для создания Instant View, дальше мы разберем правила,
+которые помогут сформировать качественное встроенное представление внутри Telegram из того контента, который доступен на
+странице. При необходимости, вы можете перезагрузить исходную страницу и сохранить ваши описанные правила с помощью
+<code>ctrl + S</code> или <code>cmd + S</code>.</p>
+
+<p>В нижней части страницы располагается результат последней операции и вывод функции @debug на которую мы взглянем в
+разделе <em>Дебаггер</em></p>
+
+<p>С помощью символа <code>#</code> обозначается начало комментария, текст справа этого символа не интерпритируется.</p>
+
+<h2 id="панель-разработчика">Панель разработчика</h2>
+
+<p>Важнейший инструмент на этапе построения Instant View это Панель разработчика в вашем браузере. К примеру, в Google
+Chrome она открывается при нажатии <code>F12</code> или <code>Ctrl + Shift + I</code>, либо поищите в меню Дополнительные инструменты -
+Инструменты разработчика.</p>
+
+<h2 id="фильтрация-контента">Фильтрация контента</h2>
+
+<p>Помните, что Instant View предназначен для относительно стачесных статей, центральная страница динамичного сайта -
+плохой кандидат для IV. Следовательно и не каждая станица интересующего сайта нам подойдет. Часто, статьи обособляются
+html тегом <code>&lt;article&gt;</code> и это знак того, что на странице есть статья. Для того, чтобы по ошибке Instant View Bot не интерпретировал
+ссылки на другие страницы сайта как встроенные, нам необходимо добавить условия.</p>
+
+<h2 id="условия">Условия</h2>
+
+<p><a href="https://instantview.telegram.org/docs#conditions">Документация</a></p>
+
+<p>Условия начинаются либо с <code>?</code>, либо с <code>!</code> по следующему формату:</p>
+
+<pre><code>?condition:  xpath_query   # пример условия
+!condition:  regexp        # в правой части условия находится регулярное выражение
+?condition                 # условие без параметров
+</code></pre>
+
+<p>Если условия следуют друг за другом, то они интерпретируются как единый блок, где <code>?</code>-правила это ИЛИ, а <code>!</code>-правила
+это И. В блоке условий должно быть как минимум одно условие ИЛИ.</p>
+
+<p>Несколько блоков условий выглядят следующим образом:</p>
+
+<pre><code>?exists: //article
+# здесь мы пишем правила, которые применим когда на странице есть тег article
+
+?exists: //content
+# здесь мы пишем правила, которые применим когда на странице есть тег content, а тега article может и не быть
+
+?exists: //content
+!exists: //article
+# здесь мы пишем правила, которые применим когда на странице и есть тег contentи тег article
+</code></pre>
+
+<p>Конечно, кроме условия <code>exists</code> существуют и другие, ниже их полный список на текущий момент:</p>
+
+<pre><code>?domain: regexp # проверяет соответствует ли домен регулярному выражению
+
+?domain_not: regexp # проверят не запрещен ли домен
+
+?path: regexp # проверяет путь до текущей страницы соответствует регулярному выражению
+
+?path_not: regexp # проверяет, что путь не соответствует регулярному выражению
+
+?exists: xpath_query # проверяет наличие узла на странице
+
+?not_exists: xpath_query # проверяет отсутствие узла на странице
+
+?true
+# правила здесь будут применены всегда
+?false
+# правила здесь не применятся никогда (по сути место для неработающих правил)
+
+</code></pre>
+
+<p>Для нашего примера я выбрал следующие условия:</p>
+
+<pre><code>?exists: //article
+!domain: i-osipov\.ru
+!path: /post/.+
+</code></pre>
+
+<p>Посты находятся всегда под i-osipov.ru/post/* и в каждом посте должен существовать тег <em>article</em>.</p>
+
+<h2 id="свойства">Свойства</h2>
+
+<p><a href="https://instantview.telegram.org/docs#properties">Документация</a></p>
+
+<p>Свойства содержат в себе значения и имеют следующий формат:</p>
+
+<pre><code>property: xpath_query
+property: &quot;Some string&quot;
+property: null
+</code></pre>
+
+<p>По умолчанию свойства не переопределяются, т.е. если не нулевое значение было записано в свойство, то для того, чтобы
+его переопределить, нужно испрользовать символ <code>!</code>, т.е. конструкция <code>property!: //content</code> сможет обновить свойство,
+если правая часть вернет не возвращает пустой результат и не <code>null</code>. Если же правая часть вернет пустой результат,
+то значение не переопределится, для того, чтобы это произошло, необходимо воспользоваться <code>!!</code>. В результате,
+<code>property!!: //content</code> перезапишет значение свойства вне зависимости от результата.</p>
+
+<p>Ранее, я упоминал о том, что есть два свойства, которые обязательно нужно определить. Мы уже познакомились со свойством
+<code>body: //article</code>, которое помогает Instant View Bot определить где же находится основной контент статьи. Второе,
+обязательное к определению свойство это <code>title</code>, например, правило <code>title: //article//h1</code> выберет заголовок первого уровня внутри
+блока статьи и объяснит IV Bot&rsquo;у, через свойство <em>title</em>, где же смотреть название статьи.</p>
+
+<p>Рассмотрим другие свойства, которые нам доступны из коробки:</p>
+
+<pre><code>Формат описания
+название: тип # пояснение
+Для создания свойства в конструкциях ниже тип нужно заменить конкретным значением
+
+title: RichText # заголовок страницы
+body: RichText # тело страницы
+author: String # имя автора
+author_url: URL # ссылка на автора
+published_date: Unixtime # дата публикации
+description: String # краткое описание для превью ссылки
+image_url: Url # ссылка на фото для превью ссылки
+document_url: Url # ссылка на документ для превью ссылки
+channel: String # указатель на авторский канал, например, @channelName
+cover: Media # Обложка страницы
+</code></pre>
+
+<p>Для нашего примера, я обозначу следующие свойства</p>
+
+<pre><code>body: //article
+title: //h1
+channel: &quot;@from_junior_to_senior&quot;
+description: //h2
+</code></pre>
+
+<p>Наших текущих знаний хватает только на такие простые манипуляции, но даже их достаточно для минимального варианта.
+Для полноты картины пока &ldquo;захардкодим&rdquo; остальные интересующие нас значения, например, так:</p>
+
+<pre><code>author: &quot;Ivan Osipov&quot;
+author_url: &quot;https://i-osipov.ru&quot;
+published_date: &quot;2017-07-23&quot;
+image_url: &quot;https://i-osipov.ru/img/posts/how_to_create_telegram_bot/header.png&quot;
+</code></pre>
+
+<p>В следующих разделах мы с вами перепишем этот хардкод, но пока так.</p>
+
+<p>Результат таких манипуляций ниже на скриншоте редактора:</p>
+
+<p><img src="../../img/posts/instant_view_in_action/iv_step1.jpg" alt="Instant View. Шаг 1" title="Instant View. Шаг 1" /></p>
+
+<h2 id="типы-данных">Типы данных</h2>
+
+<p><a href="https://instantview.telegram.org/docs#supported-types">Документация</a></p>
+
+<p>В главе выше мы затронули типы и прежде всего необходимо пояснить, что страница Instant View содержит разные типы.
+Каждый тип ассоциирован с html тегом, например, тип <code>Header</code> определяет объекты созданные на основе тегов <code>&lt;h1&gt; - &lt;h4&gt;</code>.
+У типов есть допустимые дочерние типы, по сути, это те, кто могут быть вложены внутрь. Благодаря типам, практически
+весь контент под тегом <code>&lt;article&gt;</code> может быть распознан без дополнительных усилий. Типы важная, но при этом довольно
+простая составляющая Instant View, по этому полный перечень с описанием доступен по
+<a href="https://instantview.telegram.org/docs#supported-types">ссылке</a>.</p>
+
+<p>На ваших страницах может быть представлен какой-либо код на опрежеденном языке, телеграм не поддерживает подстветку
+синтаксиса, но они планируют сделать это в будущем. По этой причине, для больших блоков кода обособленных в <code>&lt;pre&gt;</code>
+желательно указывать аттрибут <code>data-language</code>, как результат, подстветка кода в Instant View появится сама собой со
+временем.</p>
+
+<h2 id="переменные">Переменные</h2>
+
+<p><a href="https://instantview.telegram.org/docs#variables">Документация</a></p>
+
+<p>Концепция переменных знакома вам из любого языка программирования. Здесь основное предназначение переменных - гибкое
+манипулирование ими перед назначением их значений свойствам. Кратко, у нас есть идентификатор, который начинается с <code>$</code>,
+например, <code>$myvariable</code> и есть значение. Идентификатор может быть только в нижнем регистре. Значение переменной может
+быть xpath или строка, в последнем  случае переменная будет содержать
+список из одного текстового элемента в котором определен заданный в строке текст. Кроме того, вы можете назначить
+переменной <code>null</code>, что позволяет сбросить значение в ней. Вы можете свободно менять значение переменной, если же вы
+хотите назначить переменной значение только в том случае, если раньше никакое значение не было присвоено, то можно
+воспользоваться символом <code>?</code>, написанным после идентификатора, вот так <code>$myvariable?</code>,
+в том месте, где происходит смена значений.</p>
+
+<p>Резюмируя, мы можем менять значения переменных следующим образом:</p>
+
+<pre><code>$images:  //img
+$images: //img[@src]  # значение переменной $images будет переопределено
+$images?: //article//img  # новое значение для переменной $images будет выставлено, если в переменной ничего не записано
+</code></pre>
+
+<p>Для того, чтобы объяснить вторую строчку и что же такое <code>//img[@src]</code> давайте поговорим о расширенном XPath.</p>
+
+<h2 id="расширенный-xpath">Расширенный XPath</h2>
+
+<p><a href="https://instantview.telegram.org/docs#extended-xpath">Документация</a></p>
+
+<p>Прежде всего нужно сказать, что у нас есть чуть больше чем XPath для формирования выборки узлов html документа. Если вы пока не
+знакомы с XPath, то самое время это сделать. Начать можно <a href="https://ru.wikipedia.org/wiki/XPath">отсюда</a>. Кратко,
+XPath это язык, который позволяет навигироваться по XML. Нtml и Xml родственные форматы, по этому мы можем навигироваться и
+по Html.
+Взглянем на дополнительные возможности, которые дает нам расширенный XPath от Telegram.</p>
+
+<h3 id="относительный-xpath">Относительный XPath</h3>
+
+<p>В разделе <em>Переменные</em> мы узнали о таком типе правил как объявление переменных, здесь этот концепт нам пригодится.
+Стандартный XPath выполняет поиск по всему документу (мы указываем абсолютное выражение для поиска, искать будем от
+корня документа), однако, это порождает длинные цепочки описания путей до узлов. В расширенном XPath мы можем объяснить
+в каком контексте необходимо выполнять поиск при помощи переменных. Представим, что у нас есть следующее html дерево.</p>
+
+<pre><code class="language-html">&lt;body&gt;
+    &lt;article&gt;
+        &lt;h1&gt;Заголовок 1 уровня&lt;/h1&gt;
+        &lt;h2&gt;Заголовок 2 уровня&lt;/h2&gt;
+    &lt;/article&gt;
+&lt;/body&gt;&gt;
+</code></pre>
+
+<p>Для навигации по такому дереву мы можем использовать стандартный XPath</p>
+
+<pre><code>//article/h1 # находит 'Заголовок 1 уровня'
+//article/h2 # находит 'Заголовок 2 уровня'
+</code></pre>
+
+<p>Либо, так как мы изначально знаем о том, что поиск будет выполняться внутри узла <code>article</code>, то можем воспользоваться
+переменной и таким образом задать контекст:</p>
+
+<pre><code>$myArticle: //article
+$myArticle/h1 # находит 'Заголовок 1 уровня'
+$myArticle/h2 # находит 'Заголовок 2 уровня'
+</code></pre>
+
+<h3 id="один-узел-вместо-нескольких">Один узел вместо нескольких</h3>
+
+<p>Иногда, мы знаем, что XPath вернет нам несколько результатов, но мы хотим только первый, второй или любой другой из
+них. По умолчанию XPath возвращает список узлов, однако, для того, чтобы сузить область поиска мы можем явно выбрать
+один из полученных узлов с помощью выражения <code>(xpath_query)[n]</code>, здесь <code>n</code> - это порядковый номер узла в списке,
+полученном с помощью <code>xpath_query</code>. Нумерация начинается с 1, либо на месте <code>n</code> можно записать <code>last()</code> и тогда
+будет выбран последний элемент. Такой синтаксис поддерживается только для всего выражения целиком. Ниже несколько примеров:</p>
+
+<pre><code>$headers:    //h1                    # все &lt;h1&gt; узлы на странице
+$header2:    (//h1)[2]               # второй &lt;h1&gt; узел на странице
+$header2:    ($headers)[2]           # аналогично предыдущему
+$last_link:  ($header2//a)[last()]   # последняя ссылка (&lt;a&gt;) внутри контекста $header2
+</code></pre>
+
+<h3 id="выбор-по-css-классу">Выбор по css классу</h3>
+
+<p>Отличный инструмент, который мы получили с расширенным XPath это выражение <code>has-class(&quot;class&quot;)</code>, которое позволяет выбирать
+узлы имеющие определенный класс. Это выражение - сокращение следующего
+<code>contains(concat(&quot; &quot;, normalize-space(@class), &quot; &quot;), &quot; class &quot;)</code></p>
+
+<p>Я покажу практическое применение инструмента на своём же блоге, для которого настраиваю Instant View. Ранее мы присвоили
+свойствам title и description следующие значения:</p>
+
+<pre><code>title: //h1
+description: //h2
+</code></pre>
+
+<p>Но это не до конца верно, правильнее ограничить контекст поиска и мы можем это сделать. Все заголовки документа могут
+быть доступны только через <code>div</code> элемент с классом <code>post-heading</code>, зная это, мы можем воспользоваться <code>has-class</code> и
+получим следующее обновление для нашего шаблона.</p>
+
+<pre><code>$header: //div[has-class(&quot;post-heading&quot;)]
+title: $header/h1
+description: $header/h2
+</code></pre>
+
+<h3 id="элемент-одного-уровня">Элемент одного уровня</h3>
+
+<p>XPath дает нам мощные возможности для поиска, но не всегда они легко читаемы, последние два улучшения - это сокрщенные
+формы стандарных XPath выражений. В стандартном XPath мы можем донянуться до предшествующего <code>sibling</code> узла (по русски это
+&ldquo;элемент одного уровня&rdquo;) следующим образом: <code>preceding-sibling::*[1]/self</code>, расширенный XPath дает нам сокращения в виде
+<code>prev-sibling</code>, можно сравнить в применении:</p>
+
+<pre><code>$divsAfter: //div[./preceding-sibling::*[1]/self::img] # Собирает все div элементы предшествующие узлам img
+
+$divsAfter: //div[./prev-sibling::img] # Сокращенная форма того же самого
+</code></pre>
+
+<p>Для последующих элементов есть аналогичное выражение <code>next-sibling</code>, которое является сокращением
+<code>following-sibling::*[1]/self</code>.</p>
+
+<h2 id="функции">Функции</h2>
+
+<p><a href="https://instantview.telegram.org/docs#functions">Документация</a></p>
+
+<p>Пожалуй важнейший и очень гибкий вид правил - функции. С их помощью вы сможете удалять ненужные элементы, производить
+трансформации одних элементов в другие и так далее. Функции начинаются с символа <code>@</code> и есть несколько разных форматов
+их применения:</p>
+
+<pre><code>@function:                 xpath_query   # функция без параметров
+@function(param):          xpath_query   # дополнительный параметр указывается в скобках
+@function(p1 p2):          xpath_query   # параметры могут быть разделены пробелом
+@function(p1, &quot;param #2&quot;): xpath_query   # или запятой и заключены в кавычки при необходимости
+@function:                 &quot;Some text&quot;   # вместо xpath можно использовать строки
+</code></pre>
+
+<p>У функции определяется основной аргумент, например, xpath выражение или строка. Основной аргумент записывается справа
+от &ldquo;:&ldquo;. В случае строки в качестве аргумента, на самом деле, будет передан список с одним тектовым элементом, который
+содержит указанный текст.</p>
+
+<p>Разберем пример. Внутри тега <code>&lt;article&gt;</code>, который содержит контент статьи, находится блок с комментариями, это встроенные
+Disqus комментарии. Однако, эти комментарии не поддерживаются в Instant View и нам необходимо их исключить. Для его
+мы воспользуемся функцией <code>@remove</code>.</p>
+
+<p>Открыв консоль разработчика в Chrome и выбрав элемент, который я хочу удалить, я обнаружил, что в DOM дереве исходной
+страницы есть два элемента. Эта часть дерева выглядит примерно так:</p>
+
+<pre><code class="language-html">...
+&lt;noscript&gt;Please enable JavaScript to view the &amp;lt;a href=&quot;http://disqus.com/?ref_noscript&quot;&amp;gt;comments powered by Disqus.&amp;lt;/a&amp;gt;&lt;/noscript&gt;
+&lt;a href=&quot;http://disqus.com&quot; class=&quot;dsq-brlink&quot;&gt;comments powered by &lt;span class=&quot;logo-disqus&quot;&gt;Disqus&lt;/span&gt;&lt;/a&gt;
+...
+</code></pre>
+
+<p>Узел <code>noscript</code> довольно просто обнаружить и удалить. <code>$body</code> ниже это отсылка к телу статьи, к свойству
+<code>body</code>, которое мы проинициализировали в самом начале используя XPath <code>//article</code>.</p>
+
+<pre><code>@remove: $body//noscript
+</code></pre>
+
+<p>Со ссылкой, следующей за узлом <code>&lt;noscript&gt;</code> всё не так очевидно, здесь мне помогла функция <code>@debug</code>, благодаря этой
+функции вы можете понять находит ли XPath желаемый элемент или нет. Применение выглядит следующим образом:</p>
+
+<pre><code>@debug: $body//noscript
+</code></pre>
+
+<p>Результат применения вы увидите в самом низу страницы редактора.
+Здесь я могу применить расширенный XPath и сказать &ldquo;Удали все узлы <code>&lt;a&gt;</code> перед которыми есть узел того же уровня <code>&lt;noscript&gt;</code>&rdquo;.</p>
+
+<pre><code>@remove: $body//a[prev-sibling::noscript]
+</code></pre>
+
+<p>Успех? Нет! Оказывается, из-за того, что сначала мы удалили <em>noscript</em>, а затем опирались на него при поиске <em>a</em>, то
+интерпритатор в конце не нашел ни одного <em>a</em> у которого предшественник <em>noscript</em>. Понять это получилось опять же,
+благодаря функции <code>@debug</code>. В результате, поменяв местами вызовы функции <code>@remove</code> мы последовательно удалили оба
+не нужных элемента.</p>
+
+<pre><code>@remove: $body//a[prev-sibling::noscript]   # Сначала удаляем ссылку следующую за noscript
+@remove: $body//noscript                    # Затем удаляем сам noscript
+</code></pre>
+
+<p>Также функции могут явно или неявно работать со специальными переменными.</p>
+
+<h3 id="специальные-переменные">Специальные переменные</h3>
+
+<p><a href="https://instantview.telegram.org/docs#special-variables-and">Документация</a></p>
+
+<p>Когда мы работаем с функцией у которой справа записан xpath, то мы можем на следующей строке получитьрезультат этого
+выражения не повторяя его. Этот результат хранится в переменной <code>$$</code>, т.е. мы можем сделать, например, так</p>
+
+<pre><code>description: $header/h2
+@debug: $$
+</code></pre>
+
+<p>После чего внизу редактора увидим, какой же результат мы записали в description. Также каждая функция выполняет некую
+трансформацию, обрабатывает входящие элементы и получает какой-то результат. Собственно, сам результат можно получить
+из переменной <code>$@</code>. Итак:</p>
+
+<ul>
+<li><code>$$</code> - содержит результат самого последнего XPath выражения;</li>
+<li><code>$@</code> - содержит значение возвращаемое последней запущенной функцией.</li>
+</ul>
+
+<pre><code>description: $header/h2     # определяет описание страницы
+@debug                      # выводит описание, по умолчанию вместо xpath подразумевается $$
+</code></pre>
+
+<h3 id="другие-функции">Другие функции</h3>
+
+<p>В конце этого руководства я приведу описание каждой из доступных функций, но для специфик применения, предлагаю обратиться к оригинальной
+документации по ссылкам. См. приложение А.</p>
+
+<p>Используя изученные в приложении А функции мы можем, для начала, улучшить последний процесс удаления хвостов от disqus.
+Раньше мы удаляли хвосты так:</p>
+
+<pre><code>@remove: $body//a[prev-sibling::noscript]   # Сначала удаляем ссылку следующую за noscript
+@remove: $body//noscript                    # Затем удаляем сам noscript
+</code></pre>
+
+<p>Теперь мы воспользуемся функцией <code>@combine</code>, которая склеивает заданные узлы в один <code>&lt;noscript&gt;</code> узел. А затем удалим результат
+склейки.</p>
+
+<pre><code>@combine: $body//noscript/next-sibling::a
+@remove
+</code></pre>
+
+<p>Нам осталось разобраться, как правильно обозначить автора, дату публикации и ссылку на картинку для превью.</p>
+
+<p>Для получения картинки, воспользуемся функцией <code>@background_to_image</code>, она преобразует стиль в элемент <code>&lt;img&gt;</code>.
+Результат функции присвоим переменной <code>$main_image</code>, значение атрибутта <code>src</code> присвоим свойству <code>image_url</code>, а саму картинку
+добавим в начало статьи. Всё это делается следующим образом:</p>
+
+<pre><code>@background_to_image: //header[has-class(&quot;intro-header&quot;)]   # нашли картинку
+$main_image: $@                                             # сохранили узел в переменную
+
+@prepend_to($body): $main_image                             # вставили в начало контента
+image_url: $main_image/@src                                 # обозначили её как картинку для preview
+</code></pre>
+
+<p>Инструменты разработчика Chrome подсказывают, что оставшаяся интересующая нас информация находится в той же части
+дерева элементов, что и заголовки для статей, по этому воспользуемся, уже определенным ранее <code>$header</code>. Нам осталось
+извлечь из дерева имя автора и дату публикации. Извлечение данных, я сделал следующим образом:</p>
+
+<pre><code>$extra_meta: $header/span       # уточняем поддерево с метаданными
+
+$author: ($extra_meta/a)[1]     # выбираем первую ссылку в списке
+author: $author/text()          # извлекаем её название, в моем случае это автор
+
+@match(&quot;Дата публикации: ([0-9]{4}-[0-9]{2}-[0-9]{2})&quot;, 1): $extra_meta # в поддереве с метаданными ищем дату по регулярному выражению и забираем первую группу
+published_date: $@              # присваиваем результат поиска
+</code></pre>
+
+<h2 id="встраиваемые-элементы">Встраиваемые элементы</h2>
+
+<p><a href="https://instantview.telegram.org/docs#embedded-elements">Документация</a></p>
+
+<p>В вашем случае могут быть медиа элементы, которые вы так же хотели бы встроить. Сегодня телеграм поддерживает следующие
+сервисы для встраивания в Instant View:</p>
+
+<ul>
+<li>Youtube</li>
+<li>Vimeo</li>
+<li>Tweets &amp; Twitter Videos</li>
+<li>Facebook Posts &amp; Videos</li>
+<li>Instagram</li>
+<li>Giphy</li>
+<li>SoundCloud</li>
+<li>GithubGist</li>
+<li>Aparat</li>
+<li>VK.com Videos</li>
+</ul>
+
+<h2 id="включения-системные-правила">Включения (системные правила)</h2>
+
+<p><a href="https://instantview.telegram.org/docs#include">Документация</a></p>
+
+<p>Включения - это системные правила и вам их нет необходимости использовать для собственных нужд, но знание того что
+это пригодится для понимания работы Telegram Instant View.</p>
+
+<pre><code>+ core.telegram.org # вставляет блок правил, который используется для core.telegram.org
+?not_exists: $body  # если не найдет, то ...
++ telegram.org      # вставляет другой блок
+</code></pre>
+
+<p>Я вижу один вариант использования. Это если ваш сайт на одном движке с кем-то, для кого уже есть готовые правила</p>
+
+<h2 id="обработка-страниц">Обработка страниц</h2>
+
+<p><a href="https://instantview.telegram.org/docs#processing-pages">Документация</a></p>
+
+<p>Все страницы обрабатываются по следующим правилам:</p>
+
+<pre><code># Url: http://example.com/some_page.html
++ example.com
+?true
++ ..after
+</code></pre>
+
+<p>Если же страница находится на поддомене, то она обрабатывается так:</p>
+
+<pre><code># Url: http://some.subdomain.example.com/some_page.html
++ some.subdomain.example.com
+?not_exists: $body
++ subdomain.example.com
+?not_exists: $body
++ example.com
+?true
++ ..after
+</code></pre>
+
+<p>Следовательно, сначала Instant View Bot ищет шаблон для полного домена и если он не находит проинициализированного свойства
+<em>body</em>, то понижает уровнь домена и ищет шаблон для него. Блок правил <code>..after</code> выполняется для всех доменов.</p>
+
+<h2 id="instant-view-для-поддоменов">Instant View для поддоменов</h2>
+
+<p><a href="https://instantview.telegram.org/docs#working-with-subdomains">Документация</a></p>
+
+<p>Если страница обрабатывается для поддомена, то необходимо вручную выбрать уровень домена, который необходим в левом
+верхнем углу редактора.</p>
+
+<h2 id="публикация">Публикация</h2>
+
+<p><a href="https://instantview.telegram.org/#publishing-templates">Документация</a></p>
+
+<p>Для того, чтобы посмотреть результат нажмите на кнопку View In Telegram и если у вас есть десктопное приложение, то в нем
+вам предложат отправить кому-нибудь ссылку, которая будет открывать ваш тестовый пример через Instant View.</p>
+
+<p>Публикация для всех пользователей Telegram происходит только после подтверждения вашего шаблона командой Telegram.
+До этого момента вы можете распространять ссылки с истользованием шаблона, даже без подтверждения. Для этого вам нужно
+составить ссылку в формате: <code>t.me/iv?url=...&amp;rhash=...</code>, где url это ссылка на публикацию, а <code>rhash</code> - идентификатор
+шаблона.</p>
+
+<h2 id="бонус-instant-view-и-cloudflare">Бонус. Instant View и Cloudflare</h2>
+
+<!--email_off-->
+
+<p>В своих прошлых статьях, я рассказывал о том, что в качестве DNS серверов для i-osipov.ru используются DNS сервера
+Cloudflare. Кроме того, Cloudflare это прокси защищающий от DDOS и при реализации Instant View я заметил одну небольшую
+особенность. Из коробки этот замечательный сервис предоставляет услугу, которая называется &lsquo;Email protection&rsquo;, по сути
+в определенном наборе ситуаций, которые можно детектировать как &ldquo;бот, который обходит интернет и собирает email&rsquo;ы для
+спама&rdquo;, Cloudflare заменят все email&rsquo;ы обсусцирует email&rsquo;ы на странице. Instant View Bot такой же подозрительный тип,
+но всё ради безопасности. Тем ни менее, в статье про то &ldquo;как написать бота для телеграма&rdquo; есть полная форма команды
+оправляемая телеграм боту, напомню что выглядит она вот так: <code>/command@BotName</code>. Проблема в том, что cloudflare распознает
+как email всё что справа от слеша и отдает неправильную страничку боту. Как это исправить? Все подробности есть
+<a href="https://support.cloudflare.com/hc/en-us/articles/200170016-What-is-Email-Address-Obfuscation-">здесь</a>, если коротко,
+то вы должны встроить в код страницы тег <code>&lt;!--email_off--&gt; здесь cloudflare не будет защищать email'ы &lt;!--/email_off--&gt;</code>.
+Да, вы правильно поняли, для того, чтобы показать вам команду для бота и в этой статье, мне пришлось снова встроить
+комментарии отключающие cloudflare email protection.</p>
+
+<!--/email_off-->
+
+<h2 id="шаблон-для-i-osipov-ru">Шаблон для i-osipov.ru</h2>
+
+<p>В итоге, мы получили следующий шаблон:</p>
+
+<pre><code>?exists: //article
+!domain: i-osipov\.ru
+!path: /post/.+
+
+body: //article
+
+$header: //div[has-class(&quot;post-heading&quot;)]
+title: $header/h1
+description: $header/h2
+
+channel: &quot;@from_junior_to_senior&quot;
+
+$extra_meta: $header/span
+
+$author: ($extra_meta/a)[1]
+author: $author/text()
+
+author_url: &quot;https://i-osipov.ru&quot;
+
+@match(&quot;Дата публикации: ([0-9]{4}-[0-9]{2}-[0-9]{2})&quot;, 1): $extra_meta
+published_date: $@
+
+@background_to_image: //header[has-class(&quot;intro-header&quot;)]
+$main_image: $@
+
+@prepend_to($body): $main_image
+image_url: $main_image/@src
+
+@combine: $body//noscript/next-sibling::a
+@remove
+</code></pre>
+
+<p>На самом деле в шаблон входит еще и обнотка неподдерживаемых таблиц, вместо них можно отображать ссылку на сайт с
+полным контентом. Как это сделать вы можете подглядеть в публичком шаблоне для i-osipov.ru или поразмышлять самостоятельно.</p>
+
+<h2 id="заключение">Заключение</h2>
+
+<p>Telegram Instant View это мощный инструмент, который поможет вам интегрировать ваш контент в инфраструктуру Telegram.
+Относиться к Instant View можно по разному, но на мой взгляд, если вы можете сделать жизнь вашего читателя еще лучше -
+сделайте это. Со своей стороны, я надеюсь, что этот документ поможет вам легко разобраться в создании Instant View и
+улучшить UX ваших статей. Для достижения совершенства обратите внимание на
+<a href="https://instantview.telegram.org/checklist">Чеклист Идеального Instant View</a>.</p>
+
+<h1 id="приложение-а">Приложение А</h1>
+
+<p>Функции для детальной настройки форматирования</p>
+
+<ul>
+<li><a href="https://instantview.telegram.org/docs#debug">@debug</a> отладка команд, вывод результов в нижней части редактора;</li>
+<li><a href="https://instantview.telegram.org/docs#append">@append</a> вставляет переданные элементы <strong>в начало</strong> каждого найденного по XPath;</li>
+<li><a href="https://instantview.telegram.org/docs#prepend">@prepend</a> вставляет переданные элементы <strong>в конец</strong> каждого найденного по XPath;</li>
+<li><a href="https://instantview.telegram.org/docs#after">@after</a> вставляет переданные элементы <strong>после</strong> каждого найденного по XPath;</li>
+<li><a href="https://instantview.telegram.org/docs#before">@before</a> вставляет переданные элементы <strong>перед</strong> каждым найденным по XPath;</li>
+<li><a href="https://instantview.telegram.org/docs#append-to">@append_to</a> вставляет целевой узел в конец базового;</li>
+<li><a href="https://instantview.telegram.org/docs#prepend-to">@prepend_to</a> вставляет целевой узел в начало базового;</li>
+<li><a href="https://instantview.telegram.org/docs#after-el">@after_el</a>  вставляет целевой узел после базового;</li>
+<li><a href="https://instantview.telegram.org/docs#before-el">@before_el</a> вставляет целевой узел перед базовым;</li>
+<li><a href="https://instantview.telegram.org/docs#replace-tag">@replace_tag</a> изменяет имя тега;</li>
+<li><a href="https://instantview.telegram.org/docs#wrap">@wrap</a> заворачивает целевой элемент в заданный тег;</li>
+<li><a href="https://instantview.telegram.org/docs#clone">@clone</a> создает копию целевого узла;</li>
+<li><a href="https://instantview.telegram.org/docs#detach">@detach</a> отделяет целевой узел от оставшейся части, создает копию родительского узла;</li>
+<li><a href="https://instantview.telegram.org/docs#pre">@pre</a> помечает текст внутри целевого узла как отформатированный;</li>
+<li><a href="https://instantview.telegram.org/docs#set-attr">@set_attr</a> устанавливает аттрибут в каждом соответствующем узле;</li>
+<li><a href="https://instantview.telegram.org/docs#set-attrs">@set_attrs</a> устанавливает несколько аттрибутов;</li>
+<li><a href="https://instantview.telegram.org/docs#match">@match</a> выполняет поиск на основе регулярного выражения, в результате, заменяет содержимое целевого узла;</li>
+<li><a href="https://instantview.telegram.org/docs#replace">@replace</a> выполняет замену на основе регулярного выражения;</li>
+<li><a href="https://instantview.telegram.org/docs#urlencode">@urlencode</a> кодирует url в соответствии с RFC 3986;</li>
+<li><a href="https://instantview.telegram.org/docs#urldecode">@urldecode</a> декодирует url в соответствии с RFC 3986;</li>
+<li><a href="https://instantview.telegram.org/docs#htmlencode">@htmlencode</a> кодирует специальные символы в целевом узле в HTML сущности;</li>
+<li><a href="https://instantview.telegram.org/docs#htmldecode">@htmldecode</a> декодирует специальные символы в целевом узле в HTML сущности;</li>
+<li><a href="https://instantview.telegram.org/docs#background-to-image">@background_to_image</a> трансформирует целевой узел в <code>&lt;img&gt;</code> тэг с <code>src</code> атрибуттом;</li>
+<li><a href="https://instantview.telegram.org/docs#json-to-xml">@json_to_xml</a> трансформирует json контент целевого узла в xml;</li>
+<li><a href="https://instantview.telegram.org/docs#html-to-dom">@html_to_dom</a> парсит html узел и вставляет его в документ (в документации есть очевидный пример);</li>
+<li><a href="https://instantview.telegram.org/docs#combine">@combine</a> склеивает каждый следующий с предыдущим узлом, если такой существет;</li>
+<li><a href="https://instantview.telegram.org/docs#datetime">@datetime</a> трансформирует дату и время из строки в unix time;</li>
+<li><a href="https://instantview.telegram.org/docs#simplify">@simplify</a> системная функция для понимания того, как работает преобразование в Instant View;</li>
+<li><a href="https://instantview.telegram.org/docs#inline">@inline</a> встраивает iframe;</li>
+<li><a href="https://instantview.telegram.org/docs#unsupported">@unsupported</a> определяет, какие элементы не поддерживаются, для того чтобы не давать пользователю Instant View с неполным контентом.</li>
+</ul>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/instant-view-in-action\/';
+    var disqus_title = 'Instant View in Action';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/instant-view-in-action\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/MrIvanOsipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
