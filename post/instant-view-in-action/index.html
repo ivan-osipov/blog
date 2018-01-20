@@ -112,6 +112,8 @@
 Instant View работает по первой ссылке, но почему не по каждой? Сегодня мы с вами разберемся как взять
 свой сайт и адаптировать Instant View к нему. Действовать мы будем на примере i-osipov.ru.</p>
 
+<!--email_off-->
+
 <h1 id="с-чем-мы-имеем-дело">С чем мы имеем дело</h1>
 
 <p>Под капотом у i-osipov.ru находится hugo, hugo это генератор статического контента. Для понимания,
@@ -640,8 +642,6 @@ published_date: $@              # присваиваем результат по
 
 <h2 id="бонус-instant-view-и-cloudflare">Бонус. Instant View и Cloudflare</h2>
 
-<!--email_off-->
-
 <p>В своих прошлых статьях, я рассказывал о том, что в качестве DNS серверов для i-osipov.ru используются DNS сервера
 Cloudflare. Кроме того, Cloudflare это прокси защищающий от DDOS и при реализации Instant View я заметил одну небольшую
 особенность. Из коробки этот замечательный сервис предоставляет услугу, которая называется &lsquo;Email protection&rsquo;, по сути
@@ -654,8 +654,6 @@ Cloudflare. Кроме того, Cloudflare это прокси защищающ
 то вы должны встроить в код страницы тег <code>&lt;!--email_off--&gt; здесь cloudflare не будет защищать email'ы &lt;!--/email_off--&gt;</code>.
 Да, вы правильно поняли, для того, чтобы показать вам команду для бота и в этой статье, мне пришлось снова встроить
 комментарии отключающие cloudflare email protection.</p>
-
-<!--/email_off-->
 
 <h2 id="шаблон-для-i-osipov-ru">Шаблон для i-osipov.ru</h2>
 
@@ -740,6 +738,8 @@ image_url: $main_image/@src
 <li><a href="https://instantview.telegram.org/docs#inline">@inline</a> встраивает iframe;</li>
 <li><a href="https://instantview.telegram.org/docs#unsupported">@unsupported</a> определяет, какие элементы не поддерживаются, для того чтобы не давать пользователю Instant View с неполным контентом.</li>
 </ul>
+
+<!--/email_off-->
 
                   
    <div id="disqus_thread"></div>

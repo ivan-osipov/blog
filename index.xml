@@ -22,6 +22,8 @@
 Instant View работает по первой ссылке, но почему не по каждой? Сегодня мы с вами разберемся как взять
 свой сайт и адаптировать Instant View к нему. Действовать мы будем на примере i-osipov.ru.&lt;/p&gt;
 
+&lt;!--email_off--&gt;
+
 &lt;h1 id=&#34;с-чем-мы-имеем-дело&#34;&gt;С чем мы имеем дело&lt;/h1&gt;
 
 &lt;p&gt;Под капотом у i-osipov.ru находится hugo, hugo это генератор статического контента. Для понимания,
@@ -550,8 +552,6 @@ published_date: $@              # присваиваем результат по
 
 &lt;h2 id=&#34;бонус-instant-view-и-cloudflare&#34;&gt;Бонус. Instant View и Cloudflare&lt;/h2&gt;
 
-&lt;!--email_off--&gt;
-
 &lt;p&gt;В своих прошлых статьях, я рассказывал о том, что в качестве DNS серверов для i-osipov.ru используются DNS сервера
 Cloudflare. Кроме того, Cloudflare это прокси защищающий от DDOS и при реализации Instant View я заметил одну небольшую
 особенность. Из коробки этот замечательный сервис предоставляет услугу, которая называется &amp;lsquo;Email protection&amp;rsquo;, по сути
@@ -564,8 +564,6 @@ Cloudflare. Кроме того, Cloudflare это прокси защищающ
 то вы должны встроить в код страницы тег &lt;code&gt;&amp;lt;!--email_off--&amp;gt; здесь cloudflare не будет защищать email&#39;ы &amp;lt;!--/email_off--&amp;gt;&lt;/code&gt;.
 Да, вы правильно поняли, для того, чтобы показать вам команду для бота и в этой статье, мне пришлось снова встроить
 комментарии отключающие cloudflare email protection.&lt;/p&gt;
-
-&lt;!--/email_off--&gt;
 
 &lt;h2 id=&#34;шаблон-для-i-osipov-ru&#34;&gt;Шаблон для i-osipov.ru&lt;/h2&gt;
 
@@ -650,6 +648,8 @@ image_url: $main_image/@src
 &lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#inline&#34;&gt;@inline&lt;/a&gt; встраивает iframe;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://instantview.telegram.org/docs#unsupported&#34;&gt;@unsupported&lt;/a&gt; определяет, какие элементы не поддерживаются, для того чтобы не давать пользователю Instant View с неполным контентом.&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;!--/email_off--&gt;
 </description>
     </item>
     
