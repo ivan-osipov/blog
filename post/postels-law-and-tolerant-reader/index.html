@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Шаблон TolerantReader и Закон Постела -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">telegram channel</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru/img/posts/postels-law-and-tollerant-reader/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Шаблон TolerantReader и Закон Постела</h1>
+               <h2 class="subheading">будь консервативным к тому, что делаешь, будь либеральным к тому, что получаешь от других</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-01-22
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/microservices">Microservices</a>, <a href="/categories/integration">Integration</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/tolerantreader">tolerantreader</a>, <a href="/tags/postels-law">postel&#39;s law</a>, <a href="/tags/integration">integration</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>При взаимодействии множества систем постоянно встает вопрос об интеграции. Когда мы начинаем работать с чьим-то API,
+существует риск, что с представители API могут его изменить и мы будем к этому не готовы. Системы эволюционируют,
+развиваются и, порой, следствие этой эволюции - развитие API. По началу, изменения могут быть незначительными, почти совместимыми,
+но даже к таким изменениям мы должны быть готовы. С обратной стороны, когда мы кому-то отдаем своё API, нам нужно понимать, что
+наши клиенты могут быть готовы к переменам, если мы будем осторожны, консервативны к изменениям.</p>
+
+<p>Закон Джона Постела гласит:</p>
+
+<blockquote>
+<p>будь консервативным к тому, что делаешь, будь либеральным к тому, что получаешь от других</p>
+</blockquote>
+
+<p>Для успешного развития распределенных систем, сервис предоставляющий API, будем называть его <em>поставщик</em>, должен
+отдавать клиенту API, будем называть его <em>потребитель</em>, такое API, которое в минимальном виде может что-то сломать.
+От части этому способствуют такие форматы общения как Thrift и Protocol Buffers. Однако, всё не ограничивается одним
+только способом транспортировки данных и преобразования их в конечных точках, хотя это тоже важно.</p>
+
+<p>Как быть либеральным к входящим данным? Можно выстроить следующий свод павил:</p>
+
+<ul>
+<li>Используйте только те поля в данных, которые вам нужны, не используйте лишнего.</li>
+</ul>
+
+<p>Допустим, к вам прилетел JSON объект со следующей структурой:</p>
+
+<pre><code class="language-json">{
+  &quot;username&quot;: &quot;myusername&quot;,
+  &quot;address&quot;: &quot;Россия, Самара, Московское шоссе, д. 1, кв. 1&quot; 
+}
+</code></pre>
+
+<p>Для наглядности примера, представим, что вы фронтенд. Вы отображаете главную
+страницу, на которой есть имя пользователя, а адрес будет нужен только в личном кабинете. Конечно, следовало бы не
+отправлять все данные в принципе, но на практике, такие упущения случаются. Однажды, бекэнд меняет формат JSON на следующий:</p>
+
+<pre><code class="language-json">{
+  &quot;username&quot;: &quot;myusername&quot;,
+  &quot;address&quot;: {
+    &quot;country&quot;: &quot;Россия&quot;,
+    &quot;city&quot;: &quot;Самара&quot;,
+    &quot;street&quot;: &quot;Московское шоссе&quot;,
+    &quot;house_number&quot;: &quot;1&quot;,
+    &quot;apartment_number&quot;: &quot;1&quot;
+  } 
+}
+</code></pre>
+
+<p>В тот момент, когда вы получите эти изменения, для успешной интеграции, всё что вам будет нужно, это изменить обработку
+адреса в личном кабинете, т.к. на главной странице вы не стали трогать поле, которое вам не нужно.</p>
+
+<ul>
+<li>Делайте минимальные предположения о структуре данных.</li>
+</ul>
+
+<p>Рассмотрим, еще один интересный случай. Допустим, вы извлекаете поля из json напрямую, для упрощения примера представим
+что перед вами динамически типизируемый язык. Самый простой способ получить из <code>jsonObject</code> поле <code>username</code>, это явно
+его запросить, напимер, так <code>jsonObject.username</code>. Но это не совсем толератно, не так ли? Когда мы работаем с XML
+Martin Fowler предлагает воспользоваться XPath, для получения имени пользователя, для json же существует
+<a href="https://github.com/json-path/JsonPath">JsonPath</a>. Как это использовать? Представим, что <em>поставщик</em> изменяет структуру
+JSON объекта следующим образом:</p>
+
+<pre><code class="language-json">{
+  &quot;naming&quot;: {
+    &quot;username&quot;: &quot;myusername&quot;,
+    &quot;firstname&quot;: &quot;myfirstname&quot;,
+    &quot;lastname&quot;: &quot;mylastname&quot;
+  },
+  &quot;address&quot;: {
+    &quot;country&quot;: &quot;Россия&quot;,
+    &quot;city&quot;: &quot;Самара&quot;,
+    &quot;street&quot;: &quot;Московское шоссе&quot;,
+    &quot;house_number&quot;: &quot;1&quot;,
+    &quot;apartment_number&quot;: &quot;1&quot;
+  } 
+}
+</code></pre>
+
+<p>Если бы мы жестко завязались на структуру, то наш потребитель API пришлось бы знатно переделывать, но если мы воспользовались
+JsonPath, и получали имя пользователя, выполняя поиск по выражению <code>$..username</code>, то мы бы просто не заметили изменения
+входного объекта и в перспективе сумарно проделали бы на много меньше работы. Естественно, такой подход кроет в себе
+угрозу, например, если в json объекте окажется два поля с именем <code>username</code>, то какое нужно выбирать? Однако, в простых
+случаях это нас защитит. Такое чтение должно происходить для одной цели в одном месте, чтобы остальная часть системы
+могла без труда оттуда получить данные, не задумываясь о том как именно они получены.</p>
+
+<p>Этот пост вдохновлён <a href="https://martinfowler.com/bliki/TolerantReader.html">вот этой</a> статьёй.</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/postels-law-and-tolerant-reader\/';
+    var disqus_title = 'Шаблон TolerantReader и Закон Постела';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/postels-law-and-tolerant-reader\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/MrIvanOsipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

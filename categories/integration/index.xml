@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Integration on Ivan Osipov</title>
+    <link>https://i-osipov.ru/categories/integration/index.xml</link>
+    <description>Recent content in Integration on Ivan Osipov</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <atom:link href="https://i-osipov.ru/categories/integration/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Шаблон TolerantReader и Закон Постела</title>
+      <link>https://i-osipov.ru/post/postels-law-and-tolerant-reader/</link>
+      <pubDate>Mon, 22 Jan 2018 08:51:45 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/postels-law-and-tolerant-reader/</guid>
+      <description>&lt;p&gt;При взаимодействии множества систем постоянно встает вопрос об интеграции. Когда мы начинаем работать с чьим-то API,
+существует риск, что с представители API могут его изменить и мы будем к этому не готовы. Системы эволюционируют,
+развиваются и, порой, следствие этой эволюции - развитие API. По началу, изменения могут быть незначительными, почти совместимыми,
+но даже к таким изменениям мы должны быть готовы. С обратной стороны, когда мы кому-то отдаем своё API, нам нужно понимать, что
+наши клиенты могут быть готовы к переменам, если мы будем осторожны, консервативны к изменениям.&lt;/p&gt;
+
+&lt;p&gt;Закон Джона Постела гласит:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;будь консервативным к тому, что делаешь, будь либеральным к тому, что получаешь от других&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Для успешного развития распределенных систем, сервис предоставляющий API, будем называть его &lt;em&gt;поставщик&lt;/em&gt;, должен
+отдавать клиенту API, будем называть его &lt;em&gt;потребитель&lt;/em&gt;, такое API, которое в минимальном виде может что-то сломать.
+От части этому способствуют такие форматы общения как Thrift и Protocol Buffers. Однако, всё не ограничивается одним
+только способом транспортировки данных и преобразования их в конечных точках, хотя это тоже важно.&lt;/p&gt;
+
+&lt;p&gt;Как быть либеральным к входящим данным? Можно выстроить следующий свод павил:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Используйте только те поля в данных, которые вам нужны, не используйте лишнего.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Допустим, к вам прилетел JSON объект со следующей структурой:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;username&amp;quot;: &amp;quot;myusername&amp;quot;,
+  &amp;quot;address&amp;quot;: &amp;quot;Россия, Самара, Московское шоссе, д. 1, кв. 1&amp;quot; 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Для наглядности примера, представим, что вы фронтенд. Вы отображаете главную
+страницу, на которой есть имя пользователя, а адрес будет нужен только в личном кабинете. Конечно, следовало бы не
+отправлять все данные в принципе, но на практике, такие упущения случаются. Однажды, бекэнд меняет формат JSON на следующий:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;username&amp;quot;: &amp;quot;myusername&amp;quot;,
+  &amp;quot;address&amp;quot;: {
+    &amp;quot;country&amp;quot;: &amp;quot;Россия&amp;quot;,
+    &amp;quot;city&amp;quot;: &amp;quot;Самара&amp;quot;,
+    &amp;quot;street&amp;quot;: &amp;quot;Московское шоссе&amp;quot;,
+    &amp;quot;house_number&amp;quot;: &amp;quot;1&amp;quot;,
+    &amp;quot;apartment_number&amp;quot;: &amp;quot;1&amp;quot;
+  } 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В тот момент, когда вы получите эти изменения, для успешной интеграции, всё что вам будет нужно, это изменить обработку
+адреса в личном кабинете, т.к. на главной странице вы не стали трогать поле, которое вам не нужно.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Делайте минимальные предположения о структуре данных.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Рассмотрим, еще один интересный случай. Допустим, вы извлекаете поля из json напрямую, для упрощения примера представим
+что перед вами динамически типизируемый язык. Самый простой способ получить из &lt;code&gt;jsonObject&lt;/code&gt; поле &lt;code&gt;username&lt;/code&gt;, это явно
+его запросить, напимер, так &lt;code&gt;jsonObject.username&lt;/code&gt;. Но это не совсем толератно, не так ли? Когда мы работаем с XML
+Martin Fowler предлагает воспользоваться XPath, для получения имени пользователя, для json же существует
+&lt;a href=&#34;https://github.com/json-path/JsonPath&#34;&gt;JsonPath&lt;/a&gt;. Как это использовать? Представим, что &lt;em&gt;поставщик&lt;/em&gt; изменяет структуру
+JSON объекта следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;naming&amp;quot;: {
+    &amp;quot;username&amp;quot;: &amp;quot;myusername&amp;quot;,
+    &amp;quot;firstname&amp;quot;: &amp;quot;myfirstname&amp;quot;,
+    &amp;quot;lastname&amp;quot;: &amp;quot;mylastname&amp;quot;
+  },
+  &amp;quot;address&amp;quot;: {
+    &amp;quot;country&amp;quot;: &amp;quot;Россия&amp;quot;,
+    &amp;quot;city&amp;quot;: &amp;quot;Самара&amp;quot;,
+    &amp;quot;street&amp;quot;: &amp;quot;Московское шоссе&amp;quot;,
+    &amp;quot;house_number&amp;quot;: &amp;quot;1&amp;quot;,
+    &amp;quot;apartment_number&amp;quot;: &amp;quot;1&amp;quot;
+  } 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Если бы мы жестко завязались на структуру, то наш потребитель API пришлось бы знатно переделывать, но если мы воспользовались
+JsonPath, и получали имя пользователя, выполняя поиск по выражению &lt;code&gt;$..username&lt;/code&gt;, то мы бы просто не заметили изменения
+входного объекта и в перспективе сумарно проделали бы на много меньше работы. Естественно, такой подход кроет в себе
+угрозу, например, если в json объекте окажется два поля с именем &lt;code&gt;username&lt;/code&gt;, то какое нужно выбирать? Однако, в простых
+случаях это нас защитит. Такое чтение должно происходить для одной цели в одном месте, чтобы остальная часть системы
+могла без труда оттуда получить данные, не задумываясь о том как именно они получены.&lt;/p&gt;
+
+&lt;p&gt;Этот пост вдохновлён &lt;a href=&#34;https://martinfowler.com/bliki/TolerantReader.html&#34;&gt;вот этой&lt;/a&gt; статьёй.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
