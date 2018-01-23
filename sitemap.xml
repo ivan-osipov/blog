@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/semanantic-versioning-2_0/</loc>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/postels-law-and-tolerant-reader/</loc>
     <lastmod>2018-01-22T08:51:45+04:00</lastmod>
   </url>
@@ -84,13 +89,19 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/development/</loc>
-    <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/development/</loc>
-    <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/devops/</loc>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -121,6 +132,12 @@
   <url>
     <loc>https://i-osipov.ru/tags/goals/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/good-patterns/</loc>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -192,7 +209,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -209,8 +226,14 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/microservices/</loc>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/categories/microservices/</loc>
-    <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -252,7 +275,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -306,6 +329,12 @@
   <url>
     <loc>https://i-osipov.ru/tags/tolerantreader/</loc>
     <lastmod>2018-01-22T08:51:45+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/versioning/</loc>
+    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
   </url>
   

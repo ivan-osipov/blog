@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Microservices on Ivan Osipov</title>
-    <link>https://i-osipov.ru/categories/microservices/index.xml</link>
-    <description>Recent content in Microservices on Ivan Osipov</description>
+    <title>Good Patterns on Ivan Osipov</title>
+    <link>https://i-osipov.ru/categories/good-patterns/index.xml</link>
+    <description>Recent content in Good Patterns on Ivan Osipov</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <atom:link href="https://i-osipov.ru/categories/microservices/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://i-osipov.ru/categories/good-patterns/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Семантическое версионирование 2.0</title>

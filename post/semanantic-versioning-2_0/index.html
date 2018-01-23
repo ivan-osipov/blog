@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Семантическое версионирование 2.0 -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">Подписаться</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru/img/posts/semantic-versioning-2_0/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Семантическое версионирование 2.0</h1>
+               <h2 class="subheading">... это язык, в трёх словах которого общаются независимые проекты</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-01-23
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/devops">DevOps</a>, <a href="/categories/microservices">Microservices</a>, <a href="/categories/good-patterns">Good Patterns</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/microservices">microservices</a>, <a href="/tags/versioning">versioning</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Восхитительное чувство, когда один раз взглянув на новую версию сторонней библиотеки ты понимаешь, можно ли её смело
+обновлять или нужно быть готовым к изменениям в собственном коде. Осмысленность в сухую нумерацию пакетов вносит Семантическое Версионирование.
+У семантического версионирования есть свой сайт и основные посылы я брал оттуда (ссылка в конце статьи).</p>
+
+<h1 id="основная-идея">Основная Идея</h1>
+
+<p>Существует основной формат:</p>
+
+<pre><code>MAJOR.MINOR.PATCH
+</code></pre>
+
+<p>Формат включает в себя три неотрицательные цифры, которые увеличиваются в соответствии со следующими условиями.</p>
+
+<p><code>MAJOR</code> - увеличение версии говорит об обратно несовместимых изменениях API.<br />
+<code>MINOR</code> - увеличение версии говорит о добавлении новой функциональности при сохранении обратной совместимости.<br />
+<code>PATCH</code> - увеличение версии говорит об обратно совместимых фиксах.</p>
+
+<h1 id="какую-проблему-решаем">Какую проблему решаем?</h1>
+
+<p>При большом количестве зависимостей в вашем проекте может встать вопрос о потребности в использовании новых версий разных
+библиотек. Если дать полную свободу в версионировании, то процесс превратится в настоящий ад, т.к. становится абсолютно не
+очевидно сломает ли всё, например, переход с версии 2.3.4 на версию 2.6.8. Идея не новая, но её формализация позволяет
+всем использовать и понимать версии одинаково.</p>
+
+<h1 id="как-решаем">Как решаем?</h1>
+
+<p>Основная идея была описана выше, а ниже некоторые, на мой взгляд, важные вещи из спецификации SemVer.</p>
+
+<ul>
+<li>если какие-то изменения сделаны после релиза, то они попадут только в новый релиз;</li>
+<li>публичный API для версии 0.х.х не должен рассматриваться как стабильный, это версия для начальной разработки;</li>
+<li>версия 1.0.0 определяет публичный API;</li>
+<li>если часть API помечена &ldquo;устаревшей&rdquo;, то инкрементируем минорную версию, в том числе она может в себя включать фиксы;</li>
+<li>мажорная версия может включать в себя изменения характерные минорной версии и патчу;</li>
+<li>версию можно дополнять указателями на предрелизные выпуски или сборками изменяющими метаданные, но
+идентификаторы версий только в ASCII.</li>
+</ul>
+
+<h1 id="всегда-ли-это-подходит">Всегда ли это подходит?</h1>
+
+<p>Нет, не всегда. Если вы разрабатываете программу/веб приложение для конечного пользователя, а не библиотеку или
+Http API, то скорее всего семантическое версионирование вам не нужно. Прежде всего, посмотрите на цели и статус вашего
+проекта, возможно он находится на поддержке, всё, что вы делаете, - исправляете ошибки, то есть &ldquo;новая функциональность&rdquo; не появляется, это значит, что первые две цифры будут
+вечно неизменными, тогда какой в этом смысл? С другой стороны, если взглянуть категорично, то так и должно быть,
+каждый раз закрывая пачку багов, вы обновляете PATCH версию, а при необходимости хот-фиксов просто расширяете её
+дополнительными идентификаторами.</p>
+
+<h1 id="для-кого-это-подходит">Для кого это подходит?</h1>
+
+<p>Иногда, мы пишем библиотеки, иногда мы пишем модули от которых будет зависеть остальная часть системы, иногда мы
+пишем микросервисы с API которых будут взаимодействовать другие команды. Всё это отличные примеры того, где семантическое
+версионирование преобретает смысл. Семантическое версионирование - это язык, в трёх словах которого общаются
+независимые проекты.</p>
+
+<p><a href="https://semver.org">Сайт Семантического Версионирования</a></p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/semanantic-versioning-2_0\/';
+    var disqus_title = 'Семантическое версионирование 2.0';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/semanantic-versioning-2_0\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
