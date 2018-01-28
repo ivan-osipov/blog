@@ -215,6 +215,8 @@ AcademyProtos.Student.Builder. Это типичная реализация па
 
 &lt;p&gt;Как вы уже поняли, создавать студентов мы можем аналогично:&lt;/p&gt;
 
+&lt;!--email_off--&gt;
+
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;AcademyProtos.Student student = AcademyProtos.Student.newBuilder()
     .setId(123456)
     .addEmail(&amp;quot;student@example.com&amp;quot;)
@@ -261,6 +263,8 @@ student {
   gender: MALE
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!--/email_off--&gt;
 
 &lt;p&gt;За ширмой, для полноты примера, я добавил еще одного студента к группе.&lt;/p&gt;
 
