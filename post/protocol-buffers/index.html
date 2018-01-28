@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Protocol Buffers -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">Подписаться</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/posts/protocol-buffers/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Protocol Buffers</h1>
+               <h2 class="subheading">Протокол сериализации для гетерогенных систем</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-01-28
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/java">Java</a>, <a href="/categories/microservices">Microservices</a>, <a href="/categories/integration">Integration</a>, <a href="/categories/protocols">Protocols</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/java">java</a>, <a href="/tags/microservices">microservices</a>, <a href="/tags/integration">integration</a>, <a href="/tags/protocol">protocol</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Один из набирающих популярность протоколов общения между двумя гетерогенными системами - Protocol Buffers.
+Сегодня мы разберемся с тем, что это такое, для чего нужно и как применять.</p>
+
+<h1 id="контекст">Контекст</h1>
+
+<p>Когда перед нами встает задача общения двух удалённых систем, первое что приходит в голову сегодня это HTTP запросы,
+кто-то любит использовать слово REST (REpresentational State Transfer), хотя и на самом деле строит API в виде RPC
+(Remote Procedure Call), реализация которого опирается на HTTP вызовы. Наиболее распространенный сегодня HTTP/1.1
+был принят в далёком 1999 году. У протокола была и есть одна особенность (язык не поворачивается назвать это недостатком) - он текстовый, это
+говорит об одновременно двух следствиях. Процесс общения легко отлаживать, мы сразу видим в человекочитаемом виде
+какая информация передается. Однако, информация часто занимает больше места чем нужно. На смену HTTP/1.1 приходит
+относительно новый HTTP/2 - бинарный протокол. Сама процедура бинарной передачи
+данных как бы намекает: &ldquo;ты использовал json и xml для передачи компактных и читаемых данных, но теперь данные передаются
+в бинарном виде, может быть нам нужен другой формат?&rdquo;</p>
+
+<h1 id="основная-идея">Основная идея</h1>
+
+<p>Protocol Buffers - это бинартый протокол сериализации (передачи) структурированных данных. Google предложили его как
+эффективную альтернативу xml и правильно сделали. В моём окружении все не легаси проекты уже давно используют
+json и счастливы, а здесь следующий шаг, если быть точнее, другой взгляд на передаваемые данные. Данные
+хранятся в виде набора байт, но как работать с бинарнарным протоколом сериализации, где взять сериализаторы и десериализаторы,
+как они поймут, что именно нужно сделать?</p>
+
+<h1 id="язык-общения">Язык общения</h1>
+
+<p>Для того, чтобы обе стороны взаимодействия общались на &ldquo;одном языке&rdquo;, необходимо создать специальный .proto файл, который опишет
+виды сообщений и будет основой для построения бинарного формата. Пример такого файла вы увидите дальше. Когда файл с
+требуемой сруктурой данных готов его необходимо скомпилировать специально для вашего языка программирования. Результат
+компиляции это код в терминах необходимого вам языка, который упрощает процесс работы с данными, сериализацию
+и десериализацию. В Java это классы и их методы. Сгенерированный класс будет содержать методы доступа ко всем полям, а также методы сериализации и
+десириализации в/из массива байт.</p>
+
+<h1 id="общие-приемущества">Общие приемущества</h1>
+
+<ol>
+<li>Сокращение издержек на передачу в сравнении с текстовыми форматами.</li>
+<li>Хорошо дружит с HTTP/2</li>
+<li>При добавлении новых полей на старых клиентах они игнорируются, сохраняя совместимость.</li>
+</ol>
+
+<h1 id="недостатки">Недостатки</h1>
+
+<p>Пожалуй, о недостатках лучше всего скажет тот, кто с ними столкнулся и здесь я посоветую вам прочитать вот
+<a href="https://habrahabr.ru/post/310032" target="_blank">эту</a> статью на хабре, дабы развеять ненужные иллюзии безоблачного неба.</p>
+
+<p>Будьте внимательны с использованием обязательных полей. Нужно понимать, что если у клиента версия .proto
+файла, где поле Х обязательно, а сервер решит удалить его из следующей версии API, то такое изменение будет
+обратно-несовместимым. Таким образом, обязательные поля могут принести больше вреда чем пользы. Рекомендуется, следуя паттерну
+<a href="https://i-osipov.ru/post/postels-law-and-tolerant-reader" target="_blank">TolerantReader</a>, быть готовым к изменениям модели
+для максимально долгого сохранения обратной совместимости.</p>
+
+<h1 id="пример">Пример</h1>
+
+<p>Хорошая новость. Как минимум для Intellij IDEA есть плагин для .proto файлов. В тот момент, когда вы создадите и откроете
+такой файл, вы увидите хинт сверху, который предложит вам установить плагин.
+Здесь вы увидите пример .proto файла для второй версии протобафа, хотя сейчас уже появилась третья. Возможно, о ней я буду
+писать позже, а любопытный читатель уже сейчас может посмотреть
+<a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank">Language Guide (proto3)</a>.</p>
+
+<h2 id="шаг-1-определяем-формат-протокола">Шаг 1. Определяем формат протокола</h2>
+
+<p>На первом шаге нам нужно описать .proto файл. Разберем сокращенную версию предметной области учебного заведения.
+Исходный .proto файл выглядит следующим образом:</p>
+
+<pre><code class="language-proto">syntax = &quot;proto2&quot;;
+
+package academy;
+
+option java_package = &quot;ru.i_osipov.academy&quot;;
+option java_outer_classname = &quot;AcademyProtos&quot;;
+
+message Student {
+    required string name = 1;
+    optional int32 id = 2;
+    repeated string email = 3;
+    optional Gender gender = 4 [default = MALE];
+
+    enum Gender {
+    	MALE = 0;
+        FEMALE = 1;
+    }
+}
+
+message Group {
+    required string name = 1;
+    repeated Student student = 2;
+}
+</code></pre>
+
+<p>Разберемся с синтаксисом файла. Прежде всего мы указываем какую версию protobuf мы используем, в нашем случае это вторая
+версия. Затем указываем package, который необходим здесь для разделения пространств имён. Т.к. мы знаем, что будем пользоваться
+java, то указываем две дополнительные настройки: <code>java_package</code> и <code>java_outer_classname</code>. Первая, очевидно, говорит в
+какой пакет и соответственно иерархию директорий необходимо сложить результат компиляции, а <code>java_outer_classname</code>
+определяет имя файла, который будет в себя заворачивать весь сгенерированный контент. Если это не будет сделано, то
+компилятор определит имя в соответствии с CamelCase по названию .proto файла. Эти настройки, как вы понимаете, java-специфичны.</p>
+
+<p>Далее мы указываем описание наших messages, по сути, message (сообщение) - это структура данных и, судя по документации, без возможности
+наследования. Каждое сообщение, состоит из полей. В нашем примере, каждое поле имеет тип, название, уникальный в
+контексте сообщения тег и модификатор.
+Тег - это уникальный маркер поля, т.е. пока вы не задействовали один и тот же тег для нового поля в
+сообщении - ваши поля остаются совместимыми с предыдущей версией. Итак, мы определили тип студента, определили его поля:
+строковое имя, целочисленный идентификатор, строковый email и пол.</p>
+
+<p>Модификаторы дают нам больше представления о том как поле используется, например, модификатор required позволяет описать
+обязательное поле в сообщении, если десериализатор не обнаружит этого поля, то весь процесс десериализации закончится с ошибкой.
+Это важно учитывать при проектировании API (снова взгляните на второй абзац в разделе &ldquo;Недостатки&rdquo; этой статьи).
+Модификатор optional, говорит о том, что поле может быть, а может отсутствовать, своего рода nullable поле. Модификатор repeated
+используется для работы с множеством значений для одного поля (аналогично коллекциям в Java).</p>
+
+<p>Вы можете вкладывать messages друг в друга, использовать перечисления enum, в общем очень похоже на Java. Кроме того,
+есть возможность определить значения по умолчанию.</p>
+
+<h2 id="шаг-2-компилируем-файл">*Шаг 2. Компилируем файл</h2>
+
+<p>* опциональный, для понимания</p>
+
+<p>Созданный .proto файл нужно скомпилировать и прежде всего нам нужен компилятор. <a href="https://developers.google.com/protocol-buffers/docs/downloads" target="_blank">Скачиваем</a>
+<code>protoc</code> архив. В архиве к нам прилетает компилятор и некоторый набор типов, которые мы можем использовать из коробки.
+Когда вы нашли место для файла в вашей файловой системе добавьте его в PATH. В Windows это делается в Параметрах окружения,
+а в linux будет достаточно выполнить <code>export PATH=$PATH:your_path</code>. Теперь нам доступен компилятор из терминала, давайте скомпилируем.</p>
+
+<p>Перейдем в папку с .proto файлом и выполним команду:</p>
+
+<pre><code class="language-bash">protoc --java_out=./ ./academy.proto 
+</code></pre>
+
+<p>Флаг <code>--java_out</code> указывает на папку куда будет сгенерирован java код. В этой папке мы получили иерархию, которая
+определяет java package, который мы указали в .proto файле. Результат компиляции - .java файл, который пока не
+компилируется javac&rsquo;ом, для этого нам необходима дополнительная библиотека для работы с protobuf из java. В целях
+избежения ненужных проблем, перенесем наши эксперименты в плоскость обычного проекта.</p>
+
+<h2 id="шаг-3-собираем-проект">Шаг 3. Собираем проект</h2>
+
+<blockquote>
+<p>Прежде всего хочу сказать, что не смотря на то, что все примеры на java, работа на других платформах с protobuf аналогична.</p>
+</blockquote>
+
+<p>Поигрались с терминалом и хватит, перейдем к практическому применению. Создадим gradle проект, цель которого будет перегнать
+через массив байт группу со студентами. Для автоматизации рутинной деятельности нам поможет инструмент автоматизации
+сборки gradle. Для вашего случая инструмент может отличаться, но идея должна быть понятна. Для того, чтобы добавить поддержку
+protocol buffers в цикле сборки нашего проекта, дополним типичный build.gradle файл следующими настройками:</p>
+
+<pre><code class="language-groovy">/*  добавляем в проект плагин, который добавляет 
+    к процессу сборки проекта генерацию java 
+    файлов по .proto файлам
+ */
+plugins {
+    id &quot;com.google.protobuf&quot; version &quot;0.8.3&quot;
+}
+
+protobuf {
+    /*  мы можем брать протобаф компилятор прямо из 
+        репозитория в качестве зависимости, при желании 
+        мы можем указать путь до protoc файла
+     */
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.5.1-1'
+    }
+    // указываем нашу директорию в проекте для сгенерированных файлов
+    generatedFilesBaseDir = &quot;$projectDir/src&quot;
+    // по умолчанию плагин ищет .proto файлы в /src/main/proto
+}
+
+dependencies {
+    // + зависимость без которой сгенерированный код не скомпилируется
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.5.1'
+}
+</code></pre>
+
+<p>Комментарии к коду исчерпывающие, а в конце статьи я оставлю ссылку на репозиторий, в котором вы найдете
+запускаемый код.</p>
+
+<p>В папку проекта <code>src/main/proto</code> помещаем наш .proto файл из первого шага. Теперь при сборке проекта или при выполнении
+gradle команды <code>generateProto</code> мы получим сгенерированный код по .proto файлу внутри нашего проекта.</p>
+
+<h2 id="шаг-4-взаимодействуем-со-сгенерированным-кодом">Шаг 4. Взаимодействуем со сгенерированным кодом</h2>
+
+<p>Компилятор создает весь код внутри файла <code>AcademyProtos.java</code>, это название мы указали в .proto файле. Весь сгенерированный
+код доступен в одноименном классе. Messages  превратились в несколько внутренних классов, которые помогают создавать,
+сериализовывать и десериализовывать описанную модель. По message Student компилятор создал класс AcademyProtos.Student и
+AcademyProtos.Student.Builder. Это типичная реализация паттерна &ldquo;Строитель&rdquo;. Объекты класса Student всегда неизменяемы,
+т.е. после создания мы не можем изменить каких-либо значений. Все манипуляции происходят с классом Builder, для этого у него есть
+достаточно методов.<br />
+Разберем код. Нам небходимо создать группу, для которой определено обязательное имя и набор студентов в виде repeated
+поля. Создание группы выглядит следующим образом:</p>
+
+<pre><code class="language-java">AcademyProtos.Group group = AcademyProtos.Group.newBuilder()
+    .setName(&quot;Math&quot;)
+    .addStudent(...)
+    .addStudent(...)
+    .build();
+</code></pre>
+
+<p>Для того, чтобы создать новый объект мы должны вызвать его Builder, заполнить его поля, а затем, в качестве звершающей
+изменения операции вызвать метод <code>build()</code>, который создаст группу. Repeated поля мы можем заполнять как по одному, так и
+добавлять целую коллецию.</p>
+
+<p>Как вы уже поняли, создавать студентов мы можем аналогично:</p>
+
+<pre><code class="language-java">AcademyProtos.Student student = AcademyProtos.Student.newBuilder()
+    .setId(123456)
+    .addEmail(&quot;student@example.com&quot;)
+    .addEmail(&quot;student2@example.com&quot;)
+    .setGender(AcademyProtos.Student.Gender.FEMALE)
+    .setName(&quot;Ivanova&quot;)
+    .build()
+</code></pre>
+
+<p>Итак, данные мы создали, получили заполненный объект типа Group, теперь необходимо перегнать его в массив байт.
+Сделать это можно следующим образом:</p>
+
+<pre><code class="language-java">byte[] serializedGroup = group.toByteArray();
+</code></pre>
+
+<p>Вот так просто! Сериализованная группа теперь - набор байт в protocol buffers формате.</p>
+
+<p>Затем нам необходимо прочитать сохраненные данные. Воспользуемся статическим методом <code>parseFrom</code>.</p>
+
+<pre><code class="language-java">AcademyProtos.Group unserialinedGroup = AcademyProtos.Group.parseFrom(serializedGroup);
+</code></pre>
+
+<p>Для того, чтобы проверить результат выведем его на экран (компилятор создает человекопонятные методы toString для классов, так
+что с отладкой нет проблем).</p>
+
+<pre><code class="language-java">System.out.println(unserialinedGroup);
+</code></pre>
+
+<p>В результате, в консоли мы видим:</p>
+
+<pre><code>name: &quot;Math&quot;
+student {
+  name: &quot;Ivanova&quot;
+  id: 123456
+  email: &quot;student@example.com&quot;
+  email: &quot;student2@example.com&quot;
+  gender: FEMALE
+}
+student {
+  name: &quot;Ivanov&quot;
+  id: 123457
+  email: &quot;student3@example.com&quot;
+  email: &quot;student4@example.com&quot;
+  gender: MALE
+}
+</code></pre>
+
+<p>За ширмой, для полноты примера, я добавил еще одного студента к группе.</p>
+
+<h1 id="заключение">Заключение</h1>
+
+<p>Protocol Buffers - отличный инструмент для кросс-платформенной сериализации данных. В некоторых случаях, он позволяет
+сохранять обратную совместимость, однако, при безрассудном подходе может и нанести вред. Сегодня мы познакомились с
+основами формата, разобрали .proto файл и пример Java кода, который работает с описанными структурами. Protocol Buffers -
+это кирпичик, который стоит в основе других технологий для интеграции гетерогенных систем, также существуют и аналоги,
+которые мы рассмотрим позже. Как всегда - это не серебряная пуля, но хороший инструмент интеграции.</p>
+
+<p><a href="https://github.com/ivan-osipov/Experiments-and-Researches/tree/master/Integration" target="_blank">Код проекта</a><br />
+<a href="https://developers.google.com/protocol-buffers/docs/javatutorial" target="_blank">Официальный Java Tutorial</a></p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/protocol-buffers\/';
+    var disqus_title = 'Protocol Buffers';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/protocol-buffers\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
