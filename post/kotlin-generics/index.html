@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kotlin Generics -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">Подписаться</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Kotlin Generics</h1>
+               <h2 class="subheading">Инвариантность, Ковариантность, Контравариантность, Reified Generics, Star-Projection и другая дичь</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-02-04
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/java">Java</a>, <a href="/categories/kotlin">Kotlin</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/java">java</a>, <a href="/tags/kotlin">kotlin</a>, <a href="/tags/language">language</a>, <a href="/tags/generics">generics</a>, <a href="/tags/advanced">advanced</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Первый релиз языка Kotlin включает в себя Kotlin Generics. Обобщенные типы, благодаря которым
+мы с вами можем писать более гибкие приложения с меньшим дублированием кода и большей типобезопасностью.
+Одно из важных преимуществ, которое дает вашему приложению использование Generics - проверка типов на этапе компиляции.
+Дизайнеры языка Kotlin ввели новые ключевые слова для работы с дженериками, что по началу может ввести в ступор даже
+опытного Java разработчика. Сегодня мы с вами обсудим что такое &ldquo;дженерики&rdquo;, удалим страх перед словами типа &ldquo;контравариантность&rdquo;,
+а заодно познакомимся с reified generics и star-projection.</p>
+
+<h2 id="generics">Generics</h2>
+
+<p>Для тех кто вовсе не знаком с обобщенными типами (generics) и для тех, кто порядком подзабыл, я напомню,
+что обобщенные типы это возможность выполнять контроль типов в вашем приложении при том, что точный тип вам не известен.
+Приведу пример, у вас есть коллекция Set, которая может быть хранилищем для абсолютно разных объектов, так, в одном
+месте приложения вы возпользуетесь <code>Set&lt;User&gt;</code> для работы с множеством пользователей, а в другой части приложения это
+будет <code>Set&lt;Task&gt;</code> - коллекция, которая хранит выполненные задачи. В обоих случаях коллекция Set выполняет возложенные
+на неё обязательства, более того, компилятор может проверить, что метод add принимает объект соответствующего типа, ровно
+как мы получим объекты этого типа проходя по коллекции.</p>
+
+<p>Создание классов с обобщенными Kotlin типами в простейшем виде выглядит следующим образом:</p>
+
+<pre><code class="language-kotlin">class Container&lt;T&gt;(var contained: T)
+</code></pre>
+
+<p>T - это лишь типичный пример именования неизвестного типа, вместо T вы можете использовать любой идентификатор для
+удобства. В примере выше мы описали класс, единственный параметр класса имеет общенный тип. Обратите внимание, что свойство
+класса имеет модификатор <code>var</code> и здесь это не с проста, ниже я объясню почему. Воспользуемся контейнером
+следующим образом:</p>
+
+<pre><code class="language-kotlin">val container = Container(25)
+</code></pre>
+
+<p>Обратите внимание, в сравнении с Java нам нет необходимости явно указывать Generic тип для контейнера, т.к. компилятор
+обладает полной информацией для выведения этого типа. Аналогично, начиная с Java 7, мы имеем возможность писать сокращенный
+вариант с использованием <a href="http://www.rootfront.com/article/219061/2011-04-21/v-jdk-7-pojavitsja-diamond-operator" target="_blank">Diamond Operator</a>.
+В совокупности с возможностью Kotlin выводить типы и для переменных мы имеем сокращенный синтаксис и при этом гибкий набор инструментов.</p>
+
+<p>Но что, если мы хотим положить в наш контейнер другой Int? Легко!</p>
+
+<pre><code class="language-kotlin">container.contained = 42
+</code></pre>
+
+<p>Затем, мы можем прочитать его, также легко.</p>
+
+<pre><code class="language-kotlin">println(container.contained)
+</code></pre>
+
+<p>На каждом этапе, на каждой строке компилятор проверяет, что мы работаем именно с Int, а не с чем бы то ни было другим, благодаря
+этому, мы, например, не можем записать в наш контейнер String.</p>
+
+<h2 id="инвариантный-ковариантный-контравариантный">Инвариантный, ковариантный, контравариантный</h2>
+
+<p>Должен вам признаться, если не работать со сложными вариациями обобщенных типов, то со временем всё забывается и приходится
+обновлять знания, вспоминать некоторые термины и иногда это дается с трудом, т.к. множество источников по generics пестрят
+красивыми словами <em>инвариантный</em>, <em>ковариантный</em>, <em>контравариантный</em>, однако, эти же источники совершенно невнятно объясняют
+терминологию. Сегодня я нацелен исправить это и перешагнуть через тонкую грань непонимания в данном вопросе.</p>
+
+<h3 id="инвариантность">Инвариантность</h3>
+
+<p>Возвращаясь к примеру с контейнером из предыдущего раздела, мы имеем тип <code>Container&lt;T&gt;</code>, где вместо T может оказаться
+любой тип с верхней границей Any? (об этом позже, коротко, любой nullable и не-nullable тип). Допустим, что мы
+сохранили в контейнер значение с типом Int следующим образом:</p>
+
+<pre><code class="language-kotlin">val container: Container&lt;Int&gt; = Container&lt;Int&gt;(25)
+</code></pre>
+
+<blockquote>
+<p>Я определяю тип переменной и дженерик для очевидности, по умолчанию, компилятор вполне справляется с их выводом</p>
+</blockquote>
+
+<p>Сможем ли мы обобщить нашу переменную чуть больше. Int наследуется от Number, и допустим мы хотим хранить в переменной
+контейнер не только с Int, а в принципе с Number, т.е. в нем может находиться любое число, например, Double.
+Интуитивно хочется написать:</p>
+
+<pre><code class="language-kotlin">val container: Container&lt;Number&gt; = Container&lt;Int&gt;(25)
+</code></pre>
+
+<p>Однако, такой код не скомпилируется, т.к. не смотря на то, что Int наследуется от Number, то типы с дженериками
+<code>Container&lt;Number&gt;</code> и <code>Container&lt;Int&gt;</code> не находятся в одной иерархии, по сути, это абсолютно разные типы, никак не
+совместимые. Другим языком, <strong>класс Container неизменен (инвариантен) по типу T</strong>. Следовательно, независимо от иерархии
+наследования самих обобщенных типов, по умолчанию, мы не можем говорить об каком-либо следствии иерархии классов
+использующих их.</p>
+
+<h3 id="ковариантность">Ковариантность</h3>
+
+<p>Вы можете задаться вопросом: &ldquo;А зачем это сделано? Почему не дать иерархию как следствие иерархии обобщенных типов по
+умолчанию?&ldquo;. Дело в том, что основная задача обобщенных типов - обеспечить безопасность типизации в вашем коде,
+уменьшить количество выбрасываемых исключений во времени выполнения уже на этапе компиляции, ну и конечно сделать всё
+это гибко. Обрисовать проблему мне помогут массивы из Java. Так получилось, что в Java массивы появились на много
+раньше чем обобщенные типы. Когда вводили массивы дали возможность сказать, что если у вас есть массив целочисленных значений (Integer[]), то вы можете
+присвоить это значение в переменную Number[]. Казалось бы, вот мы и получили наследование, но давайте рассмотрим
+следующий кусочек кода:</p>
+
+<pre><code class="language-java">Integer[] a = { 4, 5 }; //создаем массив Integer 
+Number[] b = a; // делаем еще одну ссылку на массив с типом Number[] и это допустимо
+b[1] = 4.4; //сохраняем Double значение в массив Integer
+//Exception in thread &quot;main&quot; java.lang.ArrayStoreException: java.lang.Double
+</code></pre>
+
+<p>Вот так просто мы можем получить ошибку, которую увидим только на этапе выполнения (в JVM есть специальная проверка, которая
+выполняется на записи), следовательно, наследование
+как следствие по умолчанию - это плохая идея. Однако, следующий код допустим, не так ли?</p>
+
+<pre><code class="language-java">Integer[] a = { 4, 5 };
+Number[] b = a;
+System.out.println(b[1]);
+//output: 5
+</code></pre>
+
+<p>Здесь всё законно, мы сделали те же самые действия, но вместо присвоения значения, мы его прочитали. Получается, что иногда
+поведение передачи наследования в соответствии с обобщенным типом может быть безопасно. Например, у нас есть метод, который
+будет только распечатывать значения из входного параметра и, в принципе, он может принимать любые числа, хоть
+Integer и Double в одном массиве, а затем печатать их. Так мы можем вывести правило:</p>
+
+<blockquote>
+<p>если наша пременная только предоставляет значения, то мы можем допустить, что в ней может находиться значение ниже
+по иерархии обобщенного типа</p>
+</blockquote>
+
+<p>аналогично для классов с обобщенными типами:</p>
+
+<blockquote>
+<p>если объект нашего класса только предоставляет значения, то мы можем допустить, что в нём хранится значение ниже
+по иерархии обобщенного типа</p>
+</blockquote>
+
+<p>Что значит &ldquo;ниже по иерархии&rdquo;? В Kotlin, как и в любом другом типизированном языке, существует иерархия типов. Если вы
+слабо представляете её, то я могу порекомендовать вам вот <a href="http://natpryce.com/articles/000818.html" target="_blank">эту</a>
+статью, которая поможет разобраться в системе типов. Ну а сейчас, для краткости, я лишь скажу, что для типа Number типы Int и Double
+лежат ниже по иерархии типов (могут быть безопасно приведены к Number), а тип Any лежит выше по иерархии типов (к нему можно
+безопасно привести Number).</p>
+
+<p>Другими словами, нужно как-то объяснить компилятору, что в некоторых ситуациях мы готовы к ковариантности. Тут то мы и подобрались
+к этому страшному слову. <strong>Ковариантностью</strong> называется сохранение иерархии типов в производных типах в том же порядке.</p>
+
+<p>Мы можем сказать, что <code>Container&lt;T&gt;</code> ковариантен своему параметру-типу T. Это будет означать, что если Int - потомок
+Number, то <code>Container&lt;Int&gt;</code> будет тоже считаться потомком <code>Container&lt;Number&gt;</code>. Напомню, что выше мы убедились
+в том, что ковариантность допустима, только когда мы говорим о получении значения, а по умолчанию обобщенные типы инвариантны,
+т.е. мы можем безопасно <strong>получить</strong> Number, если работаем с <code>Container&lt;Int&gt;</code> или контейнером для любого другого наследника Number.
+Существует два способа объяснить компилятору то, что Container ковариантен по параметру-типу T в Kotlin. Давайте их рассмотрим.</p>
+
+<h4 id="ковариантность-на-уровне-класса-на-месте-объявления">Ковариантность на уровне класса (на месте объявления)</h4>
+
+<p>Когда мы объявляем класс, мы можем изначально говорить о том, что класс ковариантен своему типу-параметру. Работать с ковариантными
+типами нам помогает ключевое слово <code>out</code>. Семантика его крайне проста в понимании. Если класс выступает в качестве Producer&rsquo;a,
+т.е. мы планируем значения типа Т <strong>только</strong> получать, то мы используем ключевое слово <code>out</code>, т.е. класс поставляет
+значения типа <strong>наружу</strong>. Давайте изменим декларацию нашего класса Container следующим образом:</p>
+
+<pre><code class="language-kotlin">class Container&lt;out T&gt;(var contained: T)
+</code></pre>
+
+<p>Тут же мы получаем ошибку компиляции, но какую?</p>
+
+<pre><code>Type parameter T is declared as 'out' but occurs in 'invariant' position in type T
+</code></pre>
+
+<p>Какая странная ошибка, где это у нас возникает потребность в инвариантном состоянии? Точно! Ключевое слово <code>var</code>!
+Мы совсем забыли о том, что <code>var</code> отличается от <code>val</code> наличием возможности изменить это значение, а как мы помним,
+ковариантность возможна только в случае, если вы запретите любые изменения значения. Заменим var на val</p>
+
+<pre><code class="language-kotlin">class Container&lt;out T&gt;(val contained: T)
+</code></pre>
+
+<p>Вот и всё. Теперь наш класс Container ковариантен параметру-типу T, это означает, что мы легко можем использовать следующую
+конструкцию:</p>
+
+<pre><code class="language-kotlin">val container: Container&lt;Number&gt; = Container&lt;Int&gt;(25)
+</code></pre>
+
+<p>Инвариантность как рукой сняло! Но чем мы за это заплатили?</p>
+
+<pre><code class="language-kotlin">val container: Container&lt;Int&gt; = Container&lt;Int&gt;(25)
+val container2: Container&lt;Number&gt; = container
+container2.contained = 4.0 //не компилируется, т.к. нельзя менять значение, зато мы
+// защищены от ошибок как с Java массивами
+</code></pre>
+
+<p>Как вы видите теперь тип <code>Container&lt;Int&gt;</code> наследник типа <code>Container&lt;Number&gt;</code>, благодаря чему мы можем свободно присваивать его переменным
+типа <code>Container&lt;Number&gt;</code>, но не можем менять значения типа T и это правильно. Представьте, если бы последняя строчка
+компилировась. Это значит, что через свойство contained было бы записано Double значение! Получается, что переменная
+container с типом <code>Container&lt;Int&gt;</code> содержала бы не Int, а Double, ведь и container, и container2 это две ссылки на один и
+тот же объект в памяти. И при попытке получения container.contained мы бы словили <code>ClassCastException</code>.</p>
+
+<p>Ковариантность на уровне класса - дело хорошее, оно гребёт под себя весь класс и заставляет нас не менять значения, но, что
+если нам не нужна ковариантность для всего класса? Пора разобраться с ковариантностью на месте использования.</p>
+
+<h4 id="ковариантность-на-месте-использования">Ковариантность на месте использования</h4>
+
+<p>Один из мощных механизмов управления иерархиями обобщенных типов это ковариантность на уровне объявления. Вспомним нашу
+первую версию инвариантного контейнера:</p>
+
+<pre><code class="language-kotlin">class Container&lt;T&gt;(var contained: T)
+</code></pre>
+
+<p>Если наш класс не ковариантен какому-либо параметру T, то мы можем свободно менять его значения как хотим:</p>
+
+<pre><code class="language-kotlin">val sourceContainer: Container&lt;Int&gt; = Container&lt;Int&gt;(25)
+sourceContainer.contained = 4 // компилируется
+</code></pre>
+
+<p>А в тот момент, когда нам понадобится завести общую переменную под контейнеры с разными параметрами-типами, мы сможем это сделать, воспользовавшись
+ковариантностью на месте использования (проекцией типа).</p>
+
+<pre><code class="language-kotlin">val covariantContainer: Container&lt;out Number&gt; = sourceContainer
+covariantContainer.contained = 4 
+/*  не компилируется, работаем с переменной у которой тип ковариантен параметру-типу
+    значит нельзя менять значения, т.к. мы не знаем исходный тип, 
+    там может быть любой контейнер с параметром-типом наследником Number
+*/
+</code></pre>
+
+<p>Благодаря, ковариантности на уровне объявления мы можем делать многие вещи очень гибко, например, написать следующий код:</p>
+
+<pre><code class="language-kotlin">class Container&lt;T: Any&gt; { //что такое T: Any вы узнаете чуть позже
+    /* 
+        Пусть на момент создания контейнера мы еще не знаем,
+        что конкретно он будет содержать, но знаем точно, что 
+        что-то с некоторым типом T он должен, следовательно после 
+        создания, рано или поздно, мы поменяем значение поля contained,
+        а значит оно по определению не может быть val. В такой ситуации,
+        мы не можем объявлять ковариантность на уровне класса
+     */
+    lateinit var contained: T
+
+    override fun toString(): String {
+        return &quot;Container(contained=$contained)&quot;
+    }
+
+}
+
+/*
+    Возвращаемый тип Container&lt;out Number&gt; создает ковариантность
+    на месте использования, следовательно, из метода мы возвращаем 
+    контейнер, который типизирован чем-то ниже в иерархии наследования
+ */
+fun createIntContainer(): Container&lt;out Number&gt; {
+    val container = Container&lt;Int&gt;()
+    container.contained = 42
+    return container
+}
+
+fun createDoubleContainer(): Container&lt;out Number&gt; {
+    val container = Container&lt;Double&gt;()
+    container.contained = 42.0
+    return container
+}
+
+fun main(args: Array&lt;String&gt;) {
+    var covariantContainer = createIntContainer() //Container&lt;out Number&gt;
+    println(covariantContainer)
+    covariantContainer = createDoubleContainer() //Container&lt;out Number&gt;
+    println(covariantContainer)
+}
+</code></pre>
+
+<p>Вывод в консоли:</p>
+
+<pre><code>Container(contained=42)
+Container(contained=42.0)
+</code></pre>
+
+<p>Таким образом, мы успешно хранили в одной переменной контейнеры с разным параметром-типом, при том, что сам контейнер
+инвариантен по своему параметру-типу Т.</p>
+
+<p>С ковариантностью разобрались, осталась контравариантность.</p>
+
+<h3 id="контравариантность">Контравариантность</h3>
+
+<p>Кроме того, чтобы описывать классы как producer&rsquo;ы, иногда, нам может понадобиться
+описать классы как consumer&rsquo;ы или <strong>потребители</strong>. Давайте рассмотрим следующую иерархию типов:</p>
+
+<pre><code>    Пользователь
+   /           \
+Работник  Администратор   
+</code></pre>
+
+<p>Пусть перед нами стоит задача написать логгер тех, кто входит в систему. Каждый пользователь системы имеет логин и именно его
+мы будем распечатывать.</p>
+
+<p>Объявление такой иерархии типов может выглядеть, например, так:</p>
+
+<pre><code class="language-kotlin">open class User(var login: String)
+
+class Worker(login: String): User(login)
+
+class Admin(login: String): User(login)
+</code></pre>
+
+<p>Создадим класс Printer, который инкапсулирует в себе логику печати:</p>
+
+<pre><code class="language-kotlin">class Printer&lt;T: User&gt; {
+    fun print(user: T) {
+        println(&quot;User ${user.login} is logged in&quot;)
+    }
+}
+</code></pre>
+
+<p>Пока класс инвариантен и в большинстве случаев этого будет достаточно благодаря автоматическому приведению типов. Подумайте,
+если бы мы передали в метод print объект типа Admin, то он спокойно был бы принят компилятором и приведен к верней границе
+обобщенного типа User, но все приложения разные. Допустим, у нас есть метод <code>printAdmin</code>, который знает какие предобработки нужно
+сделать, а затем вызывает правильный метод у объекта класса <code>Printer</code>. Напишем метод <code>printAdmin</code>:</p>
+
+<pre><code class="language-kotlin">fun printAdmin(printer: Printer&lt;Admin&gt;, admin: Admin) {
+    //admin specific
+    printer.print(admin)
+}
+</code></pre>
+
+<p>Такой метод в своём использовании сужает вариативность нашего принтера, теперь принтер должен уметь печатать именно администратора.
+Принтер для работника здесь не подойдет, а подойдет ли принтер для пользователя в принципе? Почему бы и нет, админ - тоже пользователь,
+значит мы должны уметь печатать его тем же принтером, что и других пользователей. Получается, если Админ наследуется от Пользователя, то
+принтер пользователя, должен быть наследником принтера админа (только в этом случае мы сможем безопасно привести тип
+<code>Printer&lt;User&gt;</code> к типу <code>Printer&lt;Admin&gt;</code>). За сим мы наблюдаем разворот иерархии в другую сторону - это и обозначают сложным
+словом контравариантность. Схематично контравариантность можно обозначить следующим образом:</p>
+
+<pre><code>   User         Printer&lt;Admin&gt;       
+    ↑     →         ↑
+  Admin         Printer&lt;User&gt;
+</code></pre>
+
+<p>Как вы, уверен, уже запомнили, обобщенные типы сами по себе инвариантны, по этому следующий код не скомпилируется:</p>
+
+<pre><code class="language-kotlin">val admin = Admin(&quot;admin&quot;)
+printAdmin(Printer&lt;User&gt;(), admin)
+</code></pre>
+
+<p>Однако, мы можем это изменить. Для этого в нашем арсенале есть ключевое слово <code>in</code>. Применять мы можем его как на уровне объявления,
+так и на уровне использования, аналогично ковариантной аннотации обобщенного типа <code>out</code>. Выглядит применение на уровне класса
+следующим образом:</p>
+
+<pre><code class="language-kotlin">class Printer&lt;in T: User&gt; { //появился in
+    fun print(user: T) {
+        println(&quot;User ${user.login} is logged in&quot;)
+    }
+}
+</code></pre>
+
+<p>Компилятор будет всячески не давать заполучть T из объектов типа контравариантного типу-параметру. После манипуляций выше наш
+код ниже компилируется:</p>
+
+<pre><code class="language-kotlin">val admin = Admin(&quot;admin&quot;)
+printAdmin(Printer&lt;User&gt;(), admin)
+</code></pre>
+
+<p>И печатает:</p>
+
+<pre><code>User admin is logged in
+</code></pre>
+
+<h2 id="producer-out-consumer-in">Producer Out, Consumer In</h2>
+
+<p>В классической книге Effective Java автор Joshua Bloch предлагает аббревиатуру PECS для запоминания правила использования
+ключевых слов extends и super в обобщенных типах Java. Аббревиатура гласит, <code>Producer Extends, Consumer Super</code>, что
+означает если класс является Producer&rsquo;ом обобщенного типа, то необходимо использовать ключевое слово extends, а если потребителем, то
+super. В Kotlin всё на много проще. Хотя мы можем переизобрести аббревиатуру блоха POCI (Producer Out, Consumer In),
+это того не стоит. На самом деле, ключевые слова out и in говорят сами за себя, только думать нужно не в терминах иерархии типов,
+а, скорее, думать о том как перемещаются данные. Если ваш класс поставляет обобщенно-типизированные значения наружу,
+то вам нужен <code>out</code>, а если класс потребляет значения обобщенного типа, то нужен <code>in</code>.</p>
+
+<h2 id="верхняя-граница-обобщенного-типа">Верхняя граница обобщенного типа</h2>
+
+<p>Как вы уже заметили, несколько раз за статью я использовал конструкции вида <code>&lt;T: SomeClass&gt;</code>. Прежде всего я хочу вас спросить,
+а какой тип находится на вершине иерархии типов в Kotlin? Аналогично Object в Java, к чему можно привести любой тип?
+Правильным ответом будет <code>Any?</code>. Сам по себе класс <code>Any</code> это аналог <code>Object</code>, однако, в следствие поддержки Nullable и не
+Nullable типов в Kotlin мы получили <code>Any?</code>. Фактически, <code>Any?</code> соответствует любому типу и <code>null</code>, а <code>Any</code> только любому типу.
+Подробнее об иерархии типов я предлагаю прочитать статью, которую вы найдете в последнем разделе &ldquo;Бонус&rdquo;. Обобщенные
+типы ограничены сверху максимально широким типом, а именно <code>Any?</code> из-за чего может возникать некоторое недопонимание в использовании их.
+Следовательно, по умолчанию дженерик тип - Nullable, это означает, что свойства с таким типом могут принимать значения
+<code>null</code>, но когда мы будем работать с ними, то компилятор потребует удостовериться, что через свойство доступно не null значение.
+Таким образом, когда мы пишем <code>&lt;T: Any&gt;</code> мы явно говорим, что тип, указываемый в качестве конкретного варианта вместо
+обобщенного типа не может содержать <code>null</code>. Аналогично, мы можем понизить верхнюю границу по иерархии еще ниже и потребовать, например,
+указывать в качестве типов только чила: <code>&lt;T: Number&gt;</code>.</p>
+
+<p>Верхних границ может быть несколько, в этом случае необходимо указывать их в специальном разделяющем <code>where</code> условии:</p>
+
+<pre><code class="language-kotlin">class Container&lt;T&gt;(var contained: T) 
+        where T: Number, 
+              T: Comparable&lt;T&gt;
+</code></pre>
+
+<p>Аналогично для функции для которой объявлен обобщенный тип.</p>
+
+<h2 id="star-projection">Star-Projection</h2>
+
+<p>Часто мы сталкиваемся с так называемой <em>проекцией типов</em>. Простым языком, это ограничение типа на месте использования. Например,
+мы не хотим, чтобы в наш контейнер могли по ошибке что-то записать внутри метода, для этого ограничиваем тип:</p>
+
+<pre><code class="language-kotlin">fun process(container: Container&lt;out Number&gt;) {
+    container.contained = 4 //не компилируется    
+}
+</code></pre>
+
+<p>Благодаря out здесь мы можем только читать из контейнера, но не записывать. В примерах выше мы обсуждали это поведение.</p>
+
+<p>Однако, иногда возникает ситуация, что у нас нет информации о необходимом нам типе проекции, но мы знаем, что Container, к примеру, имеет
+верхнюю границу для ковариантного параметра-типа - Number и нам этого достаточно. Тогда, мы можем воспользоваться star-projection.</p>
+
+<pre><code class="language-kotlin">fun process(container: Container&lt;*&gt;) { // символ *
+    println(container.value) // мы можем печатать значения, т.к. знаем верхнюю границу обобщенного типа
+    container.value = 4 // но мы не можем писать значения, т.к. не знаем типа
+}
+</code></pre>
+
+<p>Для ковариантных параметров * означает &ldquo;могу читать значения с типом верхней границы обобщенного типа&rdquo;.
+Для контравариантных параметров * означает &ldquo;не могу ничего безопасно писать&rdquo;
+Для инвариантных параметров символ * означает: &ldquo;при чтении аналогично * для ковариантного, при записи аналогично * для контравариантного параметра&rdquo;.</p>
+
+<h2 id="стирание-типов">Стирание типов</h2>
+
+<p>Аналогично с Java в Kotlin происходит стирание информации об обобщенных типах, т.е. обобщенные типы - наши помощники только
+на этапе компиляции. На этапе выполнения кода информации уже нет, однако, есть хитрые способы, которые вы можете найти для
+частного решения в некоторых случаях.</p>
+
+<h2 id="reified-generics-и-inline-function">Reified Generics и inline function</h2>
+
+<p>Модификатор inline для функций позволяет встраивать код в место вызова без какого-либо обращения к реальной функции.
+Такой модификатор позволяет не создавать слишком много лямбд, которые передаются в методы и является небольшой оптимизацией.
+Кроме того, этот модификатор позволяет сохранить информацию об обобщенных типах объявленных в рамках методов даже на этапе выполнения. Рассмотрим
+небольшой пример:</p>
+
+<pre><code class="language-kotlin">inline fun &lt;reified T: Number&gt; printClass(value: T) {
+    println(T::class)
+}
+
+fun main(args: Array&lt;String&gt;) {
+    printClass(4)
+    printClass(4.0)
+}
+</code></pre>
+
+<p>Результат выполнения:</p>
+
+<pre><code>class kotlin.Int
+class kotlin.Double
+</code></pre>
+
+<p>Ключевое слово <code>reified</code> говорит о том, что нужно иметь доступ к информации о типе T. Таким образом, в некоторых случаях,
+даже явно не передавая тип, мы можем работать с ним.</p>
+
+<h2 id="резюме">Резюме</h2>
+
+<p>Подводя итоги статьи, хочется отметить, что обобщенные типы - довольно сложная часть как Java, так и Kotlin и их понимание
+крайне важно для бесстрашного построения гибких классов, готовых к разностороннему применению. Можно долго спорить,
+что понятнее Java программисту, который пришел в Kotlin, Java синтаксис обобщенных типов или <code>out</code> и <code>in</code>. На мой взгляд,
+если у вас есть понимание того для чего вы применяете обобщенные типы, то никакой синтаксис не помешает вам их использовать.</p>
+
+<h2 id="бонус">Бонус</h2>
+
+<p>Погружаясь в тему обобщенных типов вы можете посмотреть видео с конференции JPoint2016 &ldquo;Неочевидные Дженерики&rdquo; об обобщенных типах из Java
+вот <a href="https://www.youtube.com/watch?v=_0c9Fd9FacU" target="_blank">здесь</a></p>
+
+<p>Статья об <a href="http://natpryce.com/articles/000818.html" target="_blank">иерархии типов в Kotlin</a></p>
+
+<p>Альтернативное <a href="https://kotlinlang.ru/docs/reference/generics.html" target="_blank">чтение</a> на тему дженериков</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/kotlin-generics\/';
+    var disqus_title = 'Kotlin Generics';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/kotlin-generics\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
