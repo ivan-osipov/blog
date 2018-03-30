@@ -916,35 +916,5 @@ image_url: $main_image/@src
 </description>
     </item>
     
-    <item>
-      <title>Начинаю новый эксперимент: подкастинг</title>
-      <link>https://i-osipov.ru/post/i-have-a-first-podcast/</link>
-      <pubDate>Mon, 30 Jan 2017 01:41:31 +0400</pubDate>
-      
-      <guid>https://i-osipov.ru/post/i-have-a-first-podcast/</guid>
-      <description>&lt;p&gt;Решил испытать себя в деле подкастинга. Прослушать и скачать пилотный выпуск можете ниже:&lt;/p&gt;
-
-&lt;p&gt;&lt;audio controls=&#34;controls&#34;&gt;
-  &lt;source type=&#34;audio/mp3&#34; src=&#34;http://mobymob.podfm.ru/fjlp/1/file/podfm_mobymob_fjlp_1.mp3&#34;&gt;&lt;/source&gt;
-&lt;/audio&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://mobymob.podfm.ru/fjlp/1/file/podfm_mobymob_fjlp_1.mp3&#34;&gt;Загрузить&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Содержание пилотного выпуска&lt;/strong&gt;&lt;br /&gt;
-&lt;strong&gt;00:35&lt;/strong&gt; — Об авторе&lt;br /&gt;
-&lt;strong&gt;00:58&lt;/strong&gt; — Мотивация подкаста&lt;br /&gt;
-&lt;strong&gt;02:00&lt;/strong&gt; — Обобщенные темы подкаста&lt;br /&gt;
-&lt;strong&gt;02:26&lt;/strong&gt; — Формат подкаста&lt;br /&gt;
-&lt;strong&gt;03:00&lt;/strong&gt; — Каково быть студентом на IT специальности в ВУЗе&lt;br /&gt;
-&lt;strong&gt;13:00&lt;/strong&gt; — О современной потребности в дипломе&lt;br /&gt;
-&lt;strong&gt;24:32&lt;/strong&gt; — Планирование жизни&lt;br /&gt;
-&lt;strong&gt;28:50&lt;/strong&gt; — О собственном развитии&lt;br /&gt;
-&lt;strong&gt;30:44&lt;/strong&gt; — Поддержка окружения, конкуренция&lt;br /&gt;
-&lt;strong&gt;35:06&lt;/strong&gt; — Откуда взять свободное время?&lt;br /&gt;
-&lt;strong&gt;38:22&lt;/strong&gt; — Поиски лучшей жизни&lt;br /&gt;
-&lt;strong&gt;41:40&lt;/strong&gt; — Инвестирование&lt;/p&gt;
-</description>
-    </item>
-    
   </channel>
 </rss>
