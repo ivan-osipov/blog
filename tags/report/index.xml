@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Report on Ivan Osipov</title>
+    <link>https://i-osipov.ru/tags/report/index.xml</link>
+    <description>Recent content in Report on Ivan Osipov</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <atom:link href="https://i-osipov.ru/tags/report/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Kotlin Updates Report 1.2.20-1.2.30</title>
+      <link>https://i-osipov.ru/post/kotlin-updates-report-1.2.20-1.2.30/</link>
+      <pubDate>Sat, 31 Mar 2018 11:14:07 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/kotlin-updates-report-1.2.20-1.2.30/</guid>
+      <description>
+
+&lt;p&gt;За первую четверть этого года успело релизнуться несколько версий Kotlin. Для начала давайте перечислим основные
+изменения.&lt;/p&gt;
+
+&lt;h3 id=&#34;изменения-из-1-2-20&#34;&gt;Изменения из 1.2.20:&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;добавлена поддержка Gradle build cache;&lt;/li&gt;
+&lt;li&gt;улучшена инкрементальная компиляция;&lt;/li&gt;
+&lt;li&gt;поддержка IDE для Kotlin style guide;&lt;/li&gt;
+&lt;li&gt;хинты в IDE для неявный параметров и контекстов лямбд и значений, которые возвращаются из лямбд;&lt;/li&gt;
+&lt;li&gt;поддержан делопмент мод в JavaScript DCE Gradle Task;&lt;/li&gt;
+&lt;li&gt;мелкие улучшения.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;изменения-из-1-2-30&#34;&gt;Изменения из 1.2.30:&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;добавлена новая декларация в стандартную библиотеку, которая иммитирует suspend модификатор для лямбд;&lt;/li&gt;
+&lt;li&gt;добавлена поддержка для TestNG в kotlin.test;&lt;/li&gt;
+&lt;li&gt;притащили поддержку мультиплатформенных модулей для Android;&lt;/li&gt;
+&lt;li&gt;добавлена новая вощможность в kapt для репортинга ошибок обработки аннотаций;&lt;/li&gt;
+&lt;li&gt;добавлено много новых инспекций и интеншенов в Intellij IDEA, улучшена их производительность;&lt;/li&gt;
+&lt;li&gt;поправлены некоторые баги в плагине и компиляторе.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Ну, а теперь подробно взглянем только на интересные фичи. Полный обзор смотрите в оригинальных источниках (ссылки в конце).&lt;/p&gt;
+
+&lt;h4 id=&#34;gradle-build-cache-precise-java-tracking&#34;&gt;Gradle Build Cache &amp;amp; Precise Java Tracking&lt;/h4&gt;
+
+&lt;p&gt;При использовании версии Gradle 4.3+ вы можете использовать флаги &lt;code&gt;--build-cache&lt;/code&gt; или &lt;code&gt;org.gradle.caching=true&lt;/code&gt;. В этом случае
+плагин будет переиспользовать предыдущие результаты сборки. Например, вы собрали версию приложения под master веткой, затем переключились
+на ветку feature_X, собрали снова и вернулись назад на мастер. Если вы воспользуетесь флагом выше, то ваш код не будет пересобран
+на мастере, т.к. результаты были закешированы.&lt;/p&gt;
+
+&lt;p&gt;Если ваш Java класс изменился так, что это не аффектит ваш Kotlin код, то, в теории, компилятор, может нерекомпилировать
+ваш Kotlin код. Для того, чтобы воспользоваться этой &lt;strong&gt;экспериментальной&lt;/strong&gt; фичей нужно добавить следующую проперти в gradle.properties.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-properties&#34;&gt;kotlin.incremental.usePreciseJavaTracking=true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;code-conventions&#34;&gt;Code Conventions&lt;/h4&gt;
+
+&lt;p&gt;Ранее были опубликован &lt;a href=&#34;http://kotlinlang.org/docs/reference/coding-conventions.html&#34; target=&#34;_blank&#34;&gt;официальный style guide&lt;/a&gt;.
+Начиная с 1.2.20 форматтер Intellij IDEA поддерживает его.&lt;/p&gt;
+
+&lt;h4 id=&#34;клёвые-хинты&#34;&gt;Клёвые Хинты&lt;/h4&gt;
+
+&lt;p&gt;Среди изменений прилетело одно, ну очень полезное, для разработки и использования Kotlin DSL - это хинты для
+контекстов лямбд, их неявных параметров и результатов выполнения этих лямбд. Выглядит всё это следующим образом:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/posts/kotlin-updates-report-1.2.20-1.2.30/hints-example.png&#34; alt=&#34;Hints&#34; title=&#34;Hints&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;интересные-интеншены&#34;&gt;Интересные Интеншены&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Появился интеншен для конвертации функции let &amp;lt;-&amp;gt; run и also &amp;lt;-&amp;gt; apply. По сути, конвертер превращает одну функцию в другую и наоброт.
+Пожалуй эта фича хороша по следующей причине. Не секрет, что из-за этой кучки функций постоянно появлялись
+сомнения что-же использовать, теперь с этим проще и подобные фичи помогают запоминать и укладывать в голове
+назначение этих функций, либо каждый раз конвертировать.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Вставка Kotlin кода в пакет. Не до конца понимаю назначение фичи, но выглядит как такой, быстрый рефакторинг.
+По сути, вы делаете Ctrl + X, т.е. вырезаете класс, а затем указываете в какой пакет его положить, жмете Ctrl + V и код
+перемещается в сгенерированный файл.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;analyzing-data-flow&#34;&gt;Analyzing Data Flow&lt;/h4&gt;
+
+&lt;p&gt;Анализ потоков данных теперь поддержен для смешаных Java-Kotlin проектов. Круто! Если кто-то не знает, что это, то
+в Intellij IDEA есть фича в меню Analyze, которая помогает вам в большом и запутанном легаси проекте понять откуда
+приходят данные в то или иное место или куда они уходят. Фича классная, помогает не нажимать бесконечно Ctrl + B, а
+увидеть, например, дерево вызовов метода get и понять куда забирают наши данные и как с ними работают.&lt;/p&gt;
+
+&lt;h3 id=&#34;вместо-заключения&#34;&gt;Вместо заключения&lt;/h3&gt;
+
+&lt;p&gt;Приятно видеть, что разработчики принимают множество пул реквестов от сторонних разработчиков.&lt;/p&gt;
+
+&lt;p&gt;На этом, на мой взгляд, интересные нововведения исчерпаны. Ниже ссылки на источники. Успехов!&lt;/p&gt;
+
+&lt;p&gt;Источники:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.jetbrains.com/kotlin/2018/01/kotlin-1-2-20-is-out/&#34; target=&#34;_blank&#34;&gt;Kotlin 1.2.20 is out&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.jetbrains.com/kotlin/2018/03/kotlin-1-2-30-is-out/&#34; target=&#34;_blank&#34;&gt;Kotlin 1.2.30 is out&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.jetbrains.com/help/idea/analyzing-data-flow.html&#34; target=&#34;_blank&#34;&gt;Analyzing Data Flow&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

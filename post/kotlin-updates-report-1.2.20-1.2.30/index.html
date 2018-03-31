@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kotlin Updates Report 1.2.20-1.2.30 -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://t.me/from_junior_to_senior">Подписаться</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header_2.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Kotlin Updates Report 1.2.20-1.2.30</h1>
+               <h2 class="subheading">Обозреваем изменения в Kotlin в версиях 1.2.20 и 1.2.30</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-03-31
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/kotlin">Kotlin</a>, <a href="/categories/news">News</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/kotlin">kotlin</a>, <a href="/tags/report">report</a>, <a href="/tags/intellij-idea">intellij idea</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>За первую четверть этого года успело релизнуться несколько версий Kotlin. Для начала давайте перечислим основные
+изменения.</p>
+
+<h3 id="изменения-из-1-2-20">Изменения из 1.2.20:</h3>
+
+<ul>
+<li>добавлена поддержка Gradle build cache;</li>
+<li>улучшена инкрементальная компиляция;</li>
+<li>поддержка IDE для Kotlin style guide;</li>
+<li>хинты в IDE для неявный параметров и контекстов лямбд и значений, которые возвращаются из лямбд;</li>
+<li>поддержан делопмент мод в JavaScript DCE Gradle Task;</li>
+<li>мелкие улучшения.</li>
+</ul>
+
+<h3 id="изменения-из-1-2-30">Изменения из 1.2.30:</h3>
+
+<ul>
+<li>добавлена новая декларация в стандартную библиотеку, которая иммитирует suspend модификатор для лямбд;</li>
+<li>добавлена поддержка для TestNG в kotlin.test;</li>
+<li>притащили поддержку мультиплатформенных модулей для Android;</li>
+<li>добавлена новая вощможность в kapt для репортинга ошибок обработки аннотаций;</li>
+<li>добавлено много новых инспекций и интеншенов в Intellij IDEA, улучшена их производительность;</li>
+<li>поправлены некоторые баги в плагине и компиляторе.</li>
+</ul>
+
+<p>Ну, а теперь подробно взглянем только на интересные фичи. Полный обзор смотрите в оригинальных источниках (ссылки в конце).</p>
+
+<h4 id="gradle-build-cache-precise-java-tracking">Gradle Build Cache &amp; Precise Java Tracking</h4>
+
+<p>При использовании версии Gradle 4.3+ вы можете использовать флаги <code>--build-cache</code> или <code>org.gradle.caching=true</code>. В этом случае
+плагин будет переиспользовать предыдущие результаты сборки. Например, вы собрали версию приложения под master веткой, затем переключились
+на ветку feature_X, собрали снова и вернулись назад на мастер. Если вы воспользуетесь флагом выше, то ваш код не будет пересобран
+на мастере, т.к. результаты были закешированы.</p>
+
+<p>Если ваш Java класс изменился так, что это не аффектит ваш Kotlin код, то, в теории, компилятор, может нерекомпилировать
+ваш Kotlin код. Для того, чтобы воспользоваться этой <strong>экспериментальной</strong> фичей нужно добавить следующую проперти в gradle.properties.</p>
+
+<pre><code class="language-properties">kotlin.incremental.usePreciseJavaTracking=true
+</code></pre>
+
+<h4 id="code-conventions">Code Conventions</h4>
+
+<p>Ранее были опубликован <a href="http://kotlinlang.org/docs/reference/coding-conventions.html" target="_blank">официальный style guide</a>.
+Начиная с 1.2.20 форматтер Intellij IDEA поддерживает его.</p>
+
+<h4 id="клёвые-хинты">Клёвые Хинты</h4>
+
+<p>Среди изменений прилетело одно, ну очень полезное, для разработки и использования Kotlin DSL - это хинты для
+контекстов лямбд, их неявных параметров и результатов выполнения этих лямбд. Выглядит всё это следующим образом:</p>
+
+<p><img src="../../img/posts/kotlin-updates-report-1.2.20-1.2.30/hints-example.png" alt="Hints" title="Hints" /></p>
+
+<h4 id="интересные-интеншены">Интересные Интеншены</h4>
+
+<ol>
+<li><p>Появился интеншен для конвертации функции let &lt;-&gt; run и also &lt;-&gt; apply. По сути, конвертер превращает одну функцию в другую и наоброт.
+Пожалуй эта фича хороша по следующей причине. Не секрет, что из-за этой кучки функций постоянно появлялись
+сомнения что-же использовать, теперь с этим проще и подобные фичи помогают запоминать и укладывать в голове
+назначение этих функций, либо каждый раз конвертировать.</p></li>
+
+<li><p>Вставка Kotlin кода в пакет. Не до конца понимаю назначение фичи, но выглядит как такой, быстрый рефакторинг.
+По сути, вы делаете Ctrl + X, т.е. вырезаете класс, а затем указываете в какой пакет его положить, жмете Ctrl + V и код
+перемещается в сгенерированный файл.</p></li>
+</ol>
+
+<h4 id="analyzing-data-flow">Analyzing Data Flow</h4>
+
+<p>Анализ потоков данных теперь поддержен для смешаных Java-Kotlin проектов. Круто! Если кто-то не знает, что это, то
+в Intellij IDEA есть фича в меню Analyze, которая помогает вам в большом и запутанном легаси проекте понять откуда
+приходят данные в то или иное место или куда они уходят. Фича классная, помогает не нажимать бесконечно Ctrl + B, а
+увидеть, например, дерево вызовов метода get и понять куда забирают наши данные и как с ними работают.</p>
+
+<h3 id="вместо-заключения">Вместо заключения</h3>
+
+<p>Приятно видеть, что разработчики принимают множество пул реквестов от сторонних разработчиков.</p>
+
+<p>На этом, на мой взгляд, интересные нововведения исчерпаны. Ниже ссылки на источники. Успехов!</p>
+
+<p>Источники:</p>
+
+<ul>
+<li><a href="https://blog.jetbrains.com/kotlin/2018/01/kotlin-1-2-20-is-out/" target="_blank">Kotlin 1.2.20 is out</a></li>
+<li><a href="https://blog.jetbrains.com/kotlin/2018/03/kotlin-1-2-30-is-out/" target="_blank">Kotlin 1.2.30 is out</a></li>
+<li><a href="https://www.jetbrains.com/help/idea/analyzing-data-flow.html" target="_blank">Analyzing Data Flow</a></li>
+</ul>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/kotlin-updates-report-1.2.20-1.2.30\/';
+    var disqus_title = 'Kotlin Updates Report 1.2.20-1.2.30';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/kotlin-updates-report-1.2.20-1.2.30\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

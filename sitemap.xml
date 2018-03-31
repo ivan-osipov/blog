@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/kotlin-updates-report-1.2.20-1.2.30/</loc>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/kotlin-generics/</loc>
     <lastmod>2018-02-04T06:17:17+04:00</lastmod>
   </url>
@@ -100,13 +105,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/development/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/development/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -201,6 +206,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/intellij-idea/</loc>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/investments/</loc>
     <lastmod>2017-06-15T19:10:40+04:00</lastmod>
     <priority>0</priority>
@@ -208,7 +219,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -226,13 +237,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/kotlin/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/kotlin/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -267,6 +278,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/categories/news/</loc>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/postels-law/</loc>
     <lastmod>2018-01-22T08:51:45+04:00</lastmod>
     <priority>0</priority>
@@ -274,7 +291,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-02-04T06:17:17+04:00</lastmod>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -293,6 +310,12 @@
   <url>
     <loc>https://i-osipov.ru/categories/protocols/</loc>
     <lastmod>2018-01-28T09:26:03+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/report/</loc>
+    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
     <priority>0</priority>
   </url>
   
