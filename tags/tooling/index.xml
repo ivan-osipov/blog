@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tooling on Ivan Osipov</title>
+    <link>https://i-osipov.ru/tags/tooling/index.xml</link>
+    <description>Recent content in Tooling on Ivan Osipov</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <atom:link href="https://i-osipov.ru/tags/tooling/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Kotlin Updates Report 1.2.40</title>
+      <link>https://i-osipov.ru/post/kotlin-updates-report-1.2.40/</link>
+      <pubDate>Fri, 20 Apr 2018 07:35:10 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/kotlin-updates-report-1.2.40/</guid>
+      <description>
+
+&lt;p&gt;Вчера вечером вышло описание нововведений в Kotlin 1.2.40. Сегодня, по традиции, мы с вами взглянем на
+очередной релиз и актуализируем знания по языку.&lt;/p&gt;
+
+&lt;p&gt;Список изменений:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;множественное использование expectedBy зависимостей;&lt;/li&gt;
+&lt;li&gt;поддержка crossinline suspend параметров в inline функциях;&lt;/li&gt;
+&lt;li&gt;экспериментальная поддержка аннотации @JvmDefault для создания методов интерфейсов из Java 8 с модификатором default;&lt;/li&gt;
+&lt;li&gt;добавлены новые инспекции и интеншены в плагин;&lt;/li&gt;
+&lt;li&gt;прямое обращение к классам внутри companion object в скоупе наследования теперь deprecated;&lt;/li&gt;
+&lt;li&gt;фиксы в компиляторе и IDE плагине, улучшения производительности.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Этот update совместим с Intellij IDEA от 2017.1 до 2018.1, также как с Android Studio 3.x.&lt;/p&gt;
+
+&lt;h3 id=&#34;улучшения-мультиплатформенных-проектах&#34;&gt;Улучшения мультиплатформенных проектах&lt;/h3&gt;
+
+&lt;p&gt;Платформенные модули теперь позволяют реализовывать платформенно-специфичные декларации для более чем одного мультиплатформенного
+модуля. Теперь вы можете использовать &lt;code&gt;expectedBy&lt;/code&gt; в зависимостях несколько раз. Выглядит это, например, так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-groovy&#34;&gt;apply plugin: &#39;kotlin-platform-jvm&#39;
+// ...
+ 
+dependencies {
+    expectedBy project(&amp;quot;:io-common&amp;quot;)
+    expectedBy project(&amp;quot;:data-common&amp;quot;)
+    // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Такие зависимости нетранзитивны, разберемся с этим. Пусть есть вот такая цепочка зависимостей: &lt;code&gt;my-common -&amp;gt; lib-common&lt;/code&gt;
+Это два common модуля (напомню, что мы разделяем платформенные и common модули), где первый зависит от второго.
+При попытке установить зависимость на my-common модуль в платформенном модуле у нас есть один из двух путей:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;либо мы вручную определяем две &lt;code&gt;expectedBy&lt;/code&gt; зависимости;&lt;/li&gt;
+&lt;li&gt;или добавляем &lt;code&gt;expectedBy&lt;/code&gt; только на &lt;code&gt;my-common&lt;/code&gt; и компилируем зависимость на существующем платформенном модуле для &lt;code&gt;lib-common&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Напомню, что для мультиплатформенных проектов есть понятие expect/actual модификатора. Эти модификаторы позволяют связывать
+&amp;ldquo;ожидания реализации&amp;rdquo; интерфейса и фактические платформенные реализации. Так вот, для expect функций и конструкторов в
+Kotlin 1.2.40 появилась поддержка значений по умолчанию, пример ниже:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;expect class StringMatcher {
+    fun match(value: String, matchStrictly: Boolean = false): Boolean
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;При этом, default параметры поддерживаются только для expect конструкторов/функций, но не для их actual двойников.&lt;/p&gt;
+
+&lt;h3 id=&#34;поддержка-crossinline-suspend-параметров-функций&#34;&gt;Поддержка crossinline suspend параметров функций&lt;/h3&gt;
+
+&lt;p&gt;Напомню, что crossinline модификатор говорит о том, что лямбда, передаваемая в качестве параметра inline функции, может
+быть передана в другой контекст, а, например, если мы передадим лямбду без этого модификатора, то компилятор не знает
+как поступать в случае non-local возвратов. Для того, чтобы решить эту проблему добавим модификатор crossinline,
+который подскажет компилятору, что нужно запретить non-local return и благодаря этому запрету появится возможность передавать
+лямбды в другие контексты.&lt;/p&gt;
+
+&lt;p&gt;До версии Kotlin 1.2.40 в случае совместного использования crossinline и suspend для лямбд, мы получали сообщение:
+&lt;code&gt;Inline lambda parameters of suspend function type are not fully supported. Add noinline modifier&lt;/code&gt;. Теперь конструкция ниже компилируется:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;inline fun schedule(crossinline runner: suspend () -&amp;gt; Unit)  {
+    launch(CommonPool) {
+        runner()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;jvmdefault&#34;&gt;@JvmDefault&lt;/h3&gt;
+
+&lt;p&gt;Экспериментальная фича, которая при таргете на JVM 1.8 генерирует default методы интерфейса при наличии аннотации @JvmDefault. Фича
+выключена по умолчанию, чтобы включить передаем компилятору флаг &lt;code&gt;-Xenable-jvm-default&lt;/code&gt;. Т.к. фича экспериментальная, то она
+может быть передизайнена, изменена, ровно как может быть изменено название ключа для компилятора.&lt;/p&gt;
+
+&lt;h3 id=&#34;ограничения-видимости-типов-через-наследование-companion-object&#34;&gt;Ограничения видимости типов через наследование companion object&lt;/h3&gt;
+
+&lt;p&gt;В Kotlin 1.3 планируются потенциально ломающие изменения связанные с видимостью через companion object.
+Для того чтобы сглядить этот переход в Kotlin 1.2.40 вводится warning на использование краткого имени (non-qualified)
+для доступа к внутренностям companion object&amp;rsquo;а родительского класса.
+В примере ниже безо взякого импорта, мы можем получить доступ к классу внутри companion object&amp;rsquo;а нашего супертипа. Именно это
+и хотят постепенно запретить. Хорошая новость, Kotlin Plugin на борту содержит туллинг для миграции этого кейса, так что, если
+вы писали подобный код, то миграция поможет вам обновиться. Пример кода, ниже:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;interface Bar {
+    companion object {
+        class FromBarCompanion
+    }
+}
+
+class Foo : Bar {
+    fun foo(): FromBarCompanion = TODO()
+    // Warning: access to this type by short name 
+    // is deprecated and is going to be removed.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В Kotlin 1.3 запретят такие конструкции в принципе. Мне нравится, что разработчики языка тестируют доступную кодовую базу
+на 1.5 млн. строк кода для оценки важности этого изменения. В данном случае влияние изменения ожидается минимальным.&lt;/p&gt;
+
+&lt;h3 id=&#34;intellij-idea-улучшения-плагина&#34;&gt;Intellij IDEA. Улучшения плагина&lt;/h3&gt;
+
+&lt;p&gt;Добавлен интеншен для добавления явного return из лямбды. Гифка скажет всё за меня:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://d3nmt5vlzunoa1.cloudfront.net/kotlin/files/2018/04/return-at-label-anim.gif&#34; alt=&#34;Intention1&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Добавлен интеншен для добавления и удаления use-site targets аннотаций. В Kotlin на одну аннотацию
+(например, в primary конструкторе) может приходиться несколько Java аннотаций. Для контроля того какая именно аннотация
+нужна вводятся Use-Site Target. Их-то мы и контролируем. Для интересующихся,
+&lt;a href=&#34;http://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets&#34; target=&#34;_blank&#34;&gt;вот ссылка&lt;/a&gt;
+на документацию по этому виду аннотаций.&lt;/p&gt;
+
+&lt;p&gt;Добавлена инспекция на подсветку и удаление необязательных явных ссылок на companion object&amp;rsquo;ы.&lt;/p&gt;
+
+&lt;p&gt;Сделаны улучшения по стабильности и производительности.&lt;/p&gt;
+
+&lt;h3 id=&#34;изменения-в-компиляторе&#34;&gt;Изменения в компиляторе&lt;/h3&gt;
+
+&lt;p&gt;Улучшена производительность и поправлены некоторые известные проблемы.&lt;/p&gt;
+
+&lt;p&gt;Обещают более эффективный генерируемый компилятором код для следующийх ситуаций: доступ к private свойствам companion
+object&amp;rsquo;ов, проверка enum&amp;rsquo;ов на равенство, сравнение Long&amp;rsquo;ов.&lt;/p&gt;
+
+&lt;h3 id=&#34;заключение&#34;&gt;Заключение&lt;/h3&gt;
+
+&lt;p&gt;Релиз понравится тем, кто не может жить без inline лямбд в корутинах, любителям плодить common модули в мультиплатформенных проектах,
+тем кто пишет Kotlin &amp;ldquo;рядом&amp;rdquo; с Java. В целом есть приятные маленькие улучшения в плагине и радостно видеть, что ошибки дизайна,
+как в случае с видимостью типов из чужих companion object&amp;rsquo;ов, исправляются по намеченому плану: deprecated -&amp;gt; restricted.&lt;/p&gt;
+
+&lt;p&gt;Чтобы быть в курсе последних событий &lt;a href=&#34;http://0s.oqxg2zi.cmle.ru/from_junior_to_senior&#34; target=&#34;_blank&#34;&gt;присоединяйтесь к Telegram&lt;/a&gt; (@from_junior_to_senior)&lt;/p&gt;
+
+&lt;a href=&#34;http://blog.jetbrains.com/kotlin/2018/04/kotlin-1-2-40-is-out/?utm_source=i-osipov.ru&amp;amp;utm_medium=site&#34; target=&#34;_blank&#34;&gt;Источник&lt;/a&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

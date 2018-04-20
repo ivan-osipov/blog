@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kotlin Updates Report 1.2.40 -- Ivan Osipov</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">Ivan Osipov</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://0s.oqxg2zi.cmle.ru/from_junior_to_senior">telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://clabo.i-osipov.ru">clabo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header_2.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Kotlin Updates Report 1.2.40</h1>
+               <h2 class="subheading">Обзор изменений в Kotlin 1.2.40</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-04-20
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/kotlin">Kotlin</a>, <a href="/categories/news">News</a>, <a href="/categories/practice">Practice</a>, <a href="/categories/%D0%B2%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4">Вольный Перевод</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/kotlin">kotlin</a>, <a href="/tags/report">report</a>, <a href="/tags/intellij-idea">intellij idea</a>, <a href="/tags/tooling">tooling</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Вчера вечером вышло описание нововведений в Kotlin 1.2.40. Сегодня, по традиции, мы с вами взглянем на
+очередной релиз и актуализируем знания по языку.</p>
+
+<p>Список изменений:</p>
+
+<ul>
+<li>множественное использование expectedBy зависимостей;</li>
+<li>поддержка crossinline suspend параметров в inline функциях;</li>
+<li>экспериментальная поддержка аннотации @JvmDefault для создания методов интерфейсов из Java 8 с модификатором default;</li>
+<li>добавлены новые инспекции и интеншены в плагин;</li>
+<li>прямое обращение к классам внутри companion object в скоупе наследования теперь deprecated;</li>
+<li>фиксы в компиляторе и IDE плагине, улучшения производительности.</li>
+</ul>
+
+<p>Этот update совместим с Intellij IDEA от 2017.1 до 2018.1, также как с Android Studio 3.x.</p>
+
+<h3 id="улучшения-мультиплатформенных-проектах">Улучшения мультиплатформенных проектах</h3>
+
+<p>Платформенные модули теперь позволяют реализовывать платформенно-специфичные декларации для более чем одного мультиплатформенного
+модуля. Теперь вы можете использовать <code>expectedBy</code> в зависимостях несколько раз. Выглядит это, например, так:</p>
+
+<pre><code class="language-groovy">apply plugin: 'kotlin-platform-jvm'
+// ...
+ 
+dependencies {
+    expectedBy project(&quot;:io-common&quot;)
+    expectedBy project(&quot;:data-common&quot;)
+    // ...
+}
+</code></pre>
+
+<p>Такие зависимости нетранзитивны, разберемся с этим. Пусть есть вот такая цепочка зависимостей: <code>my-common -&gt; lib-common</code>
+Это два common модуля (напомню, что мы разделяем платформенные и common модули), где первый зависит от второго.
+При попытке установить зависимость на my-common модуль в платформенном модуле у нас есть один из двух путей:</p>
+
+<ul>
+<li>либо мы вручную определяем две <code>expectedBy</code> зависимости;</li>
+<li>или добавляем <code>expectedBy</code> только на <code>my-common</code> и компилируем зависимость на существующем платформенном модуле для <code>lib-common</code>.</li>
+</ul>
+
+<p>Напомню, что для мультиплатформенных проектов есть понятие expect/actual модификатора. Эти модификаторы позволяют связывать
+&ldquo;ожидания реализации&rdquo; интерфейса и фактические платформенные реализации. Так вот, для expect функций и конструкторов в
+Kotlin 1.2.40 появилась поддержка значений по умолчанию, пример ниже:</p>
+
+<pre><code class="language-kotlin">expect class StringMatcher {
+    fun match(value: String, matchStrictly: Boolean = false): Boolean
+}
+</code></pre>
+
+<p>При этом, default параметры поддерживаются только для expect конструкторов/функций, но не для их actual двойников.</p>
+
+<h3 id="поддержка-crossinline-suspend-параметров-функций">Поддержка crossinline suspend параметров функций</h3>
+
+<p>Напомню, что crossinline модификатор говорит о том, что лямбда, передаваемая в качестве параметра inline функции, может
+быть передана в другой контекст, а, например, если мы передадим лямбду без этого модификатора, то компилятор не знает
+как поступать в случае non-local возвратов. Для того, чтобы решить эту проблему добавим модификатор crossinline,
+который подскажет компилятору, что нужно запретить non-local return и благодаря этому запрету появится возможность передавать
+лямбды в другие контексты.</p>
+
+<p>До версии Kotlin 1.2.40 в случае совместного использования crossinline и suspend для лямбд, мы получали сообщение:
+<code>Inline lambda parameters of suspend function type are not fully supported. Add noinline modifier</code>. Теперь конструкция ниже компилируется:</p>
+
+<pre><code class="language-kotlin">inline fun schedule(crossinline runner: suspend () -&gt; Unit)  {
+    launch(CommonPool) {
+        runner()
+    }
+}
+</code></pre>
+
+<h3 id="jvmdefault">@JvmDefault</h3>
+
+<p>Экспериментальная фича, которая при таргете на JVM 1.8 генерирует default методы интерфейса при наличии аннотации @JvmDefault. Фича
+выключена по умолчанию, чтобы включить передаем компилятору флаг <code>-Xenable-jvm-default</code>. Т.к. фича экспериментальная, то она
+может быть передизайнена, изменена, ровно как может быть изменено название ключа для компилятора.</p>
+
+<h3 id="ограничения-видимости-типов-через-наследование-companion-object">Ограничения видимости типов через наследование companion object</h3>
+
+<p>В Kotlin 1.3 планируются потенциально ломающие изменения связанные с видимостью через companion object.
+Для того чтобы сглядить этот переход в Kotlin 1.2.40 вводится warning на использование краткого имени (non-qualified)
+для доступа к внутренностям companion object&rsquo;а родительского класса.
+В примере ниже безо взякого импорта, мы можем получить доступ к классу внутри companion object&rsquo;а нашего супертипа. Именно это
+и хотят постепенно запретить. Хорошая новость, Kotlin Plugin на борту содержит туллинг для миграции этого кейса, так что, если
+вы писали подобный код, то миграция поможет вам обновиться. Пример кода, ниже:</p>
+
+<pre><code class="language-kotlin">interface Bar {
+    companion object {
+        class FromBarCompanion
+    }
+}
+
+class Foo : Bar {
+    fun foo(): FromBarCompanion = TODO()
+    // Warning: access to this type by short name 
+    // is deprecated and is going to be removed.
+}
+</code></pre>
+
+<p>В Kotlin 1.3 запретят такие конструкции в принципе. Мне нравится, что разработчики языка тестируют доступную кодовую базу
+на 1.5 млн. строк кода для оценки важности этого изменения. В данном случае влияние изменения ожидается минимальным.</p>
+
+<h3 id="intellij-idea-улучшения-плагина">Intellij IDEA. Улучшения плагина</h3>
+
+<p>Добавлен интеншен для добавления явного return из лямбды. Гифка скажет всё за меня:</p>
+
+<p><img src="https://d3nmt5vlzunoa1.cloudfront.net/kotlin/files/2018/04/return-at-label-anim.gif" alt="Intention1" /></p>
+
+<p>Добавлен интеншен для добавления и удаления use-site targets аннотаций. В Kotlin на одну аннотацию
+(например, в primary конструкторе) может приходиться несколько Java аннотаций. Для контроля того какая именно аннотация
+нужна вводятся Use-Site Target. Их-то мы и контролируем. Для интересующихся,
+<a href="http://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets" target="_blank">вот ссылка</a>
+на документацию по этому виду аннотаций.</p>
+
+<p>Добавлена инспекция на подсветку и удаление необязательных явных ссылок на companion object&rsquo;ы.</p>
+
+<p>Сделаны улучшения по стабильности и производительности.</p>
+
+<h3 id="изменения-в-компиляторе">Изменения в компиляторе</h3>
+
+<p>Улучшена производительность и поправлены некоторые известные проблемы.</p>
+
+<p>Обещают более эффективный генерируемый компилятором код для следующийх ситуаций: доступ к private свойствам companion
+object&rsquo;ов, проверка enum&rsquo;ов на равенство, сравнение Long&rsquo;ов.</p>
+
+<h3 id="заключение">Заключение</h3>
+
+<p>Релиз понравится тем, кто не может жить без inline лямбд в корутинах, любителям плодить common модули в мультиплатформенных проектах,
+тем кто пишет Kotlin &ldquo;рядом&rdquo; с Java. В целом есть приятные маленькие улучшения в плагине и радостно видеть, что ошибки дизайна,
+как в случае с видимостью типов из чужих companion object&rsquo;ов, исправляются по намеченому плану: deprecated -&gt; restricted.</p>
+
+<p>Чтобы быть в курсе последних событий <a href="http://0s.oqxg2zi.cmle.ru/from_junior_to_senior" target="_blank">присоединяйтесь к Telegram</a> (@from_junior_to_senior)</p>
+
+<a href="http://blog.jetbrains.com/kotlin/2018/04/kotlin-1-2-40-is-out/?utm_source=i-osipov.ru&amp;utm_medium=site" target="_blank">Источник</a>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/kotlin-updates-report-1.2.40\/';
+    var disqus_title = 'Kotlin Updates Report 1.2.40';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/kotlin-updates-report-1.2.40\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:i.osipov.develop@gmail.com">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

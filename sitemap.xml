@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/kotlin-updates-report-1.2.40/</loc>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/kotlin-updates-report-1.2.20-1.2.30/</loc>
     <lastmod>2018-03-31T11:14:07+04:00</lastmod>
   </url>
@@ -105,13 +110,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/development/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/development/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -207,7 +212,7 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/intellij-idea/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -219,7 +224,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -237,13 +242,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/kotlin/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/kotlin/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -279,7 +284,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/news/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -291,7 +296,13 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/practice/</loc>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -315,7 +326,7 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/report/</loc>
-    <lastmod>2018-03-31T11:14:07+04:00</lastmod>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -355,8 +366,20 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/tooling/</loc>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/versioning/</loc>
     <lastmod>2018-01-23T07:33:47+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/%D0%B2%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4/</loc>
+    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
     <priority>0</priority>
   </url>
   
