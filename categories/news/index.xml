@@ -145,7 +145,7 @@ object&amp;rsquo;ов, проверка enum&amp;rsquo;ов на равенст�
 тем кто пишет Kotlin &amp;ldquo;рядом&amp;rdquo; с Java. В целом есть приятные маленькие улучшения в плагине и радостно видеть, что ошибки дизайна,
 как в случае с видимостью типов из чужих companion object&amp;rsquo;ов, исправляются по намеченому плану: deprecated -&amp;gt; restricted.&lt;/p&gt;
 
-&lt;p&gt;Чтобы быть в курсе последних событий &lt;a href=&#34;http://0s.oqxg2zi.cmle.ru/from_junior_to_senior&#34; target=&#34;_blank&#34;&gt;присоединяйтесь к Telegram&lt;/a&gt; (@from_junior_to_senior)&lt;/p&gt;
+&lt;p&gt;Чтобы быть в курсе последних событий &lt;a href=&#34;https://t.me/from_junior_to_senior&#34; target=&#34;_blank&#34;&gt;присоединяйтесь к Telegram&lt;/a&gt; (@from_junior_to_senior)&lt;/p&gt;
 
 &lt;a href=&#34;http://blog.jetbrains.com/kotlin/2018/04/kotlin-1-2-40-is-out/?utm_source=i-osipov.ru&amp;amp;utm_medium=site&#34; target=&#34;_blank&#34;&gt;Источник&lt;/a&gt;
 </description>
