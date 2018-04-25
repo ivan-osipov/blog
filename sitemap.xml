@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/hugo-and-math/</loc>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/kotlin-updates-report-1.2.40/</loc>
     <lastmod>2018-04-20T07:35:10+04:00</lastmod>
   </url>
@@ -87,7 +92,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/blog/</loc>
-    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -105,6 +110,12 @@
   <url>
     <loc>https://i-osipov.ru/tags/cloudflare/</loc>
     <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/datascience/</loc>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -170,7 +181,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/hobby/</loc>
-    <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -188,7 +199,7 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/hugo/</loc>
-    <lastmod>2017-07-20T00:19:26+04:00</lastmod>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -224,7 +235,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -259,8 +270,26 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/latex/</loc>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/categories/manual/</loc>
     <lastmod>2018-01-20T00:00:00+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/math/</loc>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/mathjax/</loc>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -296,7 +325,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-04-20T07:35:10+04:00</lastmod>
+    <lastmod>2018-04-25T09:17:46+04:00</lastmod>
     <priority>0</priority>
   </url>
   

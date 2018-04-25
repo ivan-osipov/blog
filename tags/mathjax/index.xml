@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mathjax on Ivan Osipov</title>
+    <link>https://i-osipov.ru/tags/mathjax/index.xml</link>
+    <description>Recent content in Mathjax on Ivan Osipov</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <atom:link href="https://i-osipov.ru/tags/mathjax/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo and Math</title>
+      <link>https://i-osipov.ru/post/hugo-and-math/</link>
+      <pubDate>Wed, 25 Apr 2018 09:17:46 +0400</pubDate>
+      
+      <guid>https://i-osipov.ru/post/hugo-and-math/</guid>
+      <description>&lt;p&gt;Сейчас я в нахожусь в процессе прохождения курсов по Data Science и как следствие некоторые вещи мне хочется законспектировать
+в виде блога. Основная проблема в том, что для конспектирования материала хотелось бы иметь возможность
+писать математические формулы в LaTeX синтаксисе или около того. Если хорошенько поискать, то в документации
+hugo можно наткнуться на вот &lt;a href=&#34;https://gohugo.io/content-management/formats/#mathjax-with-hugo&#34; target=&#34;_blank&#34;&gt;этот&lt;/a&gt;
+раздел. Заметка будет полезна тем, кто организовывает свой блог через статик-генератор gohugo и хочет подключить поддержку
+формул.&lt;/p&gt;
+
+&lt;p&gt;Библиотека MathJax - js библиотека, которая позволяет отображать математические выражения описанные в LaTeX синтаксисе.
+Для того, чтобы подключить поддержку этой библиотеки к вашему блогу, во-первых создадим пока пустой файл &lt;strong&gt;mathjax_support.html&lt;/strong&gt; и положим
+его в папку исходников блога layouts/partials сразу же подключим и проинициализируем его в файле header.md перед закрывающим тегом &lt;code&gt;&amp;lt;/head&amp;gt;&lt;/code&gt; следующим образом:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;{{ partial &amp;quot;mathjax_support.html&amp;quot; . }}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Наполним файл следующим образом: укажем где найти библиотеку и как её проинициализировать.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;quot;&amp;gt;
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=&amp;quot;text/x-mathjax-config&amp;quot;&amp;gt;
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [[&#39;$&#39;,&#39;$&#39;], [&#39;\\(&#39;,&#39;\\)&#39;]],
+    displayMath: [[&#39;$$&#39;,&#39;$$&#39;], [&#39;\[&#39;,&#39;\]&#39;]],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;],
+    TeX: { equationNumbers: { autoNumber: &amp;quot;AMS&amp;quot; },
+         extensions: [&amp;quot;AMSmath.js&amp;quot;, &amp;quot;AMSsymbols.js&amp;quot;] }
+  }
+});
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Готово. На страничке &lt;a href=&#34;https://gohugo.io/content-management/formats/#mathjax-with-hugo&#34; target=&#34;_blank&#34;&gt;hugo документации&lt;/a&gt;
+можно найти решения основных проблем при подключении библиотеки. Лично у меня заработало из коробки.&lt;/p&gt;
+
+&lt;p&gt;В результате, следующий код:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$$
+c^{2} = a^{2} + b^{2}
+$$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Превращается в формулу:&lt;/p&gt;
+
+&lt;p&gt;$$
+c^{2} = a^{2} + b^{2}
+$$&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
