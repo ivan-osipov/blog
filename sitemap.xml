@@ -67,6 +67,10 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/telegram/</loc>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/advanced/</loc>
     <lastmod>2018-02-04T06:17:17+04:00</lastmod>
     <priority>0</priority>
@@ -404,6 +408,10 @@
     <loc>https://i-osipov.ru/tags/versioning/</loc>
     <lastmod>2018-01-23T07:33:47+04:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/video-presentations/</loc>
   </url>
   
   <url>

@@ -2402,5 +2402,47 @@ git push -u origin master
 </description>
     </item>
     
+    <item>
+      <title></title>
+      <link>https://i-osipov.ru/telegram/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://i-osipov.ru/telegram/</guid>
+      <description>&lt;!--email_off--&gt;
+
+&lt;p&gt;У меня есть канал в Telegram: @from_junior_to_senior&lt;/p&gt;
+
+&lt;p&gt;Если вы не из России: &lt;a href=&#34;https://t.me/from_junior_to_senior&#34; target=&#34;_blank&#34;&gt;ссылка на канал&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Если вы из России: канал можно найти вручную &lt;strong&gt;@from_junior_to_senior&lt;/strong&gt; или воспользоваться proxy/vpn.&lt;/p&gt;
+
+&lt;!--/email_off--&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Videos</title>
+      <link>https://i-osipov.ru/video-presentations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://i-osipov.ru/video-presentations/</guid>
+      <description>
+
+&lt;h2 id=&#34;jpoint-2018-kotlin-dsl-теория-и-практика&#34;&gt;JPoint 2018. Kotlin DSL: Теория и Практика&lt;/h2&gt;
+
+&lt;p&gt;Разработка тестов приложения — не самое приятное занятие. Этот процесс занимает долгое время, требует большой концентрации и при этом крайне востребован. Язык Kotlin дает набор инструментов, который позволяет довольно легко построить собственный проблемно-ориентированный язык (DSL). В нашем опыте Kotlin DSL заменил билдеры и статические методы для тестирования модуля планирования ресурсов, что превратило добавление новых тестов и поддержку старых из рутины в увлекательный процесс.&lt;/p&gt;
+
+&lt;p&gt;В ходе доклада мы разберем все основные инструменты из арсенала разработчика и то, как их можно комбинировать для решения задач тестирования. Мы с вами проделаем путь от проектирования Идеального Теста до запуска максимально приближенного, чистого и понятного теста для системы планирования ресурсов на основе Kotlin.&lt;/p&gt;
+
+&lt;p&gt;Доклад будет полезен практикующим инженерам, тем, кто рассматривает Kotlin как язык для комфортного написания компактных тестов, и тем, кто хочет улучшить процесс тестирования в своем проекте.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube.com/embed/q_UM1EY2S5g?&#34; 
+  style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%;&#34; allowfullscreen frameborder=&#34;0&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
