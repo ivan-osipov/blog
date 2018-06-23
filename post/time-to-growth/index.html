@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Проектные пожары - время расти - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">Business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Проектные пожары - время расти</h1>
+               <h2 class="subheading">Как проблемы и отсутствие помощи помогают нашему росту</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-06-23
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/thinking">Thinking</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Порой на наших проектах происходят ситуации, когда именно от тебя всё зависит, множество срочных к исправлению проблем. Ты тот единственный человек, который сейчас может помочь, тебе не на кого оставить проблему и других более опытных технических специалистов, которые разбираются в проекте, больше нет. Я называю такие моменты &ldquo;пожар&rdquo;. Давай взглянем на эту ситуацию и подумаем, что же мы из неё можем извлечь и почему страх безоснователен.</p>
+
+<h2 id="почему-это-произошло">Почему это произошло?</h2>
+
+<p>Для начала разберемся в причинах. Почему на проектах происходят пожары, которые нужно тушить, срочно, именно тебе? Интуитивно кажется, что источник этой проблемы - менеджмент, однако, это далеко не всегда так. Представим, что вас двое-трое разработчиков на проекте и те, другие, собрались в отпуск или в командировку по параллельному проекту. Остался только ты. С точки зрения менеджера - всё в порядке, всегда есть разработчик, который может исправить критическую проблему заказчика. С другой стороны, обычно, если система довольно крупная, то ты знаешь только свою часть и еще немножко, а в тот момент, когда начинают сыпаться ошибки из модуля, которым ты раньше не занимался, то появляется некоторого рода страх, о котором мы немного поговорим.</p>
+
+<h2 id="безосновательная-природа-страха">Безосновательная природа страха</h2>
+
+<p>Начинать что-то новое всегда больно, а исправлять чужой код в непокрытой тестами части системы всегда страшно.</p>
+
+<blockquote>
+<p>Конечно, здесь исходная проблема в отсутствии обильного авто тестирования, однако, если ты работал в аутсорсинге, то ты меня поймешь, нам далеко не всегда дают достаточно времени на покрытие системы тестами, здесь есть тонкая грань между миром разработки и миром бизнеса.</p>
+</blockquote>
+
+<p>Почему возникает страх? В первую очередь от отсутствия знания того или иного модуля, того или иного кода. Вспомни, когда к тебе прилетал тикет в котором написано, например, следующее: <em>Метод Х модуля А бросает IllegalStateException&hellip;</em>. Какие чувства вызывают подобные тикеты, если ты создатель этого метода и вообще обладаешь абсолютно полными знаниями о модуле А? По моим ощущениям, такие проблемы вызывают скорее легкое раздражение: <em>Как же так, я что-то упустил&hellip;</em>, чем страх. А что с ситуацией где всё тот же самый тикет, но ты впервые в глаза видишь <em>модуль А</em>? Возникает страх или своего рода волнение, из подсознательного выскакивает мысль: <em>А смогу ли я это исправить?</em></p>
+
+<p>С опытом приходит понимание, что можно исправить всё, страх пропадает, но как же так происходит? Дело в том, что причин для страха на самом деле нет и постепенно осознаем. В чем исходная причина страха? В незнании! Мы понятия не имеем с чем имеем дело. Хотя как только мы устраним незнание, станим владельцами функции, разберемся в её работе, то страх и волнение сами по себе уйдут. Здесь нам поможет иерархический нисходящий подход.</p>
+
+<h2 id="иерархический-нисходящий-подход">Иерархический нисходящий подход</h2>
+
+<p>Сначала, узнайте, что это за модуль, в котором возникла проблема, обозначьте его основные ответственности. Затем, разберитесь кто инициировал вызов, какая глобальная задача модуля выполняется, и постепенно опускайтесь вглубь до самой функции, которая бросает ошибку. Довольно очевидно, не так ли? Однако, на мой взгляд, только этот подход может дать эффективные плоды в изучении чужого кода. После того, как мы идеологически разобрались с частью в которой падают ошибки наступает время для её решения. Я сформировал для себя эвристическое правило, которое назвал &ldquo;Полуторачасовой Proof of Concept&rdquo;, о нём я расскажу в отдельной статье, чтобы не пропустить, <a href="https://i-osipov.ru/subscribe/" target="_blank">подписывайтесь на рассылку</a> или присоединяйтесь к <a href="https://i-osipov.ru/telegram" target="_blank">Telegram каналу</a>. Борьба со страхом неизвестных ошибок, исправление их - это первый шаг по лестнице вверх в направлении собсвенного роста. Как бы нам извлечь максимум пользы из текущего состояния дел? Именно об этом мы и поговорим дальше.</p>
+
+<h2 id="time-to-growth">Time to growth</h2>
+
+<p>Когда горят пожары на проекте, когда всё зависит от тебя, твое время сильно ограничено и нужно выдавать N тысяч фиксов в минуту, тут то и активизируются все навыки к освоению чего-то нового. Лучший прогресс процесса обучения заметен в той области, где вы уже немного разобрались, но пока недостаточно, дельта прироста максимальна. Это можно описать широко известной кривой обучения, которая представлена на картинке ниже.</p>
+
+<p><img src="../../img/posts/time-to-growth/learning-curve.jpeg" alt="Learning Curve" title="Кривая обучения" /></p>
+
+<p>Я приведу пример из практики. На одном из проектов во время его выхода на UAT (User Acceptance Testing) я остался единственным разработчиком, приложение активно тестировалось и на этом этапе нужно было справиться с серией интересных задач. Я давно хотел поработать с инфраструктурой амазона, мне повезло, наше приложение развернули у них, но не успели сделать нормальное Continuous Delivery, по этому все обновления нужно было делать вручную. Вход на сервер был доступен только через bastion server, это такой прокси в инфраструктуре амазона, который является единой точкой входа в вашу подсеть. Доступ только по ssh. Должно быть довольно очевидно из картинки ниже.</p>
+
+<p><img src="../../img/posts/time-to-growth/bastion.png" alt="Bastion" title="Bastion" /></p>
+
+<p>Представь, какое &ldquo;удовольствие&rdquo; ты получаешь, когда делаешь последовательное открытие ssh соединений, сначала до bastion сервера, потом до веб сервера, при этом нужно использовать правильные pem ключи и ничего не забыть. Это изматывает, хочется найти более простые пути. Тут-то и произошёл очередной скачек, когда я узнал про .ssh/config - файл конфигурации для OpenSSH в котором ты можешь описать довольно сложные соединения, указать bastion как прокси и всё это свернуть под один HostName. В итоге, открытие ssh соединение до web server&rsquo;a превращаетя в одну команду <code>ssh web_server_alias</code>. Особенно круто, что ты можешь, например, копировать файлы с помощью <code>scp</code> на удалённый сервер всё так же просто, более того автодополнение в терминале поможет тебе найти правильную папку на удаленном сервере, при том, что ты явным образом никакого ssh не открывал. Конечно, раньше мне иногда приходилось пользоваться ssh, но сам факт того, что это можно сделать на столько просто - открыл для меня следующий уровень владения этим инструментом и производными от него.</p>
+
+<p>Другой пример, это логирование, когда приложения попадают к пользователю очень часто что-то идет не так. Например, background worker, поток, который запускается с частотой раз в 10 секунд начинает забрасывать лог тоннами эксепшенов из одного специализированного модуля, благодаря чему размер лог файла очень быстро стремится в бесконечность при этом забивая этим шумомом ни в чем неповинный общий лог файл (сейчас я говорю об обычном монолите). Первое, что приходит на ум, нужно срочно бежать и фиксить. Здесь главное остановиться на пару секунд и подумать: &ldquo;А могу ли я замедлить разгоряющийся пожар?&rdquo;. Вовсе остановить запускающийся процесс - нельзя, а вот замедлить, например, до частоты запуска раз в минуту - можно. Таким образом, пожар превращается в нечто меньшее, лог файл растет в шесть раз медленнее, значит, что достигнуть того огромного размера в который он превратился за один день он сможет только за неделю, не плохо, теперь можно собраться с мыслями и спокойно делать фикс.</p>
+
+<blockquote>
+<p>Подобные идеи, ассоциируются у меня с книгой Д. Трампа &ldquo;Искусство заключать сделки&rdquo;. Автор рассказывает о том, что когда он строил свою Trump Tower в Нью-Йорке ему никак не удавалось выкупить территорию, достаточную по регламенту для построения небоскреба, хозяева этой территории отказывались её продавать. Тогда автор нашёл обходной путь, он арендовал землю на 99 лет. Мораль - если что-то нужно прямо сейчас, но это недостижимо, ищите дополнительные обходные пути для быстрого временного решения.</p>
+</blockquote>
+
+<p>Если в обычной жизни вам не часто нужно настраивать лог файл, то здесь появляется острая потребность в этом разобраться. Например, вы хотите отслеживать запросы во внешнее API, они не доходят до этого API или некоторые из них невалидные, их происходит много и смешивать такие логи с общим потоком - не правильно. Мы всегда можем выделить специальный файл для определенного API, настроить для него логгер и аппендер (в терминах logback), настроить процесс ежедневного архивирования таких файлов и вуаля, оно работает. Вся интересная вам информация в одном месте, без лишнего шума. Таким образом, если вы имели минимальное представление как этого достичь, но не знали деталей, то кривая роста делает своё дело.</p>
+
+<h2 id="разгребая-угли">Разгребая угли</h2>
+
+<p>В какой-то момент пожары заканчиваются, они либо становятся маленькими и локальными, либо оказываются полностью потушенными, что тоже имеет место быть. Такие ситуации помогают нам приобрести навыки необходимые для выживания, вырасти и почувствовать настроящий вкус профессии программиста. Где-то я прочитал, что музыка способствует поиску множества решений одной проблемы, стимулирует разнообразие вариантов, это может действительно помочь в трудных ситуациях. Пожары заколяют и показывают вам на что вы способны, я не призываю вас их разжигать, но если уже разгорелось, то это отличная возможность для роста.</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/time-to-growth\/';
+    var disqus_title = 'Проектные пожары - время расти';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/time-to-growth\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
