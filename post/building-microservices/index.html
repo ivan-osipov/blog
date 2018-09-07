@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Книга: Создание микросервисов - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">Business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/posts/building-microservices/header.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Книга: Создание микросервисов</h1>
+               <h2 class="subheading">Отзыв на книгу Сэма Ньюмана</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-09-07
+<br />
+В категориях: <a href="/categories/architecture">Architecture</a>, <a href="/categories/book-review">Book Review</a>, <a href="/categories/microservices">Microservices</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/review">review</a>, <a href="/tags/microservices">microservices</a>, <a href="/tags/architecture">architecture</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Параллельно с прослушиванием аудиокниг я не расстаюсь с классическим форматом. Не всегда удается читать бумажную версию, благо, гаджеты сегодня не отстают. На днях я закончил книгу, которую начал читать еще в январе этого года, но спустя время прервался и вот, в связи с новым местом работы и новыми задачами книга стала для меня снова актуальна - книга <a href="https://www.ozon.ru/context/detail/id/135199296/" target="_blank">Создание микросервисов</a>  от автора Сэма Ньюмана.</p>
+
+<h3 id="об-авторе">Об авторе</h3>
+
+<p>Ты не знаешь кто такой автор? Не беда! Знаешь Мартина Фаулера? Да, того мужика, который топит за Рефакторинг, Шаблоны корпоративных приложений и UML (это всё его книжки), ну и конечно за микросервисы в своем блоге. Так вот, Сэм и Мартин работают в одной конторе ThoughtWorks. На сколько я понимаю, эти ребята занимаются консалтингом в построении всяких разных систем и в использовании микросервисных архитектур. Занятная работенка. Между делом ребята пишут книги, вот сегодня и поговорим про одну из них.</p>
+
+<h3 id="обзор">Обзор</h3>
+
+<p>Сразу скажу, впечатления от книги хорошие. На многие вопросы она дает ответы, но не на все. Такс, давай по порядку.</p>
+
+<p>Прежде всего я для себя усвоил из книги интересную и, пожалуй, самую главную мысль. Твои и мои системы будут падать, обязательно будут падать. Вот так, без этого в нашем производстве никак. Сэм обращает внимание на одну забавную вещь. В действительности среди наших коллег можно наблюдать Архитекторов, Инженеров и другие громкие названия должностей, при том, что это всё заимствованные слова из других профессий. Архитектор софта и архитектор здания или моста это совершенно несравнимые люди. За архитекторами, которые проектируют очередной мост, стоит огромная история, тонна знаний, которые передаются из века в век, снова и снова. Какой релевантный багаж у наших архитекторов, ну, например, банковских систем? 20-40 лет? В масштабах реальной архитектуры это практически ничто. Мы пытаемся навешать ярлыков, чтобы ощутить ложное чувство защищенности, но от правды никуда не скроешься. Наши системы обязательно будут где-то падать, где-то работать не так как ожидалось и это нормально, для текущего этапа прогресса, это вполне приемлемо. Наша же задача, быть к этому готовыми. В общем, мне нравится эта мысль, особенно на фоне прочтения статей о <a href="https://en.wikipedia.org/wiki/Crash-only_software" target="_blank">crash-only software</a>.</p>
+
+<p>Второй, важный пункт, который отмечает автор - это моделирование сервисов на основе ограниченных контекстов. Я не буду углубляться в детали, но об этом можно думать как о моделировании опираясь на бизнес потебности, а не на технологии. Например, автор описывает жуткую луковую архитектуру, где разделение проходит по технологической грани, т.е., например, для работы с общей базой данных создают отдельный сервис. Как верно замечает автор, от луковой архитектуры хочется плакать.</p>
+
+<p>Здесь правильнее же разбивать сервисы на слабо связанные (минимально зависимые) системы с сильным зацеплением. Это значит, что сервисы должны по минимуму соприкасаться и при этом функции, которые обеспечивают взаимодействие должны покрывать потребности по максимуму. Я сформировал некоторое представление о том, как должна развиваться микросервисная архитектура начиная с нуля и заканчивая продакшен окружением, с чего она должна начинаться и куда двигаться. И, хотя, сначала я хотел описать это здесь, решил, что это большая тема для отдельной статьи.
+<a href="https://i-osipov.ru/telegram" target="_blank">Подписывайтесь</a> чтобы не пропустить.</p>
+
+<p>Пара важных паттернов, которые вы встретите в книге, это Backends for Frontends и Tolerant Reader. Про последний я уже писал вот <a href="https://i-osipov.ru/post/apostels-law-and-tolerant-reader" target="_blank">здесь</a>.  Backends for Frontends это когда вы под кажный тип клиента имеете по сути свой gateway, который контролирует объем данных, необходимый этому виду клиента, например, когда нам нужно получить данные на мобильный клиент их, во-первых, должно быть по минимуму, во-вторых, для экономии батареи устройства использовать минимум запросов. Дроссель - это еще один интересный паттерн, который описывает автор, как полезный подход при миграции с legacy систем.</p>
+
+<p>Многие вещи довольно очевидны, как мне кажется, но когда ты видишь подтверждение собственных мыслей в виде паттернов, то на душе становится легче.</p>
+
+<p>Помните, что не стоит спешить плодить нано-сервисы, т.к. ни к чему хорошему это не приведет. Растите сервис, а когда внутри него сформируются собственные домены, то это хороший знак, чтобы разбить сервис на две независимых части, кстати, как это сделать в книжке тоже рассказывается.</p>
+
+<p>Разделы о развертывании и тестировании хорошо пересекаются с видео, которое я упоминал на своем <a href="https://i-osipov.ru/telegram" target="_blank">телеграм канале</a></p>
+
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/K1l8717tN2c" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0"></iframe>
+ </div>
+
+
+<p>Достаточно плотно автор обрисовал масштабирование микросервисов. Представил различные способы, в том числе и упреждающие, для мониринга и локализации проблем в микросервисной архитектуре, например, прокидывание ID запроса по всей цепочке вызовов для удобного дальнейшего поиска по логам.</p>
+
+<p>Из недостатков, я не увидел практически никакой информации о том какие практики используются для авторизации действий пользователей в системе. JWT токен был упомянут единожды вскользь. Как автор администрировал одновременно множество сервисов также остается загадкой, возможно никак. Хотя у меня есть представление как реализовать всё, что меня интересует, в книге этой информации нет.</p>
+
+<h3 id="заключение">Заключение</h3>
+
+<p>Я не претендую на роль лучшего обзорщика книг этого года, но хотел в первую очередь поделиться с вами впечатлениями о книге. Резюмируя вышесказанное: книга хороша, особенно, если вы не знаете как подобраться к задаче проектирования микросервисной архитектуры, в таком случае книга точно для вас. Больше всего, сама книга напоминает обзор возможных действий и вариантов реализации при проектировании микросервисных систем, к счастью, автор упоминает достаточное обилие тулов, которые упрощают жизнь. Уже сформировал себе список инструментов с которыми еще предстоит познакомится. В целом, рекомендую к прочтению, особенно, если ты на стороне бекенда.</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/building-microservices\/';
+    var disqus_title = 'Книга: Создание микросервисов';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/building-microservices\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
