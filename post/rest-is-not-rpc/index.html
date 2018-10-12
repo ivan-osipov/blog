@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>REST is not RPC - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">Business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>REST is not RPC</h1>
+               <h2 class="subheading">Всем говоришь &#34;REST&#34;, а что же на самом деле?</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-10-12
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/architecture">Architecture</a>, <a href="/categories/thinking">Thinking</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/rest">rest</a>, <a href="/tags/rpc">rpc</a>, <a href="/tags/thinking">thinking</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Тебе не приелось слово REST? Нет, я не говорю об отдыхе, я говорю про тот самый архитектурный стиль.
+Пожалуй, слишком часто я слышу о том, что у тех REST API, у этих REST API, а потом, оказывается что всё не так просто.
+Здесь пойдет речь о том какой смысл в этой аббревиатуре и что в неё вкладывают все вокруг, мы вспомним идеи и посмотрим как их реализуют.</p>
+
+<p>Индустрия парализована. Парализована банально не правильным пониманием концепции и эхолалией. Одна хорошая идея в неправильной трактовке может принести много вреда. Всё было довольно просто, хотелось оформить всё единообразно, а получилось&hellip; безобразно! Удивительно, как крайне компетентные, уважаемые люди и те попадают под власть красивых сокращений.</p>
+
+<p>Часто ли тебе говорили, &ldquo;посмотри на REST API сервиса Х&rdquo; или &ldquo;у нас реализовано REST API&rdquo;, ты приходил и видел, что на самом деле никакого REST API нет и в помине, обычный HTTP API, хаотичным образом разбросанные HTTP глаголы в купе с уродливыми URL. Со мной такое случалось последние несколько лет и если раньше я не особо обращал внимание на это, то спустя время ошибочная трактовка REST начала бросаться в глаза. Позволь объяснить, что я понимаю под &ldquo;правильным&rdquo; пониманием REST. С одной стороны, можно трактовать REST по Филдингу. Тогда, мы обязаны обеспечить следующие условия:</p>
+
+<ol>
+<li>Клиент-серверная модель взаимодействия;</li>
+<li>Stateless;</li>
+<li>Кеширование;</li>
+<li>Единообразие интерфейса;</li>
+<li>Слоистая архитектура со стороны сервера;</li>
+<li>Код по требованию, расширяющий функциональность клиента.</li>
+</ol>
+
+<p>Хм, многовато сложности, давай упростим и предположим, что когда говорят о REST API, то в идеале имеют ввиду соблюдение условия &ldquo;4 Единообразие интерфейса&rdquo;. Кстати, окинь взглядом этот список еще раз и подумай, как близко твоя система, которую ты в данный момент разрабатываешь. Я могу честно отметить, что ни в одной системе мне не приходилось реализовывать пункт 6, хотя возможно под него подойдет загрузка JS из CDN,  тогда всё в порядке.</p>
+
+<p>Можно выделить несколько важных пунктов о единообразии интерфейса, т.е. о создании REST API:</p>
+
+<ol>
+<li><p>Явно выделенные ресурсы (например, пользователь). Метод HTTP API, который называется &ldquo;/createUser&rdquo; очевидно нельзя называть частью REST API - это отличный пример реализации RPC поверх HTTP. Думая о пользователях, как о ресурсах мы получаем uri, который заканчивается на &ldquo;/users&rdquo;. Обрати внимание, &ldquo;users&rdquo; это множественное число. Из собственной практики могу заключить, что такой вариант воспринимается лучше, это выглядит более естественным при запросе множества пользователей. К сожалению, не во всех проектах мне удается этому следовать, но помни, главное - единообразие. Если в большей части системы для получения множества ресурсов уже используется единственное число, лучше так и оставить - меньше будет ошибок у пользователей твоего API.</p></li>
+
+<li><p>HTTP глаголы это не просто глаголы. Во первых, REST это не обязательно про HTTP. Вот так, теперь живи с этим. Суть HTTP глаголов в REST - помочь тебе манипулировать ресурсами через их представления. Кроме очевидной логики в названиях HTTP глаголов POST, PUT. DELETE, GET, есть один важный момент который мы часто упускаем. Имя его - <strong>идемпотентность</strong>. Тебя когда-нибудь спрашивали на собеседовании &ldquo;почему для update используют глагол PUT&rdquo;? Обычно, я в таких ситуациях отвечал &ldquo;ну, логично же&rdquo; и с этим никто не спорил, хотя есть и другое объяснение. Основное различие между PUT и POST это идемпотентность. Это обозначает, что PUT, как идемпотентный метод, можно запустить многократно с одинаковым результатом, а вот POST нельзя. Предположим, что у вас есть реализация &ldquo;POST /users&rdquo; и &ldquo;PUT /users&rdquo;, естественно, в теле запроса находится user. Если запустить первый метод 20 раз, то будет создано 20 пользователей (при условии отсутствия уникальных индексов), а если запустить 20 раз второй запрос, то результирующее состояние будет тем же, что и при первом вызове. Идемпотентность это важное свойство, которое следует соблюдать для избежания несогласованой трактовки работы твоего API.</p></li>
+
+<li><p>Гипермедиа. Пункт, который на моей практике не так часто соблюдают, возможно из-за отсутствия единого стандарта, но скорее из-за лени и нежелания это поддерживать. Сама по себе концепция проста, действия определяются на сервере, т.е. ссылки которые могут повлиять на состояние системы. Кроме простых точек входа в систему могут быть и более сложные действия, которые необходимо определять. Однако, складывается впечатление, что это несколько вырожденный пункт, который сегодня перекрывается возможностями автоматически генерируемой документации.</p></li>
+
+<li><p>Content-Type &amp; Accept заголовки помогают понять как же именно обрабатывать запрос, что находится в его теле и какой формат ожидается в ответ. Когда у вас один веб клиент, этот пункт кажется излишним, но на практике, это хорошее ребро жесткости для API, которое позволяет получать именно то, что ожидается в ответ.</p></li>
+</ol>
+
+<p>Итак, мы разобрались, что RESTful системы делает вовсе не каждый. Достаточно завести базу в которой ты будешь хранить состояние сессии и всё, по условию Stateless ты уже не проходишь. Окей, но что нам стоит построить хотя бы RESTful API? Дисциплина помогает писать в REST стиле конечные точки: правильные url, корректное использование глаголов и даже заголовки приведены в порядок. Осталось гипермедиа&hellip; Один шаг и у нас по настоящему RESTful API. Что-то внутри мне подсказывает, что это непреодолимый в общем случае шаг, что это достаточно много трудозатрат ради минимального выхлопа, при том, что закрыть проблему, которую закрывает hypermedia можно и с помощью swagger, не так гибко, но всё же.</p>
+
+<p>В сухом остатке, по моему субъективному опыту мало кто пишет настоящий REST API, однако, мы можем довольно просто приблизиться к нему. Но зачем обманывать себя? Почему недостаточно сказать &ldquo;посмотри на сервис Х у них HTTP API&rdquo; или &ldquo;у нас HTTP API&rdquo;? Видимо, люди надеятся спрятать за словом, которое должно характеризовать надежные, производительные и масштабируемые системы, то, что они делают. Получается, даже приведение интерфейса к единообразному виду делает далеко не каждый, зато мы спешим повесить лейбл &ldquo;RESTful&rdquo; на свой RPC.</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/rest-is-not-rpc\/';
+    var disqus_title = 'REST is not RPC';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/rest-is-not-rpc\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
