@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/bff/</loc>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/rest-is-not-rpc/</loc>
     <lastmod>2018-10-12T00:00:00+00:00</lastmod>
   </url>
@@ -98,13 +103,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/architecture/</loc>
-    <lastmod>2018-09-07T23:59:28+03:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/architecture/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -117,6 +122,12 @@
   <url>
     <loc>https://i-osipov.ru/tags/articles/</loc>
     <lastmod>2017-07-19T00:21:33+04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/tags/backends-for-frontends/</loc>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -205,7 +216,7 @@
   
   <url>
     <loc>https://i-osipov.ru/categories/good-patterns/</loc>
-    <lastmod>2018-01-23T07:33:47+04:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -253,7 +264,7 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/integration/</loc>
-    <lastmod>2018-01-28T09:26:03+04:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -277,7 +288,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -337,13 +348,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/microservices/</loc>
-    <lastmod>2018-09-07T23:59:28+03:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/microservices/</loc>
-    <lastmod>2018-09-07T23:59:28+03:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -367,7 +378,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

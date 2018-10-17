@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Backends for Frontends - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">Business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Backends for Frontends</h1>
+               <h2 class="subheading">Microservice Pattern</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-10-18
+<br />
+В категориях: <a href="/categories/architecture">Architecture</a>, <a href="/categories/good-patterns">Good Patterns</a>, <a href="/categories/microservices">Microservices</a>
+
+<br />
+Тэги: <a href="/tags/architecture">architecture</a>, <a href="/tags/backends-for-frontends">backends-for-frontends</a>, <a href="/tags/microservices">microservices</a>, <a href="/tags/integration">integration</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>Микросервисный пузырь как будто уже лопнул и все, кто поспешно применял этот взгляд на архитектуру бекенда либо канули в Лету, либо многократно пожалели о своем выборе этого тернистого пути. Пожалуй, это связано в первую очередь с бездумным разбиением кода на кучу маленьких тесно-связанных приложений, создания наносервисов и т.п. Всё это происходит из-за недостаточного количества хороших практик? Конечно нет, скорее из-за отсутствия информированности о простейших шаблонах проектирования таких систем. Здесь пойдет речь о шаблоке &ldquo;бекенды для фронтендов&rdquo;, но для начала давай разберемся, а в чем же проблема&hellip;</p>
+
+<h1 id="проблема">Проблема</h1>
+
+<p>Мы делаем софт у которого есть конечные пользователи. В случае разработки бекенда это может быть разношерстный пул клиентов. Это проблема. Клиенты должны с тобой взаимодействовать и для этого ты предоставляешь им API. Здесь довольно очевидные вещи и я не хотел бы останавливаться на них, разбирая термин API и говоря банальные вещи о том, что API должен быть документирован и удобен, не должен ломать совместимость от версии к версии (а лучше, должен версионироваться) и так далее, всё это ясно. А какие бывают клиенты? Вот тебе бытовая классификация потенциальных потребителей твоего апи:</p>
+
+<ul>
+<li>классический веб фронтенд, написанный типично на js и работающий в браузере пользователя;</li>
+<li>мобильные клиенты, обычные приложения, которые стоят на смартфонах пользователей;</li>
+<li>GraphQL сервер между тобой и фронтендом;</li>
+<li>интеграции с различными сервисами, когда ты определяешь api, которое будут дергать какие-то внутренние системы, которые разрабатываешь не ты;</li>
+<li>внешние системы, например, какой-то другой бекенд, который написал кто-то для создания собственного сервиса, который использует тебя для части задач.</li>
+</ul>
+
+<p>Даже если я что-то забыл - это не страшно, идея понятна, клиенты гетерогенные. При чем, для одних было бы здорово получать информацию по кусочкам, каждый раз дозапрашивая часть, для других нужно минимизировать количество запросов, т.к. это сажает батарейку, а для третьих нужена определенная подготовленная структура данных, потому что логика обработки запросов на той стороне обязана быть минималистичной. Всё это приводит нас к проблеме того, что нашему сервису нужно обеспечивать логику, которая подойдет одновременно всем клиентам.</p>
+
+<p>Какие есть варианты решения? Остановимся на нескольких клиентах, допустим у нас ожидается мобильное приложение, веб фронтенд, парочка внутренних интеграций.</p>
+
+<h1 id="попытка-решения-1">Попытка решения 1</h1>
+
+<p>Давайте ничего не будем делать. Как гласят источники - иногда, ничего не делать - это лучшее решение. Поставим HTTP API, оформим для единообразия его в стиле REST (об этом была прошлая <a href="../../post/rest-is-not-rpc/">статья</a>) и вуаля, всем подходит. Так ли это? На практике окажется, что в этом API сликом много данных для мобильных клиентов и вообще им приходится делать дюжину запросов, чтобы собрать полную картину в этом вашем REST. Внутренние интеграции будут недовольны необходимостью слишком много знать про твое API, да и вообще, не понятно как и где будут появляться специфичные для интеграции запросы. Зато веб фронтенду будет в принципе всё круто.</p>
+
+<h1 id="попытка-решения-2">Попытка решения 2</h1>
+
+<p>Подумаем, можем ли мы упростить всё и поставить вместо HTTP API - GraphQL API, а уже за ним ничего не делать и снова оформить в REST стиле и попивать чай, наслаждаясь результатом? С первого взгляда создается ощущение, что да, однако, скорее всего окажется, что внутренние интеграции не захотят подобного рода взаимодействие и вообще им бы пару методов дернуть, только вот методы эти специфичные и нужны только им.</p>
+
+<h1 id="попытка-решения-3">Попытка решения 3</h1>
+
+<p>Сделать толстый API Gateway, который реализует всю специфичную логику, дает возможность реализовать на нем все виды взаимодейсткий. В теории, такое решение, конечно, даст результат, однако ценой тесного связывания в одном месте большого количества несвязанной логики, более того, этот гейтвей будет нагружаться всем, чем только можно, что обязательно скажется на производительности решения.</p>
+
+<h1 id="попытка-решения-4">Попытка решения 4</h1>
+
+<p>Дадим клиентам доступ напрямую к базе данных! Ладно, это шутка, никогда так не делайте, это как минимум свяжет вас по рукам и ногам.</p>
+
+<h1 id="решение">Решение</h1>
+
+<p>О том, что этот шаблон в качестве решения проблемы используют на практике многие компании (например, SoundCloud) я узнал из книги Сема Ньюмана &ldquo;Создание микросервисов&rdquo;. <a href="../../post/building-microservices/">Вот здесь</a> я написал на неё обзор, ты можешь почитать. Позволь, я проиллюстрирую пример:</p>
+
+<p><img src="../../img/posts/bff/bff.png" alt="bff" /></p>
+
+<p>Как становится очевидно, для каждого типа клиента заводится свой BFF (Backend For Frontend), что помогает спрятать в нём все специфики связанные с потребителем API. Если возникает потребность в дублировании части логики, то следует обратить на это внимание, возможно где-то раньше был пропущен кандидат на попадание в отдельный сервис, как, например, Service AB на рисунке выше. При всём этом, сколько BFF будет в итоге - частное решение, однако, если ты видишь, что логика работы двух мобильных клиентов с одним BFF всё больше отличается, то, вероятно, это знак к разделению Mobile BFF на Android BFF и iOS BFF.</p>
+
+<p>Конечно, буду рад услышать то, как бы вы справлялись с этой проблемой.</p>
+
+<p>На почитать:<br />
+Сем Ньюман &ldquo;Создание микросервисов&rdquo;<br />
+<a href="https://samnewman.io/patterns/architectural/bff/">Backends for Frontends</a> samnewman.io</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/bff\/';
+    var disqus_title = 'Backends for Frontends';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/bff\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
