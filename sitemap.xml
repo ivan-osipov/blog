@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://i-osipov.ru/post/do-oauth2-forget-login-password/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/post/bff/</loc>
     <lastmod>2018-10-18T00:00:00+00:00</lastmod>
   </url>
@@ -174,13 +179,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/development/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/development/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -288,7 +293,7 @@
   
   <url>
     <loc>https://i-osipov.ru/</loc>
-    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -371,6 +376,12 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/oauth2/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/postels-law/</loc>
     <lastmod>2018-01-22T08:51:45+04:00</lastmod>
     <priority>0</priority>
@@ -378,7 +389,7 @@
   
   <url>
     <loc>https://i-osipov.ru/post/</loc>
-    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -443,6 +454,18 @@
   </url>
   
   <url>
+    <loc>https://i-osipov.ru/tags/security/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://i-osipov.ru/categories/security/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://i-osipov.ru/tags/sites/</loc>
     <lastmod>2017-05-06T02:37:00+04:00</lastmod>
     <priority>0</priority>
@@ -479,13 +502,13 @@
   
   <url>
     <loc>https://i-osipov.ru/tags/thinking/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://i-osipov.ru/categories/thinking/</loc>
-    <lastmod>2018-10-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

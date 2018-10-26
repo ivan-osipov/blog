@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Сделай OAuth2 - забудь о логинах и паролях - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://solvingbrains.io">Business</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Сделай OAuth2 - забудь о логинах и паролях</h1>
+               <h2 class="subheading">Упрощайте жизнь пользователей и вам воздастся</h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2018-10-26
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/security">Security</a>, <a href="/categories/thinking">Thinking</a>
+
+<br />
+Тэги: <a href="/tags/oauth2">oauth2</a>, <a href="/tags/security">security</a>, <a href="/tags/thinking">thinking</a>, <a href="/tags/development">development</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Шёл 2018 год, а люди продолжали вводить логины и пароли, снова логины и пароли, опять логины и пароли. Тебе не кажется это странным? Почему огромное количество пользователей всё еще просит своих пользователей залогиниться? Давай разберемся в этом вопросе.</p>
+
+<p>Мы живем в век инноваций и автоматизируем каждый чих человеческой деятельности, но что касается интернета, то тут я теряюсь в догадках. Почему очередной интернет магазин книг просит у меня логин и пароль? Почему я должен &ldquo;по умолчанию&rdquo; пройти регистрацию? Почему мне не дают в качестве пути по умолчанию OAuth2 от, например, Google? Всё это сбивает с толку, кажется, что очередной сайт хочет сохранить мой пароль (а самые продвинутые хотят сохранить только хеш от него), чтобы при первой хакерской атаке всё утекло в интернеты.</p>
+
+<p>Пароли это, пожалуй, одна из самых уязвимых частей секретной жизни человека в интернете. Как часто вы используете один и тот же пароль для разных ресурсов? Хотя бы раз вы повторялись? Как часто ваши пароли похожи на столько, что узнав один, путем недолгого перебора можно получить другой? Самые продвинутые из нас используют сервисы типа LastPass, которые хранят ваши рандомные пароли для разных ресурсов, но кажется, что таких людей не много, да и сам факт потребности в подобных сервисах заставляет задуматься.</p>
+
+<p>Сколько сложностей связано с регистрацией? Обычно, нужно получить email, в котором надо нажать на ссылку. А если почта на смартфоне, то порой нужно начала нажать на кнопку в телефоне, затем логиниться с ноутбука, в общем всякие реализации бывают. Да и пять сотен раз я уже подтверждал всем вокруг, что это мой email.</p>
+
+<p>А эти логины? Вы пробовали подобрать хороший логин для твиттера? Если только у вас редкая комбинация имени и фамилии или супер-уникальный никнейм, то всё пройдет без проблем, но это же исключения! Идея логина в том, чтобы составить пару паролю, дать дефолтное имя и позволить пользователю представить себя, но как мне представить себя, если я не помню свой логин, потому что мой стандартный был занят кем-то, а тот, что я придумал специально для этого сервиса, я уже забыл? Как мне понять при повторном логине, что именно на этом сервисе я задействовал все свои силы на подбор уникального логина?</p>
+
+<p>Похоже, что почта в качестве идентификатора пользователя это хорошо, но как я озвучил выше, почту нужно подтверждать, а еще их можно зарегистрировать несколько и получить много разных аккаунтов, в результате по ошибке путаться, каким из них пользоваться. Или, что если вам нужно что-то большее, например, гарантия, что это не просто &ldquo;уникальный интернет пользователь&rdquo;, но и в реальном мире уникальный человек? Очевидно, сегодня технически этого трудно достигнуть, инструменты есть, но эти случаи особые и к ним этот текст не имеет отношения. Квазиуникальность через номер телефона должна быть достаточна в большинстве случаев. Представляете как усложнится жизнь пользователя, если вы его и номер телефона спросите?</p>
+
+<p>В общем, вопросов много, давайте поищем ответ.</p>
+
+<p>Во всех мыслимых и немыслимых случаях я не вижу необходимости в логине, это какая-то опциональная штука от которой можно смело отказываться, например, в телеграме вы можете иметь аккаунт, но вам не обязательно иметь логин для него, например, вы можете отказаться от логина и вас по нему нельзя будет найти.</p>
+
+<p>Сначала, я хотел перечислить несколько интересных схем аутентификации, но потом решил, что до них можно и самим легко дойти, да и это хорошее практическое упражнение на развитие фантазии.</p>
+
+<p>OAuth2 решает наши проблемы. Я не буду вдаваться здесь в детали, но высокоуровнево это выглядит так: пользователь хочет войти, затем его редиректит на identity provider (например, на гугл), где он скорее всего уже залогинен, но если нет, то вводит там свои логин и пароль и подтверждает, что этому приложению можно дать доступ к данным этого пользователя. После этого его редиректит назад с кодом, который отправляется клиентом на бекенд, а бекенд обменивает код на токен и с помощью токена запрашивает данные по пользователю. Алгоритм довольно простой в реализации, со своими нюансами, но о них в другой статье, и самое главное, что в 99% случаев аутентификация сводится к нажатию на одну-две кнопки. Более того, в зависимости от identity provider ты можешь получить много разных полезных данных для твоего конкретного случая и твоего конкретного приложения, например, Google в списке информации о пользователе при указании определенного scope ты можешь получить номер телефона пользователя и сформировать таким образом квазиуникальных пользователей, или же получить полный список email этого пользователя, чтобы он мог заходить под любым из них.</p>
+
+<p>Identity provider хранит информацию защищёно и не даст пользователю просто так упустить свой аккаунт в чужие руки, часто поддерживается двух факторная аутентификация.</p>
+
+<p>А что с корпоративными системами? В случае Google, если вы работаете с G Suite, то это совсем идеальное решение, если же вы не завязаны на какой облачный офис, то вы всегда можете поднять один корпоративный OAuth сервер и ходить на него из ваших приложений для аутентификации. В любом случае, это куда удобнее, чем вводить по миллиону раз учетные данные. Хорошо, что современные браузеры уже автоматизировали процесс хранения учетных данных и использования последних, когда вам это необходимо, потому что человечество по неведомой причине не спешит отказаться от логина и пароля.</p>
+
+<p>Получается, если есть инструмент - OAuth2, который в пару кликов способен сделать счастливыми и пользователя, и бизнес, то почему бы им не заменить устаревший, неудобный, менее безопасный способ использования логинов и паролей?</p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/do-oauth2-forget-login-password\/';
+    var disqus_title = 'Сделай OAuth2 - забудь о логинах и паролях';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/do-oauth2-forget-login-password\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
