@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Push Notifications with coroutines - The Developer&#39;s blog</title>
+
+    
+
+    
+    <link href="https://i-osipov.ru/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://i-osipov.ru/css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="https://i-osipov.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://i-osipov.ru/css/blog.css">
+    
+    
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://i-osipov.ru">The Developer&#39;s blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="/subscribe">Subscribe</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/telegram">Telegram</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/video-presentations">Videos</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://github.com/ivan-osipov">Github</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://i-osipov.ru//img/main_header.png')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Push Notifications with coroutines</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">
+                 
+Автор: <a href="#">Ivan Osipov</a>
+<br />
+Дата публикации: 2019-11-07
+<br />
+В категориях: <a href="/categories/development">Development</a>, <a href="/categories/backend">Backend</a>, <a href="/categories/kotlin">Kotlin</a>
+
+<br />
+Тэги: <a href="/tags/development">development</a>, <a href="/tags/backend">backend</a>, <a href="/tags/kotlin">kotlin</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>В определенный момент жизненного цикла любого более менее серьезного веб приложения появляется потребность в отправке push нотификаций в браузер. Исторически такие нотификации можно получить на стороне браузера разными способами. Это может быть широко известный websocket, который у всех на слуху, это может быть реализовано на основе long или short polling, когда клиент либо подвешивает запрос или непрерывно отпрашивает сервер короткоживущими запросами. Ну и на конец, либо это Server Sent Event о котором мы сегодня и поговорим, а затем реализуем при помощи корутин и Kotlin.</p>
+
+<p>Сама по себе технология Server Sent Event не нова и напоминает реактивный обмен даннными. Клиент подвешивает соединение в которое со стороны сервера стримится информация по кусочкам.</p>
+
+<h2 id="создаем-проект">Создаем проект</h2>
+
+<p>Как обычно, заходи на start.spring.io и генерируй spring boot проект со следующией конфигурацией.</p>
+
+<ul>
+<li>Gradle</li>
+<li>Kotlin</li>
+<li>Spring Boot 2.2.1+</li>
+<li>Dependencies: Reactive</li>
+</ul>
+
+<p>Обрати внимание, что уже при такой минимальной конфигурации в зависимостях проекта окажется одна, интересная нам - <code>org.jetbrains.kotlinx:kotlinx-coroutines-reactor</code></p>
+
+<h2 id="прежде-чем-что-либо-делать">Прежде чем что-либо делать</h2>
+
+<ul>
+<li>Разархивируй проект</li>
+<li>Открой в любимой IDE</li>
+<li>Добавь в файл src/main/resource/application.preperties <code>server.port=9090</code> для того, чтобы не законфликтовать с каким-нибудь уже запущенным локально приложением</li>
+</ul>
+
+<h2 id="клиент">Клиент</h2>
+
+<p>Создать клиент довольно просто, с него мы и начнем.</p>
+
+<p>Создай где угодно файл index.html со следующим содержимым</p>
+
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sse Test&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+    const eventSource = new EventSource(&quot;http://localhost:9090/events/stream&quot;);
+    eventSource.onmessage = (ev) =&gt; {
+        document.getElementById(&quot;content&quot;).innerHTML += ev.data + '&lt;/br&gt;';
+    }
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Всё что делает этот кусочек html + js - создает event source и пытается подписаться на события по указанному URL <code>http://localhost:9090/events/stream</code> (ты же читал внимательно и поменял порт у spring boot приложения, да?)</p>
+
+<p>Если ты посмотришь в Network в своём браузере, то увидишь, что такой эндпоинт не достижим. Давай его создадим</p>
+
+<h2 id="сервер">Сервер</h2>
+
+<p>Настала пора наполнить пустой сгенерированный проект чем-то полезным.</p>
+
+<p>Создаём рядом с Application классом контроллер, можешь назвать его SseController или EventsController, или PushNotificationController, в общем,
+придумай крутое название для этого кусочка кода</p>
+
+<pre><code class="language-kotlin">@CrossOrigin
+@RestController
+@RequestMapping(&quot;/events&quot;)
+class EventsController {
+    @RequestMapping(&quot;/stream&quot;)
+    fun eventStream() = Flux.just(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+}
+</code></pre>
+
+<p>Обрати внимание, что Сors никто не отменял, так что есть аннотация @CrossOrigin. Реактивные стримы тоже никуда не уходят, так как всё работает на их основе.
+Для начала мы напишем знакомую реализацию на основе Flux и понаблюдаем за поведением клиента.</p>
+
+<p>Фактически нам доступны два вида клиентов. Первый - тот, что внутри index.html. Второй - браузер, когда мы заходим напрямую по ссылке
+<code>http://localhost:9090/events/stream</code>. Понаблюдаем за их поведением.</p>
+
+<h3 id="как-работает-прямой-запрос">Как работает прямой запрос</h3>
+
+<p>Если мы открываем в браузере эндпоинт <code>http://localhost:9090/events/stream</code>, то всё что мы увидим - это &lsquo;abc&rsquo; как результат запроса, т.е. стрим вернул все значения которые в нём были и закрылся.</p>
+
+<h3 id="как-работает-клиент">Как работает клиент</h3>
+
+<p>Если мы откроем написанный выше клиент в браузере, то увидим, что строчки a b и c появляются многократно, буквально каждую секунду. Довольно странное поведение, но вполне
+логичное. Одно из важных преимуществ SSE перед Websocket - SSE прямо из коробки умеет востанавливать соединение, т.е. если по какой-то причине сервер завершил стриминг,
+то клиент пересоздаст соединение. Это и происходит. В нашем случае сервер посылает a, b и c, а затем завершает поток информации, на что голодный клиент, просит ещё и
+получет те же самые данные. На этом примере становится ясно, что либо ты должен никогда не завершать стриминг со стороны сервера, либо не посылать дублирующие события при реконнекте, если конечно, это не часть твоей бизнес логики.</p>
+
+<h2 id="корутины">Корутины</h2>
+
+<h3 id="flow">Flow</h3>
+
+<p>Начиная со Spring Boot 2.2 фреймворк полноценно поддерживает корутины, а если у тебя уже есть код, который работает в reactive стиле, то не составит труда сынтегрировать два подхода.
+Перепишем метод <code>eventStream()</code> сразу на корутины. В библиотеке поддерживается тип аналогичный Flux, который называется Flow. Обеспечить переход от одного типа к другому довольно просто
+есть extension функция <code>asFlow()</code> на типе Flux. Пускай наша реализация стримит текущее время, выглядеть она может вот так</p>
+
+<pre><code class="language-kotlin">@GetMapping(&quot;/stream&quot;)
+fun eventStream() = flow {
+  repeat(times = 1000) {
+    delay(1000)
+    emit(Date())
+  }
+}
+</code></pre>
+
+<p>Теперь открывая index.html видим вновь и вновь поступающие события, которые оповещают нас текущим временем.</p>
+
+<h3 id="launch">Launch</h3>
+
+<p>Добавим аннотацию @EnableScheduling на тот же класс, что помечен как @SpringBootApplication или на любую другую конфигурацию, для того, чтобы иметь возможность имитировать ивенты, которые приходят к нам из вне, например, из очереди.</p>
+
+<p>Для простоты реализации добавим прямо в контроллер Scheduled Job</p>
+
+<pre><code>@Scheduled(fixedDelay = 1000)
+fun onEvent() {
+  GlobalScope.launch {
+    //...
+  }
+}
+</code></pre>
+
+<p>Каждую секунду будет запускаться запланированный вызов и благодаря функции launch будет запускаться корутина в контексте которой и будет происходить фактическое выполнение. В этой статье мы не будем говорить ни о видах скоупов, ни о том что такое Structural Concurrency, всё это в другой раз.</p>
+
+<p>Интересно здесь, что ранее у нас появился метод, который возвращает Flow и теперь есть метод, который имитирует события, которые надо в этот Flow перебросить. Очевидно требуется какой-то способ коммуникации, самое время поговорить о каналах.</p>
+
+<h3 id="channel">Channel</h3>
+
+<p>Давайте добавим немного коммуникации к ивентам и представим, что они приходят к нам из какого-то внешнего источника. Внешний источник мы уже иммитируем с помощью Scheduled Job. Для того, чтобы абстрагироваться от него и построить нативный способ коммуникации, воспользуемся каналами.</p>
+
+<p>На каждом запросе на <code>/v1/events/stream</code> будем создавать канал, а затем при разрыве соединения (при закрытии браузера) будем очищать ресурсы.</p>
+
+<pre><code class="language-kotlin">//...
+class EventsController {
+  val channels: MutableSet&lt;Channel&lt;String&gt;&gt; = ConcurrentHashMap.newKeySet()
+  
+  @GetMapping(&quot;/stream&quot;)
+  fun eventStream(): Flow&lt;String&gt; {
+      val channel = Channel&lt;String&gt;()
+      channel.invokeOnClose {
+        channels.remove(channel)
+      }
+      channels.add(channel)
+      return channel.consumeAsFlow()
+  }
+  
+  @Scheduled(fixedDelay = 1000)
+  fun onEvent() {
+    GlobalScope.launch {
+      channels.forEach {
+        it.send(Date().toString())
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>Теперь если снова открыть index.html, то каждую секунду будет прилетать событие с указанной датой.</p>
+
+<h2 id="итого">Итого</h2>
+
+<p>В ходе статьи ты научился не только нотифицировать пользователей событиями которые происходят внутри системы, но и разобрался как это сделать без взаимодействия с reactive кодом, только на инструментах которые дают корутины (напомню, под капотом reactive никуда не делся).</p>
+
+<p>Обязательно посмотри исходники вот <a href="https://github.com/ivan-osipov/articles/tree/master/sse-on-coroutines">здесь</a></p>
+
+                  
+   <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'i-osipov-ru';
+    var disqus_identifier = 'https:\/\/i-osipov.ru\/post\/push-notifications-with-coroutines\/';
+    var disqus_title = 'Push Notifications with coroutines';
+    var disqus_url = 'https:\/\/i-osipov.ru\/post\/push-notifications-with-coroutines\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:contact@i-osipov.ru">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/_osipov_">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/ivan-osipov">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.facebook.com/100016225501356">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://i-osipov.ru/js/jquery.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/bootstrap.min.js"></script>
+
+    
+    <script src="https://i-osipov.ru/js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-101210646-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

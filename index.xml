@@ -6,8 +6,180 @@
     <description>Recent content on Ivan Osipov</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <lastBuildDate>Fri, 26 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 07 Nov 2019 06:37:53 +0300</lastBuildDate>
     <atom:link href="https://i-osipov.ru/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Push Notifications with coroutines</title>
+      <link>https://i-osipov.ru/post/push-notifications-with-coroutines/</link>
+      <pubDate>Thu, 07 Nov 2019 06:37:53 +0300</pubDate>
+      
+      <guid>https://i-osipov.ru/post/push-notifications-with-coroutines/</guid>
+      <description>
+
+&lt;p&gt;В определенный момент жизненного цикла любого более менее серьезного веб приложения появляется потребность в отправке push нотификаций в браузер. Исторически такие нотификации можно получить на стороне браузера разными способами. Это может быть широко известный websocket, который у всех на слуху, это может быть реализовано на основе long или short polling, когда клиент либо подвешивает запрос или непрерывно отпрашивает сервер короткоживущими запросами. Ну и на конец, либо это Server Sent Event о котором мы сегодня и поговорим, а затем реализуем при помощи корутин и Kotlin.&lt;/p&gt;
+
+&lt;p&gt;Сама по себе технология Server Sent Event не нова и напоминает реактивный обмен даннными. Клиент подвешивает соединение в которое со стороны сервера стримится информация по кусочкам.&lt;/p&gt;
+
+&lt;h2 id=&#34;создаем-проект&#34;&gt;Создаем проект&lt;/h2&gt;
+
+&lt;p&gt;Как обычно, заходи на start.spring.io и генерируй spring boot проект со следующией конфигурацией.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Gradle&lt;/li&gt;
+&lt;li&gt;Kotlin&lt;/li&gt;
+&lt;li&gt;Spring Boot 2.2.1+&lt;/li&gt;
+&lt;li&gt;Dependencies: Reactive&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Обрати внимание, что уже при такой минимальной конфигурации в зависимостях проекта окажется одна, интересная нам - &lt;code&gt;org.jetbrains.kotlinx:kotlinx-coroutines-reactor&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;прежде-чем-что-либо-делать&#34;&gt;Прежде чем что-либо делать&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Разархивируй проект&lt;/li&gt;
+&lt;li&gt;Открой в любимой IDE&lt;/li&gt;
+&lt;li&gt;Добавь в файл src/main/resource/application.preperties &lt;code&gt;server.port=9090&lt;/code&gt; для того, чтобы не законфликтовать с каким-нибудь уже запущенным локально приложением&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;клиент&#34;&gt;Клиент&lt;/h2&gt;
+
+&lt;p&gt;Создать клиент довольно просто, с него мы и начнем.&lt;/p&gt;
+
+&lt;p&gt;Создай где угодно файл index.html со следующим содержимым&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;Sse Test&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div id=&amp;quot;content&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;script&amp;gt;
+    const eventSource = new EventSource(&amp;quot;http://localhost:9090/events/stream&amp;quot;);
+    eventSource.onmessage = (ev) =&amp;gt; {
+        document.getElementById(&amp;quot;content&amp;quot;).innerHTML += ev.data + &#39;&amp;lt;/br&amp;gt;&#39;;
+    }
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Всё что делает этот кусочек html + js - создает event source и пытается подписаться на события по указанному URL &lt;code&gt;http://localhost:9090/events/stream&lt;/code&gt; (ты же читал внимательно и поменял порт у spring boot приложения, да?)&lt;/p&gt;
+
+&lt;p&gt;Если ты посмотришь в Network в своём браузере, то увидишь, что такой эндпоинт не достижим. Давай его создадим&lt;/p&gt;
+
+&lt;h2 id=&#34;сервер&#34;&gt;Сервер&lt;/h2&gt;
+
+&lt;p&gt;Настала пора наполнить пустой сгенерированный проект чем-то полезным.&lt;/p&gt;
+
+&lt;p&gt;Создаём рядом с Application классом контроллер, можешь назвать его SseController или EventsController, или PushNotificationController, в общем,
+придумай крутое название для этого кусочка кода&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;@CrossOrigin
+@RestController
+@RequestMapping(&amp;quot;/events&amp;quot;)
+class EventsController {
+    @RequestMapping(&amp;quot;/stream&amp;quot;)
+    fun eventStream() = Flux.just(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Обрати внимание, что Сors никто не отменял, так что есть аннотация @CrossOrigin. Реактивные стримы тоже никуда не уходят, так как всё работает на их основе.
+Для начала мы напишем знакомую реализацию на основе Flux и понаблюдаем за поведением клиента.&lt;/p&gt;
+
+&lt;p&gt;Фактически нам доступны два вида клиентов. Первый - тот, что внутри index.html. Второй - браузер, когда мы заходим напрямую по ссылке
+&lt;code&gt;http://localhost:9090/events/stream&lt;/code&gt;. Понаблюдаем за их поведением.&lt;/p&gt;
+
+&lt;h3 id=&#34;как-работает-прямой-запрос&#34;&gt;Как работает прямой запрос&lt;/h3&gt;
+
+&lt;p&gt;Если мы открываем в браузере эндпоинт &lt;code&gt;http://localhost:9090/events/stream&lt;/code&gt;, то всё что мы увидим - это &amp;lsquo;abc&amp;rsquo; как результат запроса, т.е. стрим вернул все значения которые в нём были и закрылся.&lt;/p&gt;
+
+&lt;h3 id=&#34;как-работает-клиент&#34;&gt;Как работает клиент&lt;/h3&gt;
+
+&lt;p&gt;Если мы откроем написанный выше клиент в браузере, то увидим, что строчки a b и c появляются многократно, буквально каждую секунду. Довольно странное поведение, но вполне
+логичное. Одно из важных преимуществ SSE перед Websocket - SSE прямо из коробки умеет востанавливать соединение, т.е. если по какой-то причине сервер завершил стриминг,
+то клиент пересоздаст соединение. Это и происходит. В нашем случае сервер посылает a, b и c, а затем завершает поток информации, на что голодный клиент, просит ещё и
+получет те же самые данные. На этом примере становится ясно, что либо ты должен никогда не завершать стриминг со стороны сервера, либо не посылать дублирующие события при реконнекте, если конечно, это не часть твоей бизнес логики.&lt;/p&gt;
+
+&lt;h2 id=&#34;корутины&#34;&gt;Корутины&lt;/h2&gt;
+
+&lt;h3 id=&#34;flow&#34;&gt;Flow&lt;/h3&gt;
+
+&lt;p&gt;Начиная со Spring Boot 2.2 фреймворк полноценно поддерживает корутины, а если у тебя уже есть код, который работает в reactive стиле, то не составит труда сынтегрировать два подхода.
+Перепишем метод &lt;code&gt;eventStream()&lt;/code&gt; сразу на корутины. В библиотеке поддерживается тип аналогичный Flux, который называется Flow. Обеспечить переход от одного типа к другому довольно просто
+есть extension функция &lt;code&gt;asFlow()&lt;/code&gt; на типе Flux. Пускай наша реализация стримит текущее время, выглядеть она может вот так&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;@GetMapping(&amp;quot;/stream&amp;quot;)
+fun eventStream() = flow {
+  repeat(times = 1000) {
+    delay(1000)
+    emit(Date())
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Теперь открывая index.html видим вновь и вновь поступающие события, которые оповещают нас текущим временем.&lt;/p&gt;
+
+&lt;h3 id=&#34;launch&#34;&gt;Launch&lt;/h3&gt;
+
+&lt;p&gt;Добавим аннотацию @EnableScheduling на тот же класс, что помечен как @SpringBootApplication или на любую другую конфигурацию, для того, чтобы иметь возможность имитировать ивенты, которые приходят к нам из вне, например, из очереди.&lt;/p&gt;
+
+&lt;p&gt;Для простоты реализации добавим прямо в контроллер Scheduled Job&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Scheduled(fixedDelay = 1000)
+fun onEvent() {
+  GlobalScope.launch {
+    //...
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Каждую секунду будет запускаться запланированный вызов и благодаря функции launch будет запускаться корутина в контексте которой и будет происходить фактическое выполнение. В этой статье мы не будем говорить ни о видах скоупов, ни о том что такое Structural Concurrency, всё это в другой раз.&lt;/p&gt;
+
+&lt;p&gt;Интересно здесь, что ранее у нас появился метод, который возвращает Flow и теперь есть метод, который имитирует события, которые надо в этот Flow перебросить. Очевидно требуется какой-то способ коммуникации, самое время поговорить о каналах.&lt;/p&gt;
+
+&lt;h3 id=&#34;channel&#34;&gt;Channel&lt;/h3&gt;
+
+&lt;p&gt;Давайте добавим немного коммуникации к ивентам и представим, что они приходят к нам из какого-то внешнего источника. Внешний источник мы уже иммитируем с помощью Scheduled Job. Для того, чтобы абстрагироваться от него и построить нативный способ коммуникации, воспользуемся каналами.&lt;/p&gt;
+
+&lt;p&gt;На каждом запросе на &lt;code&gt;/v1/events/stream&lt;/code&gt; будем создавать канал, а затем при разрыве соединения (при закрытии браузера) будем очищать ресурсы.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-kotlin&#34;&gt;//...
+class EventsController {
+  val channels: MutableSet&amp;lt;Channel&amp;lt;String&amp;gt;&amp;gt; = ConcurrentHashMap.newKeySet()
+  
+  @GetMapping(&amp;quot;/stream&amp;quot;)
+  fun eventStream(): Flow&amp;lt;String&amp;gt; {
+      val channel = Channel&amp;lt;String&amp;gt;()
+      channel.invokeOnClose {
+        channels.remove(channel)
+      }
+      channels.add(channel)
+      return channel.consumeAsFlow()
+  }
+  
+  @Scheduled(fixedDelay = 1000)
+  fun onEvent() {
+    GlobalScope.launch {
+      channels.forEach {
+        it.send(Date().toString())
+      }
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Теперь если снова открыть index.html, то каждую секунду будет прилетать событие с указанной датой.&lt;/p&gt;
+
+&lt;h2 id=&#34;итого&#34;&gt;Итого&lt;/h2&gt;
+
+&lt;p&gt;В ходе статьи ты научился не только нотифицировать пользователей событиями которые происходят внутри системы, но и разобрался как это сделать без взаимодействия с reactive кодом, только на инструментах которые дают корутины (напомню, под капотом reactive никуда не делся).&lt;/p&gt;
+
+&lt;p&gt;Обязательно посмотри исходники вот &lt;a href=&#34;https://github.com/ivan-osipov/articles/tree/master/sse-on-coroutines&#34;&gt;здесь&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Сделай OAuth2 - забудь о логинах и паролях</title>
@@ -2184,87 +2356,6 @@ image_url: $main_image/@src
 &lt;/ul&gt;
 
 &lt;!--/email_off--&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Telegram API. Как написать бота?</title>
-      <link>https://i-osipov.ru/post/how_to_create_telegram_bot/</link>
-      <pubDate>Sun, 23 Jul 2017 23:10:24 +0400</pubDate>
-      
-      <guid>https://i-osipov.ru/post/how_to_create_telegram_bot/</guid>
-      <description>&lt;p&gt;Всем привет!&lt;/p&gt;
-
-&lt;p&gt;Сегодня мы побеседуем о том как делаются Telegram боты.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Кто ты по жизни?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Telegram боты бывают двух видов:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Боты основанные на Webhoock&lt;/li&gt;
-&lt;li&gt;Боты основанные на Long Polling&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Первый вариант бота требует от вас поднять сервер и установить &amp;ldquo;вебхуки&amp;rdquo; для асинхронного оповещения вас о новых изменениях. На вашем сервере должен быть соответствующий роутинг.&lt;/p&gt;
-
-&lt;p&gt;Второй вариант бота - это имитация асинхронности. Ваш бот с определенным периодом будет запрашивать последние изменения с сервера телеграм на основании механизма long polling. Т.е. бот делает запрос и подвисает, а отвисает либо по таймауту, либо по получению новыйх обновлений. Об этом виде ботов сегодня и пойдет речь.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Long polling в разрезе работы с сетью&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Когда вы работаете с Telegram Api вы нагружаете сервера Telegram. Все запросы вы отправляете по одному URL, но в один момент времени может работать только один обработчик для Telegram бота.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Интересно, что в API предусмотрена умная обработка ошибок, среди прочего, в ответе телеграм сервера, который вы за DDOS&amp;rsquo;или, может сообщить вам сколько нужно подождать, чтобы вы могли взаимодействовать с Telegram снова&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Как сказано выше у вас фактически однопоточная обработка запросов к телеграм. По этому, кажется, здравым принять одну из следующих реализаций ботов:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;реализовать поток, который будет отправлять запросы и складировать ответы в общую очередь из которой потоки-обработчики будут их разбирать;&lt;/li&gt;
-&lt;li&gt;поставить прокси-сервер, который будет затягивать последние изменения и шарить их между нодами (другими серверами) бота. В этом случае можно подменяя прокси-сервер менять реализации взаимодействия с telegram api не меняя реализацию для нод. Это решение мне нравится несколько больше, его масштабируемость зависит от потребностей в функциональности бота, т.к. если можно обрабатывать параллельно несколько чатов независимо друг от друга, то масштабируемость на пределе.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Оставим использование прокси-сервера для будущих статей, а пока давайте рассмотрим как вы можете реализовать своего бота.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Красная или синяя таблетка?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;На сколько вы любите писать велосипеды? В зависимости от этого у вас есть 2 пути реализации Telegram бота:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;писать всё самому с нуля;&lt;/li&gt;
-&lt;li&gt;воспользоваться существующей библиотекой.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Если вы используете динамически типизируемые языки, которые поддерживают нативную работу с JSON, то первый вариант, не так уж и плох, однако, уже существует большое количество библиотек для разработки ботов их публичный перечень вы можете увидеть &lt;a href=&#34;https://core.telegram.org/bots/samples&#34;&gt;здесь&lt;/a&gt;. Вы найдете много вариантов для PHP, Java, Python, Node.js и так далее. Я сейчас реализую собственную библиотеку на языке Kotlin - &lt;a href=&#34;https://clabo.i-osipov.ru/&#34;&gt;Clabo&lt;/a&gt;. Эта библиотека поможет вам на основании расширяемого DSL описать работу своего бота, например, всё что надо для запуска бота, который говорит &amp;ldquo;Привет!&amp;rdquo; по команде /start это небольшой кусочек кода по &lt;a href=&#34;https://gist.github.com/ivan-osipov/266204f3560a6c5e64d381df5c73bf22&#34;&gt;ссылке&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;BotFather&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;В телеграме есть специальный бот, который позволяет создавать других ботов и настраивать их. Некоторые действия вы, как пользователь, не можете сделать из интерфейса, например, сменить имя бота или задать набор команд, для этого нужен &lt;a href=&#34;http://t.me/botfather&#34;&gt;BotFather&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Теперь у вас есть представление, как реализовать бота, но что с ним можно сделать? Об этом я расскажу ниже.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;И зачем всё это?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Боты очень способные, они обладают следующими возможностями:&lt;/p&gt;
-
-&lt;!--email_off--&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Встраиваемый мод (Inline mode). Вы можете встроить бота прямо в строку с вводом, хорошие примеры таких ботов это GifBot и YouTubeBot. Вы вписываете имя бота, например, @youtube и он предлагает вам результаты поиска видео или вы можете авторизоваться и результаты будут специфичны для вас.&lt;/li&gt;
-&lt;li&gt;Клавиатуры. Есть два вида клавиатур: &amp;ldquo;Клавиатура для быстрого ответа&amp;rdquo; и &amp;ldquo;Встроенная клавиатура&amp;rdquo;. Первый вариант позволяет пользователю не писать сообщение, а просто отправить его выбрав один из вариантов. Встроенная клавиатура размещается прямо под сообщением и ассоциирована именно с ним.&lt;/li&gt;
-&lt;li&gt;Команды. Всё что вы пишете после &amp;ldquo;/&amp;rdquo; в телеграм называется командами, чтобы избежать коллизий, когда два бота в одном чате имеют одну и ту же команду используется следующий формат &lt;code&gt;/command@BotName&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Бот может отправлять отформатированные с помощью html или markdown сообщения.&lt;/li&gt;
-&lt;li&gt;Бот может запросить местоположение или номер телефона.&lt;/li&gt;
-&lt;li&gt;Ботов можно добавлять в группы и, например, администрировать их.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--/email_off--&gt;
-
-&lt;p&gt;&lt;strong&gt;Что в итоге?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Мы обзорно рассмотрели основы того как можно сделать ботов, для чего это и что они могут делать. Применение ботов ограничивается только вашей фантазией.
-Вы создаете бота и запускаете сопровождающий код, который обрабатывает сообщения. Ничего сложного. Увидимся в следующих статьях!&lt;/p&gt;
 </description>
     </item>
     
